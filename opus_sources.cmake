@@ -4,6 +4,11 @@ but still have the option to use CMake with only lists at one place]]
 
 cmake_minimum_required(VERSION 3.12)
 
+function(add_sources_group target group)
+    target_sources(${target} PRIVATE ${ARGN})
+    source_group(${group} FILES ${ARGN})
+endfunction()
+
 function(get_opus_sources SOURCE_GROUP MAKE_FILE SOURCES)
   message(STATUS "Parse source file names from ${SOURCE_GROUP} in ${MAKE_FILE}")
 
