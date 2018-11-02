@@ -3,6 +3,13 @@ project(opus LANGUAGES C)
 include(opus_sources.cmake)
 enable_testing()
 
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+function(add_sources_group target group)
+    target_sources(${target} PRIVATE ${ARGN})
+    source_group(${group} FILES ${ARGN})
+endfunction()
+
 message(STATUS "Build target:")
 message(STATUS "  CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
 message(STATUS "  CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR}")
@@ -17,16 +24,8 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
   message(FATAL_ERROR "Only tested on Windows and Linux")
 endif()
 
-list(APPEND opus_sources
-            ${opus_sources_float}
-            ${celt_sources}
-            ${silk_sources})
-
-# TODO: add Fixed and optimizations
-list(APPEND opus_sources ${silk_sources_float})
-
 # library
-add_library(opus ${opus_sources})
+add_library(opus STATIC ${opus_sources} ${opus_sources_float})
 set_property(TARGET opus PROPERTY C_STANDARD 99)
 target_include_directories(opus
                            PUBLIC $<BUILD_INTERFACE:
@@ -37,6 +36,10 @@ target_include_directories(opus
                                   >
                                   $<INSTALL_INTERFACE:include>)
 target_compile_definitions(opus PRIVATE USE_ALLOCA CUSTOM_MODES OPUS_BUILD)
+
+add_sources_group(opus silk ${silk_sources})
+add_sources_group(opus celt ${celt_sources})
+
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
   target_link_libraries(opus PRIVATE m)
 endif()
