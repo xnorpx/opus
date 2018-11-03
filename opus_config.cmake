@@ -29,6 +29,10 @@ else (USE_ALLOCA OR MSVC)
 endif (USE_ALLOCA OR MSVC)
 
 set(system_libs "")
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+
+include(CheckLibraryExists)
+check_library_exists(m floor "" HAVE_LIBM)
+if(HAVE_LIBM)
   list(APPEND system_libs m)
+  list(APPEND CMAKE_REQUIRED_LIBRARIES m)
 endif()
