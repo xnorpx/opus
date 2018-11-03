@@ -10,8 +10,6 @@ function(add_sources_group target group)
 endfunction()
 
 function(get_opus_sources SOURCE_GROUP MAKE_FILE SOURCES)
-  message(STATUS "Parse source file names from ${SOURCE_GROUP} in ${MAKE_FILE}")
-
   # read file, each item in list is one group
   file(STRINGS ${MAKE_FILE} opus_sources)
 
@@ -46,12 +44,7 @@ function(get_opus_sources SOURCE_GROUP MAKE_FILE SOURCES)
 
   list(LENGTH sources list_length)
 
-  if(${list_length} GREATER 0)
-    message(
-      STATUS
-        "Succesfully parsed ${list_length} files from ${SOURCE_GROUP} in ${MAKE_FILE}"
-      )
-  else()
+  if(${list_length} LESS 1)
     message(
       FATAL_ERROR
         "No files parsed succesfully from ${SOURCE_GROUP} in ${MAKE_FILE}")
