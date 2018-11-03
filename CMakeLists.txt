@@ -27,8 +27,6 @@ else(FIXED_POINT)
   target_include_directories(opus PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/silk/float>)
 endif(FIXED_POINT)
 
-target_link_libraries(opus PRIVATE ${system_libs})
-
 # TODO: install lib, headers and tests
 
 if (BUILD_TESTING)

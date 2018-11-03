@@ -28,11 +28,8 @@ else (USE_ALLOCA OR MSVC)
     add_definitions(-DVAR_ARRAYS)
 endif (USE_ALLOCA OR MSVC)
 
-set(system_libs "")
-
 include(CheckLibraryExists)
 check_library_exists(m floor "" HAVE_LIBM)
 if(HAVE_LIBM)
-  list(APPEND system_libs m)
   list(APPEND CMAKE_REQUIRED_LIBRARIES m)
 endif()
