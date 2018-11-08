@@ -9,7 +9,6 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set_property(GLOBAL PROPERTY C_STANDARD 99)
 
 # Windows compile options
-add_compile_options($<$<C_COMPILER_ID:MSVC>:/MP>)
 add_compile_options($<$<C_COMPILER_ID:MSVC>:/W4>)
 
 if(MSVC)
