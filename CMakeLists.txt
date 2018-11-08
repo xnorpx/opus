@@ -20,16 +20,40 @@ add_sources_group(opus celt ${celt_sources})
 
 if(FIXED_POINT)
   add_sources_group(opus silk ${silk_sources_fixed})
-  target_include_directories(opus PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/silk/fixed>)
+  target_include_directories(
+    opus
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/silk/fixed>)
   target_compile_definitions(opus PRIVATE FIXED_POINT=1 DISABLE_FLOAT_API)
 else(FIXED_POINT)
   add_sources_group(opus silk ${silk_sources_float})
-  target_include_directories(opus PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/silk/float>)
+  target_include_directories(
+    opus
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/silk/float>)
 endif(FIXED_POINT)
+
+if(x86 OR x86_64)
+  if(FIXED_POINT)
+    add_sources_group(opus silk ${silk_sources_fixed_sse4_1})
+  else(FIXED_POINT)
+    add_sources_group(opus silk ${silk_sources_sse4_1})
+  endif(FIXED_POINT)
+
+  add_sources_group(opus celt ${celt_sources_sse})
+  add_sources_group(opus celt ${celt_sources_sse2})
+  add_sources_group(opus celt ${celt_sources_sse4_1})
+
+  # Do runtime check for SIMD
+  target_compile_definitions(opus
+                             PUBLIC
+                             OPUS_X86_MAY_HAVE_SSE
+                             OPUS_X86_MAY_HAVE_SSE2
+                             OPUS_X86_MAY_HAVE_SSE4_1
+                             OPUS_HAVE_RTCD)
+endif(x86 OR x86_64)
 
 # TODO: install lib, headers and tests
 
-if (BUILD_TESTING)
+if(BUILD_TESTING)
   enable_testing()
 
   # demo
