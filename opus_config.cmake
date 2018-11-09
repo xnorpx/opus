@@ -23,6 +23,7 @@ option(USE_ALLOCA "Use alloca for stack arrays (on non-C99 compilers)" NO)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set_property(GLOBAL PROPERTY C_STANDARD 99)
 
+
 if(MSVC)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
   string(REGEX

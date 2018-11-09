@@ -4,6 +4,7 @@ but still have the option to use CMake with only lists at one place]]
 
 cmake_minimum_required(VERSION 3.12)
 
+
 include(CheckSymbolExists)
 if(MSVC)
   check_symbol_exists("_M_AMD64" "" x86_64)
