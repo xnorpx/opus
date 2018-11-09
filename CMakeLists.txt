@@ -9,11 +9,12 @@ add_library(opus STATIC ${opus_sources} ${opus_sources_float})
 
 target_include_directories(opus
                            PUBLIC $<BUILD_INTERFACE:
-                                  ${CMAKE_CURRENT_SOURCE_DIR}/include
-                                  ${CMAKE_CURRENT_SOURCE_DIR}/celt
-                                  ${CMAKE_CURRENT_SOURCE_DIR}/silk
-                                  >
-                                  $<INSTALL_INTERFACE:include>)
+                                  ${CMAKE_CURRENT_SOURCE_DIR}/include >
+                           PRIVATE $<BUILD_INTERFACE:
+                                   ${CMAKE_CURRENT_SOURCE_DIR}/celt
+                                   ${CMAKE_CURRENT_SOURCE_DIR}/silk
+                                   >
+                                   $<INSTALL_INTERFACE:include>)
 target_compile_definitions(opus PRIVATE CUSTOM_MODES OPUS_BUILD)
 
 add_sources_group(opus silk ${silk_sources})
@@ -23,16 +24,16 @@ if(FIXED_POINT)
   add_sources_group(opus silk ${silk_sources_fixed})
   target_include_directories(
     opus
-    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/silk/fixed>)
+    PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/silk/fixed>)
   target_compile_definitions(opus PRIVATE FIXED_POINT=1 DISABLE_FLOAT_API)
 else(FIXED_POINT)
   add_sources_group(opus silk ${silk_sources_float})
   target_include_directories(
     opus
-    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/silk/float>)
+    PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/silk/float>)
 endif(FIXED_POINT)
 
-if(x86 OR x86_64)
+if(HAVE_SSE)
   if(FIXED_POINT)
     add_sources_group(opus silk ${silk_sources_fixed_sse4_1})
   else(FIXED_POINT)
@@ -43,19 +44,26 @@ if(x86 OR x86_64)
   add_sources_group(opus celt ${celt_sources_sse2})
   add_sources_group(opus celt ${celt_sources_sse4_1})
 
-  # Do runtime check for SIMD
-  target_compile_definitions(opus
-                             PUBLIC
-                             OPUS_X86_MAY_HAVE_SSE
-                             OPUS_X86_MAY_HAVE_SSE2
-                             OPUS_X86_MAY_HAVE_SSE4_1
-                             OPUS_HAVE_RTCD)
-endif(x86 OR x86_64)
+  if(OPUS_MAY_HAVE_SSE)
+    # Do runtime check for SIMD
+    target_compile_definitions(opus
+                               PRIVATE
+                               OPUS_X86_MAY_HAVE_SSE
+                               OPUS_X86_MAY_HAVE_SSE2
+                               OPUS_X86_MAY_HAVE_SSE4_1
+                               OPUS_HAVE_RTCD)
+  elseif(OPUS_PRESUME_SSE)
+    target_compile_definitions(opus
+                               PRIVATE
+                               OPUS_X86_PRESUME_HAVE_SSE
+                               OPUS_X86_PRESUME_HAVE_SSE2
+                               OPUS_X86_PRESUME_SSE4_1)
+  endif()
+endif(HAVE_SSE)
 
 # TODO: install lib, headers and tests
 
 if(BUILD_TESTING)
-
   # demo
   add_executable(opus_demo ${opus_demo_sources})
   target_link_libraries(opus_demo PRIVATE opus)
@@ -66,6 +74,9 @@ if(BUILD_TESTING)
 
   # tests
   add_executable(test_opus_api ${test_opus_api_sources})
+  target_include_directories(test_opus_api
+                             PRIVATE $<BUILD_INTERFACE:
+                                     ${CMAKE_CURRENT_SOURCE_DIR}/celt >)
   target_link_libraries(test_opus_api PRIVATE opus)
   if(FIXED_POINT)
     target_compile_definitions(test_opus_api PRIVATE DISABLE_FLOAT_API)
@@ -73,6 +84,9 @@ if(BUILD_TESTING)
   add_test(test_opus_api test_opus_api)
 
   add_executable(test_opus_encode ${test_opus_encode_sources})
+  target_include_directories(test_opus_encode
+                             PRIVATE $<BUILD_INTERFACE:
+                                     ${CMAKE_CURRENT_SOURCE_DIR}/celt >)
   target_link_libraries(test_opus_encode PRIVATE opus)
   add_test(test_opus_encode test_opus_encode)
 
