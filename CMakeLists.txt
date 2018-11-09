@@ -4,6 +4,8 @@ include(CTest)
 include(opus_config.cmake)
 include(opus_sources.cmake)
 
+# TODO Generate version
+
 # library
 add_library(opus STATIC ${opus_sources} ${opus_sources_float})
 
@@ -60,8 +62,6 @@ if(HAVE_SSE)
   endif()
 endif(HAVE_SSE)
 
-# TODO: install lib, headers and tests
-
 if(BUILD_TESTING)
   # demo
   add_executable(opus_demo ${opus_demo_sources})
@@ -100,3 +100,6 @@ if(BUILD_TESTING)
   target_link_libraries(test_opus_padding PRIVATE opus)
   add_test(test_opus_padding test_opus_padding)
 endif(BUILD_TESTING)
+
+#install
+# TODO
