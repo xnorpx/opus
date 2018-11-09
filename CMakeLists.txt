@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(opus LANGUAGES C)
+include(CTest)
 include(opus_config.cmake)
 include(opus_sources.cmake)
 
@@ -54,7 +55,6 @@ endif(x86 OR x86_64)
 # TODO: install lib, headers and tests
 
 if(BUILD_TESTING)
-  enable_testing()
 
   # demo
   add_executable(opus_demo ${opus_demo_sources})
