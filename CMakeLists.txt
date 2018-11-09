@@ -13,8 +13,7 @@ target_include_directories(opus
                            PRIVATE $<BUILD_INTERFACE:
                                    ${CMAKE_CURRENT_SOURCE_DIR}/celt
                                    ${CMAKE_CURRENT_SOURCE_DIR}/silk
-                                   >
-                                   $<INSTALL_INTERFACE:include>)
+                                   >)
 target_compile_definitions(opus PRIVATE CUSTOM_MODES OPUS_BUILD)
 
 add_sources_group(opus silk ${silk_sources})
