@@ -5,23 +5,15 @@ but still have the option to use CMake with only lists at one place]]
 cmake_minimum_required(VERSION 3.12)
 
 
-include(CheckSymbolExists)
-if(MSVC)
-  check_symbol_exists("_M_AMD64" "" x86_64)
-  check_symbol_exists("_M_IX86" "" x86)
-  check_symbol_exists("_M_ARM" "" ARM)
-else()
-  check_symbol_exists("__x86_64__" "" x86_64)
-  check_symbol_exists("__i386__" "" x86)
-  check_symbol_exists("__arm__" "" ARM)
-endif()
+include(CheckIncludeFile)
 
 function(opus_detect_sse HAVE_SSE)
-  if(x86 OR x86_64)
-    set(HAVE_SSE ON PARENT_SCOPE)
-  else(x86 OR x86_64)
-    set(HAVE_SSE OFF PARENT_SCOPE)
-  endif(x86 OR x86_64)
+  if(CMAKE_SYSTEM_PROCESSOR MATCHES "(i[0-9]86|x86|X86|amd64|AMD64|x86_64)")
+    check_include_file(xmmintrin.h HAVE XMMINTRIN_H)
+    if(HAVE XMMINTRIN_H)
+      set(HAVE_SSE ${HAVE_XMMINTRIN_H} PARENT_SCOPE)
+    endif()
+  endif()
 
 endfunction()
 
