@@ -4,6 +4,9 @@ if(NOT WIN32)
   message(FATAL_ERROR "Only tested on Windows")
 endif()
 
+get_opus_version(OPUS_VERSION)
+add_compile_definitions("PACKAGE_VERSION \"${OPUS_VERSION}\"")
+
 opus_detect_sse(HAVE_SSE)
 
 include(CmakeDependentOption)
@@ -22,7 +25,6 @@ option(USE_ALLOCA "Use alloca for stack arrays (on non-C99 compilers)" NO)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set_property(GLOBAL PROPERTY C_STANDARD 99)
-
 
 if(MSVC)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)

@@ -4,8 +4,6 @@ include(CTest)
 include(opus_config.cmake)
 include(opus_sources.cmake)
 
-# TODO Generate version
-
 # library
 add_library(opus STATIC ${opus_sources} ${opus_sources_float})
 
@@ -101,5 +99,4 @@ if(BUILD_TESTING)
   add_test(test_opus_padding test_opus_padding)
 endif(BUILD_TESTING)
 
-#install
-# TODO
+# install TODO

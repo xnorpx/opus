@@ -4,9 +4,27 @@ but still have the option to use CMake with only lists at one place]]
 
 cmake_minimum_required(VERSION 3.12)
 
+function(get_opus_version OPUS_VERSION)
+  find_package(Git)
+  if(GIT_FOUND)
+    execute_process(COMMAND ${GIT_EXECUTABLE} describe --tags --match "v*"
+                    OUTPUT_VARIABLE OPUS_PACKAGE_VERSION)
+    string(STRIP ${OPUS_PACKAGE_VERSION}, OPUS_PACKAGE_VERSION)
+    string(REPLACE \n
+                   ""
+                   OPUS_PACKAGE_VERSION
+                   ${OPUS_PACKAGE_VERSION})
+    string(REPLACE ,
+                   ""
+                   OPUS_PACKAGE_VERSION
+                   ${OPUS_PACKAGE_VERSION})
+    set(OPUS_VERSION ${OPUS_PACKAGE_VERSION} PARENT_SCOPE)
+  else(GIT_FOUND)
+    set(OPUS_VERSION unknown PARENT_SCOPE)
+  endif(GIT_FOUND)
+endfunction()
 
 include(CheckIncludeFile)
-
 function(opus_detect_sse HAVE_SSE)
   if(CMAKE_SYSTEM_PROCESSOR MATCHES "(i[0-9]86|x86|X86|amd64|AMD64|x86_64)")
     check_include_file(xmmintrin.h HAVE_XMMINTRIN_H)
@@ -14,7 +32,6 @@ function(opus_detect_sse HAVE_SSE)
       set(HAVE_SSE ${HAVE_XMMINTRIN_H} PARENT_SCOPE)
     endif()
   endif()
-
 endfunction()
 
 function(add_sources_group target group)
