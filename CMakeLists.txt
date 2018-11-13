@@ -15,6 +15,7 @@ target_include_directories(opus
                                    ${CMAKE_CURRENT_SOURCE_DIR}/silk
                                    >)
 target_compile_definitions(opus PRIVATE CUSTOM_MODES OPUS_BUILD)
+target_link_libraries(opus PRIVATE ${CMAKE_REQUIRED_LIBRARIES})
 
 add_sources_group(opus silk ${silk_sources})
 add_sources_group(opus celt ${celt_sources})
@@ -58,6 +59,11 @@ if(HAVE_SSE)
                                OPUS_X86_PRESUME_HAVE_SSE2
                                OPUS_X86_PRESUME_SSE4_1)
   endif()
+
+  if(NOT MSVC)
+    set(CMAKE_C_FLAGS "-msse4.1")
+  endif(NOT MSVC)
+
 endif(HAVE_SSE)
 
 if(BUILD_TESTING)

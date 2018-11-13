@@ -1,15 +1,13 @@
 include(opus_functions.cmake)
 
-if(NOT WIN32)
-  message(FATAL_ERROR "Only tested on Windows")
-endif()
-
-get_opus_version(OPUS_VERSION)
-add_compile_definitions("PACKAGE_VERSION \"${OPUS_VERSION}\"")
+get_package_version(PACKAGE_VERSION)
+configure_file(config.h.in config.h @ONLY)
+add_compile_definitions(HAVE_CONFIG_H)
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 opus_detect_sse(HAVE_SSE)
 
-include(CmakeDependentOption)
+include(CMakeDependentOption)
 cmake_dependent_option(OPUS_PRESUME_SSE
                        "Use SSE always (requires CPU with SSE)"
                        ON

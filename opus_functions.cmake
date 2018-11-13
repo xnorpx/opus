@@ -4,7 +4,7 @@ but still have the option to use CMake with only lists at one place]]
 
 cmake_minimum_required(VERSION 3.12)
 
-function(get_opus_version OPUS_VERSION)
+function(get_package_version PACKAGE_VERSION)
   find_package(Git)
   if(GIT_FOUND)
     execute_process(COMMAND ${GIT_EXECUTABLE} describe --tags --match "v*"
@@ -18,9 +18,9 @@ function(get_opus_version OPUS_VERSION)
                    ""
                    OPUS_PACKAGE_VERSION
                    ${OPUS_PACKAGE_VERSION})
-    set(OPUS_VERSION ${OPUS_PACKAGE_VERSION} PARENT_SCOPE)
+    set(PACKAGE_VERSION ${OPUS_PACKAGE_VERSION} PARENT_SCOPE)
   else(GIT_FOUND)
-    set(OPUS_VERSION unknown PARENT_SCOPE)
+    set(PACKAGE_VERSION unknown PARENT_SCOPE)
   endif(GIT_FOUND)
 endfunction()
 
