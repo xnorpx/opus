@@ -83,6 +83,40 @@ if(HAVE_SSE)
   endif()
 endif(HAVE_SSE)
 
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "(armv7-a)")
+  add_sources_group(objopus celt ${celt_sources_arm})
+endif()
+
+if(HAVE_NEON)
+
+  add_sources_group(objopus celt ${celt_sources_arm_neon_intr})
+  add_sources_group(objopus silk ${silk_sources_arm_neon_intr})
+
+  # silk arm neon depends on main_Fix.h
+  target_include_directories(
+    objopus
+    PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/silk/fixed>)
+
+  if(FIXED_POINT)
+    add_sources_group(objopus silk ${silk_sources_fixed_arm_neon_intr})
+  endif(FIXED_POINT)
+
+  if(OPUS_MAY_HAVE_NEON)
+    # Do runtime check for NEON
+    target_compile_definitions(objopus
+                               PRIVATE
+                               OPUS_ARM_MAY_HAVE_NEON
+                               OPUS_ARM_MAY_HAVE_NEON_INTR
+                               OPUS_HAVE_RTCD)
+  elseif(OPUS_PRESUME_NEON)
+    target_compile_definitions(objopus
+                               PRIVATE
+                               OPUS_ARM_PRESUME_NEON
+                               OPUS_ARM_PRESUME_NEON_INTR)
+  endif()
+endif()
+
+
 include(GNUInstallDirs)
 install(TARGETS opus opus_static
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}

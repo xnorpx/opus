@@ -4,9 +4,3 @@
 #cmakedefine PACKAGE_VERSION "@PACKAGE_VERSION@"
 
 #endif /* CONFIG_H */
-
-
-
-
-
-
