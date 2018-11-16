@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.12)
 project(opus LANGUAGES C)
 include(opus_config.cmake)
 include(opus_sources.cmake)
+include(opus_functions.cmake)
 
 add_library(objopus OBJECT ${opus_sources} ${opus_sources_float})
 add_library(opus SHARED $<TARGET_OBJECTS:objopus>)
@@ -47,15 +48,18 @@ else(FIXED_POINT)
 endif(FIXED_POINT)
 
 if(HAVE_SSE)
-  if(FIXED_POINT)
-    add_sources_group(objopus silk ${silk_sources_fixed_sse4_1})
-  else(FIXED_POINT)
-    add_sources_group(objopus silk ${silk_sources_sse4_1})
-  endif(FIXED_POINT)
 
   add_sources_group(objopus celt ${celt_sources_sse})
   add_sources_group(objopus celt ${celt_sources_sse2})
-  add_sources_group(objopus celt ${celt_sources_sse4_1})
+
+  if(SSE4_FLAG_SUPPORTED)
+    add_sources_group(objopus celt ${celt_sources_sse4_1})
+    if(FIXED_POINT)
+      add_sources_group(objopus silk ${silk_sources_fixed_sse4_1})
+    else(FIXED_POINT)
+      add_sources_group(objopus silk ${silk_sources_sse4_1})
+    endif(FIXED_POINT)
+  endif(SSE4_FLAG_SUPPORTED)
 
   if(OPUS_MAY_HAVE_SSE)
     # Do runtime check for SIMD
@@ -63,19 +67,20 @@ if(HAVE_SSE)
                                PRIVATE
                                OPUS_X86_MAY_HAVE_SSE
                                OPUS_X86_MAY_HAVE_SSE2
-                               OPUS_X86_MAY_HAVE_SSE4_1
                                OPUS_HAVE_RTCD)
+    if(SSE4_FLAG_SUPPORTED)
+      target_compile_definitions(objopus PRIVATE OPUS_X86_MAY_HAVE_SSE4_1)
+    endif(SSE4_FLAG_SUPPORTED)
+
   elseif(OPUS_PRESUME_SSE)
     target_compile_definitions(objopus
                                PRIVATE
                                OPUS_X86_PRESUME_HAVE_SSE
-                               OPUS_X86_PRESUME_HAVE_SSE2
-                               OPUS_X86_PRESUME_SSE4_1)
+                               OPUS_X86_PRESUME_HAVE_SSE2)
+    if(SSE4_FLAG_SUPPORTED)
+      target_compile_definitions(objopus PRIVATE OPUS_X86_PRESUME_SSE4_1)
+    endif(SSE4_FLAG_SUPPORTED)
   endif()
-
-  if(NOT MSVC)
-    set(CMAKE_C_FLAGS "-msse4.1")
-  endif(NOT MSVC)
 endif(HAVE_SSE)
 
 include(GNUInstallDirs)
