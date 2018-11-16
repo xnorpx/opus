@@ -4,18 +4,23 @@ include(opus_config.cmake)
 include(opus_sources.cmake)
 
 add_library(objopus OBJECT ${opus_sources} ${opus_sources_float})
-add_library(${OPUS_SHARED_LIB} SHARED $<TARGET_OBJECTS:objopus>)
-add_library(${OPUS_STATIC_LIB} STATIC $<TARGET_OBJECTS:objopus>)
+add_library(opus SHARED $<TARGET_OBJECTS:objopus>)
+add_library(opus_static STATIC $<TARGET_OBJECTS:objopus>)
 
-target_include_directories(${OPUS_STATIC_LIB}
-                           PUBLIC $<BUILD_INTERFACE:
-                                  ${CMAKE_CURRENT_SOURCE_DIR}/include >
-)
+if(NOT MSVC)
+  set_target_properties(opus_static PROPERTIES OUTPUT_NAME opus)
+endif(NOT MSVC)
 
-target_include_directories(${OPUS_SHARED_LIB}
+target_include_directories(opus
                            PUBLIC $<BUILD_INTERFACE:
-                                  ${CMAKE_CURRENT_SOURCE_DIR}/include >
-)
+                                  ${CMAKE_CURRENT_SOURCE_DIR}/include >)
+target_link_libraries(opus PRIVATE ${CMAKE_REQUIRED_LIBRARIES})
+
+target_include_directories(opus_static
+                           PUBLIC $<BUILD_INTERFACE:
+                                  ${CMAKE_CURRENT_SOURCE_DIR}/include >)
+target_link_libraries(opus_static PRIVATE ${CMAKE_REQUIRED_LIBRARIES})
+set_property(TARGET objopus PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 target_include_directories(objopus
                            PRIVATE $<BUILD_INTERFACE:
@@ -24,7 +29,6 @@ target_include_directories(objopus
                                    ${CMAKE_CURRENT_SOURCE_DIR}/silk
                                    >)
 target_compile_definitions(objopus PRIVATE CUSTOM_MODES OPUS_BUILD DLL_EXPORT)
-target_link_libraries(objopus PRIVATE ${CMAKE_REQUIRED_LIBRARIES})
 
 add_sources_group(objopus silk ${silk_sources})
 add_sources_group(objopus celt ${celt_sources})
@@ -74,23 +78,31 @@ if(HAVE_SSE)
   endif(NOT MSVC)
 endif(HAVE_SSE)
 
+include(GNUInstallDirs)
+install(TARGETS opus opus_static
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(DIRECTORY include/
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
+
 if(BUILD_TESTING)
   enable_testing()
 
   # demo
   add_executable(opus_demo ${opus_demo_sources})
-  target_link_libraries(opus_demo PRIVATE ${OPUS_STATIC_LIB})
+  target_link_libraries(opus_demo PRIVATE opus_static)
 
   # compare
   add_executable(opus_compare ${opus_compare_sources})
-  target_link_libraries(opus_compare PRIVATE ${OPUS_STATIC_LIB})
+  target_link_libraries(opus_compare PRIVATE opus_static)
 
   # tests
   add_executable(test_opus_api ${test_opus_api_sources})
   target_include_directories(test_opus_api
                              PRIVATE $<BUILD_INTERFACE:
                                      ${CMAKE_CURRENT_SOURCE_DIR}/celt >)
-  target_link_libraries(test_opus_api PRIVATE ${OPUS_STATIC_LIB})
+  target_link_libraries(test_opus_api PRIVATE opus_static)
   if(FIXED_POINT)
     target_compile_definitions(test_opus_api PRIVATE DISABLE_FLOAT_API)
   endif(FIXED_POINT)
@@ -100,19 +112,17 @@ if(BUILD_TESTING)
   target_include_directories(test_opus_encode
                              PRIVATE $<BUILD_INTERFACE:
                                      ${CMAKE_CURRENT_SOURCE_DIR}/celt >)
-  target_link_libraries(test_opus_encode PRIVATE ${OPUS_STATIC_LIB})
+  target_link_libraries(test_opus_encode PRIVATE opus_static)
   add_test(test_opus_encode test_opus_encode)
 
   add_executable(test_opus_decode ${test_opus_decode_sources})
-  target_link_libraries(test_opus_decode PRIVATE ${OPUS_STATIC_LIB})
+  target_link_libraries(test_opus_decode PRIVATE opus_static)
   if(FIXED_POINT)
     target_compile_definitions(test_opus_decode PRIVATE DISABLE_FLOAT_API)
   endif(FIXED_POINT)
   add_test(test_opus_decode test_opus_decode)
 
   add_executable(test_opus_padding ${test_opus_padding_sources})
-  target_link_libraries(test_opus_padding PRIVATE ${OPUS_STATIC_LIB})
+  target_link_libraries(test_opus_padding PRIVATE opus_static)
   add_test(test_opus_padding test_opus_padding)
 endif(BUILD_TESTING)
-
-# install TODO
