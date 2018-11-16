@@ -7,6 +7,7 @@ add_definitions(-DHAVE_CONFIG_H)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 opus_detect_sse(HAVE_SSE)
+opus_detect_neon(HAVE_NEON)
 
 include(CMakeDependentOption)
 cmake_dependent_option(OPUS_PRESUME_SSE
@@ -19,6 +20,21 @@ cmake_dependent_option(OPUS_MAY_HAVE_SSE
                        ON
                        "HAVE_SSE;NOT OPUS_PRESUME_SSE"
                        OFF)
+
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+  set(OPUS_PRESUME_NEON ON)
+endif()
+cmake_dependent_option(OPUS_PRESUME_NEON
+                       "Use NEON always (requires CPU with NEON Support)"
+                       ON
+		       "HAVE_NEON;OPUS_PRESUME_NEON"
+                       OFF)
+cmake_dependent_option(OPUS_MAY_HAVE_NEON
+                       "Use NEON if available"
+                       ON
+                       "HAVE_NEON;NOT OPUS_PRESUME_NEON"
+                       OFF)
+
 option(FIXED_POINT "Use fixed-point code (for devices with less powerful FPU"
        NO)
 option(USE_ALLOCA "Use alloca for stack arrays (on non-C99 compilers)" NO)
