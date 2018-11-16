@@ -18,7 +18,7 @@ cmake_dependent_option(OPUS_MAY_HAVE_SSE
                        ON
                        "HAVE_SSE;NOT OPUS_PRESUME_SSE"
                        OFF)
-option(FIXED_POINT "Use fixed-point code (for device with less powerful FPU" NO)
+option(FIXED_POINT "Use fixed-point code (for devices with less powerful FPU" NO)
 option(USE_ALLOCA "Use alloca for stack arrays (on non-C99 compilers)" NO)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
