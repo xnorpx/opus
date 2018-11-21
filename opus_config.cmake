@@ -1,8 +1,9 @@
 include(opus_functions.cmake)
 
 get_package_version(PACKAGE_VERSION)
+message(STATUS "Opus version: ${PACKAGE_VERSION}")
 configure_file(config.h.in config.h @ONLY)
-add_compile_definitions(HAVE_CONFIG_H)
+add_definitions(-DHAVE_CONFIG_H)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 opus_detect_sse(HAVE_SSE)
@@ -18,7 +19,8 @@ cmake_dependent_option(OPUS_MAY_HAVE_SSE
                        ON
                        "HAVE_SSE;NOT OPUS_PRESUME_SSE"
                        OFF)
-option(FIXED_POINT "Use fixed-point code (for devices with less powerful FPU" NO)
+option(FIXED_POINT "Use fixed-point code (for devices with less powerful FPU"
+       NO)
 option(USE_ALLOCA "Use alloca for stack arrays (on non-C99 compilers)" NO)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)

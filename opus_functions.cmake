@@ -2,7 +2,7 @@
 this is to avoid breaking existing make and auto make support
 but still have the option to use CMake with only lists at one place]]
 
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.1)
 
 function(check_and_set_flag NAME FLAG)
   include(CheckCCompilerFlag)
@@ -57,41 +57,46 @@ function(get_opus_sources SOURCE_GROUP MAKE_FILE SOURCES)
   file(STRINGS ${MAKE_FILE} opus_sources)
 
   # add wildcard for regex match
-  string(APPEND SOURCE_GROUP ".*$")
+  string(CONCAT SOURCE_GROUP ${SOURCE_GROUP} ".*$")
 
   # find group
   foreach(val IN LISTS opus_sources)
     if(val MATCHES ${SOURCE_GROUP})
-      list(TRANSFORM val STRIP)
       list(LENGTH val list_length)
       if(${list_length} EQUAL 1)
-        # for tests split by '=' and clean up the rest into list
+        # for tests split by '=' and clean up the rest into a list
         string(FIND ${val} "=" index)
         math(EXPR index "${index} + 1")
         string(SUBSTRING ${val}
                          ${index}
                          -1
                          sources)
-        string(STRIP ${sources} sources)
         string(REPLACE " "
                        ";"
                        sources
                        ${sources})
       else()
-        # discard the group as not a file name
-        list(SUBLIST val 1 -1 sources)
+        # discard the group
+        list(REMOVE_AT val 0)
+        set(sources ${val})
       endif()
       break()
     endif()
   endforeach()
 
   list(LENGTH sources list_length)
-
   if(${list_length} LESS 1)
     message(
       FATAL_ERROR
         "No files parsed succesfully from ${SOURCE_GROUP} in ${MAKE_FILE}")
   endif()
 
-  set(${SOURCES} ${sources} PARENT_SCOPE)
+  # remove trailing whitespaces
+  set(list_var "")
+  foreach(source ${sources})
+    string(STRIP "${source}" source)
+    list(APPEND list_var "${source}")
+  endforeach()
+
+  set(${SOURCES} ${list_var} PARENT_SCOPE)
 endfunction()
