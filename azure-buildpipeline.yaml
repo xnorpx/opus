@@ -1,6 +1,6 @@
 jobs: 
 
-- job: 'android_arm64-v8a_debug'
+- job: 'android_arm64_v8a_debug'
   pool: 
     vmImage: 'VS2017-Win2016'
   steps:
@@ -23,7 +23,7 @@ jobs:
       cmakeArgs: --build . -j 4 --config Debug
     displayName: 'Build'
 
-- job: 'android_arm64-v8a_release'
+- job: 'android_arm64_v8a_release'
   pool: 
     vmImage: 'VS2017-Win2016'
   steps:
@@ -46,7 +46,7 @@ jobs:
       cmakeArgs: --build . -j 4 --config Release
     displayName: 'Build'
 
-- job: 'android_armeabi-v7a_debug'
+- job: 'android_armeabi_v7a_debug'
   pool: 
     vmImage: 'VS2017-Win2016'
   steps:
@@ -69,7 +69,7 @@ jobs:
       cmakeArgs: --build . -j 4 --config Debug
     displayName: 'Build'
 
-- job: 'android_armeabi-v7a_release'
+- job: 'android_armeabi_v7a_release'
   pool: 
     vmImage: 'VS2017-Win2016'
   steps:
