@@ -5,12 +5,13 @@ jobs:
     vmImage: 'VS2017-Win2016'
   steps:
   - powershell: |
-          $temp = $(ANDROID_NDK_PATH) -replace '\\','/'
+          $temp = "$(ANDROID_NDK_PATH)"
           echo "##vso[task.setvariable variable=android_ndk;isOutput=true]$temp"
     name: ConvertNDKPath
   - script: echo $(ConvertNDKPath.android_ndk)
     name: echovar
   #- script: cinst ninja
+  #-replace '\\','/'
 
   #- task: CMake@1
    # inputs: 
