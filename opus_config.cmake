@@ -1,5 +1,7 @@
 include(opus_functions.cmake)
 
+string(REPLACE "\\" "/" CMAKE_ANDROID_NDK ${CMAKE_ANDROID_NDK})
+
 get_package_version(PACKAGE_VERSION)
 message(STATUS "Opus version: ${PACKAGE_VERSION}")
 configure_file(config.h.in config.h @ONLY)
