@@ -4,7 +4,7 @@ jobs:
   pool: 
     vmImage: 'VS2017-Win2016'
   steps:
-  - powershell: echo "##vso[task.setvariable variable=android_ndk;isOutput=true]$$(ANDROID_NDK_PATH) -replace '\\','/'"
+  - powershell: echo "##vso[task.setvariable variable=android_ndk;isOutput=true]'$(ANDROID_NDK_PATH) -replace '\\','/''"
     name: ConvertNDKPath
   - script: echo $(ConvertNDKPath.android_ndk)
     name: echovar
