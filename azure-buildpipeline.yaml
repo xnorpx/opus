@@ -6,12 +6,12 @@ jobs:
   steps:
   - powershell: |
           $temp = "$(ANDROID_NDK_PATH)"
+          $temp = $temp -replace '\\','/'
           echo "##vso[task.setvariable variable=android_ndk;isOutput=true]$temp"
     name: ConvertNDKPath
   - script: echo $(ConvertNDKPath.android_ndk)
     name: echovar
   #- script: cinst ninja
-  #-replace '\\','/'
 
   #- task: CMake@1
    # inputs: 
