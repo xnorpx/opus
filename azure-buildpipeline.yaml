@@ -1,6 +1,6 @@
 jobs: 
 
-- job: 'android_arm_debug'
+- job: 'android_arm64-v8a_debug'
   pool: 
     vmImage: 'VS2017-Win2016'
   steps:
@@ -22,3 +22,119 @@ jobs:
     inputs: 
       cmakeArgs: --build . -j 4 --config Debug
     displayName: 'Build'
+
+- job: 'android_arm64-v8a_release'
+  pool: 
+    vmImage: 'VS2017-Win2016'
+  steps:
+  - powershell: |
+          $temp = "$(ANDROID_NDK_PATH)"
+          $temp = $temp -replace '\\','/'
+          echo "##vso[task.setvariable variable=android_ndk;isOutput=true]$temp"
+    name: ConvertNDKPath
+  - script: echo $(ConvertNDKPath.android_ndk)
+    name: echovar
+  - script: cinst ninja
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: .. -G Ninja -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_ARCH_ABI=arm64-v8a -DCMAKE_ANDROID_NDK="$(ConvertNDKPath.android_ndk)"
+    displayName: 'Generate Solution'
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: --build . -j 4 --config Release
+    displayName: 'Build'
+
+- job: 'android_armeabi-v7a_debug'
+  pool: 
+    vmImage: 'VS2017-Win2016'
+  steps:
+  - powershell: |
+          $temp = "$(ANDROID_NDK_PATH)"
+          $temp = $temp -replace '\\','/'
+          echo "##vso[task.setvariable variable=android_ndk;isOutput=true]$temp"
+    name: ConvertNDKPath
+  - script: echo $(ConvertNDKPath.android_ndk)
+    name: echovar
+  - script: cinst ninja
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: .. -G Ninja -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_ARCH_ABI=armeabi-v7a -DCMAKE_ANDROID_NDK="$(ConvertNDKPath.android_ndk)"
+    displayName: 'Generate Solution'
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: --build . -j 4 --config Debug
+    displayName: 'Build'
+
+- job: 'android_armeabi-v7a_release'
+  pool: 
+    vmImage: 'VS2017-Win2016'
+  steps:
+  - powershell: |
+          $temp = "$(ANDROID_NDK_PATH)"
+          $temp = $temp -replace '\\','/'
+          echo "##vso[task.setvariable variable=android_ndk;isOutput=true]$temp"
+    name: ConvertNDKPath
+  - script: echo $(ConvertNDKPath.android_ndk)
+    name: echovar
+  - script: cinst ninja
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: .. -G Ninja -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_ARCH_ABI=armeabi-v7a -DCMAKE_ANDROID_NDK="$(ConvertNDKPath.android_ndk)"
+    displayName: 'Generate Solution'
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: --build . -j 4 --config Release
+    displayName: 'Build'
+
+- job: 'android_x86_debug'
+  pool: 
+    vmImage: 'VS2017-Win2016'
+  steps:
+  - powershell: |
+          $temp = "$(ANDROID_NDK_PATH)"
+          $temp = $temp -replace '\\','/'
+          echo "##vso[task.setvariable variable=android_ndk;isOutput=true]$temp"
+    name: ConvertNDKPath
+  - script: echo $(ConvertNDKPath.android_ndk)
+    name: echovar
+  - script: cinst ninja
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: .. -G Ninja -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_ARCH_ABI=x86 -DCMAKE_ANDROID_NDK="$(ConvertNDKPath.android_ndk)"
+    displayName: 'Generate Solution'
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: --build . -j 4 --config Debug
+    displayName: 'Build'
+
+- job: 'android_x86_release'
+  pool: 
+    vmImage: 'VS2017-Win2016'
+  steps:
+  - powershell: |
+          $temp = "$(ANDROID_NDK_PATH)"
+          $temp = $temp -replace '\\','/'
+          echo "##vso[task.setvariable variable=android_ndk;isOutput=true]$temp"
+    name: ConvertNDKPath
+  - script: echo $(ConvertNDKPath.android_ndk)
+    name: echovar
+  - script: cinst ninja
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: .. -G Ninja -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_ARCH_ABI=x86 -DCMAKE_ANDROID_NDK="$(ConvertNDKPath.android_ndk)"
+    displayName: 'Generate Solution'
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: --build . -j 4 --config Release
+    displayName: 'Build'
+
