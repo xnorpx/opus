@@ -1,0 +1,328 @@
+jobs: 
+- job: 'win_x86_debug'
+  pool: 
+    vmImage: 'VS2017-Win2016'
+  steps:
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: .. -DBUILD_TESTING=1 -DCMAKE_GENERATOR_PLATFORM=Win32
+    displayName: 'Generate Solution'
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: --build . -j 4 --config Debug
+    displayName: 'Build'
+
+  - script: |
+      cd build
+      ctest -j 4
+    displayName: 'Test'
+
+- job: 'win_x86_release'
+  pool: 
+    vmImage: 'VS2017-Win2016'
+  steps:
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: .. -DBUILD_TESTING=1 -DCMAKE_GENERATOR_PLATFORM=Win32
+    displayName: 'Generate Solution'
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: --build . -j 4 --config Release
+    displayName: 'Build'
+
+  - script: |
+      cd build
+      ctest -j 4
+    displayName: 'Test'
+
+- job: 'win_x64_debug'
+  pool: 
+    vmImage: 'VS2017-Win2016'
+  steps:
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: .. -DBUILD_TESTING=1 -DCMAKE_GENERATOR_PLATFORM=x64
+    displayName: 'Generate Solution'
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: --build . -j 4 --config Debug
+    displayName: 'Build'
+
+  - script: |
+      cd build
+      ctest -j 4
+    displayName: 'Test'
+
+- job: 'win_x64_release'
+  pool: 
+    vmImage: 'VS2017-Win2016'
+  steps:
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: .. -DBUILD_TESTING=1 -DCMAKE_GENERATOR_PLATFORM=x64
+    displayName: 'Generate Solution'
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: --build . -j 4 --config Release
+    displayName: 'Build'
+
+  - script: |
+      cd build
+      ctest -j 4
+    displayName: 'Test'
+
+- job: 'win_arm_debug'
+  pool: 
+    vmImage: 'VS2017-Win2016'
+  steps:
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: .. -DCMAKE_GENERATOR_PLATFORM=ARM
+    displayName: 'Generate Solution'
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: --build . -j 4 --config Debug
+    displayName: 'Build'
+
+- job: 'win_arm_release'
+  pool: 
+    vmImage: 'VS2017-Win2016'
+  steps:
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: .. -DCMAKE_GENERATOR_PLATFORM=ARM
+    displayName: 'Generate Solution'
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: --build . -j 4 --config Release
+    displayName: 'Build'
+
+- job: 'mac_x64_debug'
+  pool: 
+    vmImage: 'macOS-10.13'
+  steps:
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: .. -DBUILD_TESTING=1
+    displayName: 'Generate Solution'
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: --build . -j 4 --config Debug
+    displayName: 'Build'
+
+  - script: |
+      cd build
+      ctest -j 4
+    displayName: 'Test'
+
+- job: 'mac_x64_release'
+  pool: 
+    vmImage: 'macOS-10.13'
+  steps:
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: .. -DBUILD_TESTING=1
+    displayName: 'Generate Solution'
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: --build . -j 4 --config Release
+    displayName: 'Build'
+
+  - script: |
+      cd build
+      ctest -j 4
+    displayName: 'Test'
+
+- job: 'linux_x64_debug'
+  pool: 
+    vmImage: 'Ubuntu-16.04'
+  steps:
+  # Remove the install of CMake 3.12 once hosted image is updated from 3.10
+  - script: |
+      curl -sL https://cmake.org/files/v3.12/cmake-3.12.4-Linux-x86_64.sh -o cmakeinstall.sh
+      chmod +x cmakeinstall.sh
+      sudo ./cmakeinstall.sh --prefix=/usr/local --exclude-subdir
+      rm cmakeinstall.sh
+    displayName: 'Install CMake 3.12 on Linux'
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: .. -DBUILD_TESTING=1
+    displayName: 'Generate Solution'
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: --build . -j 4 --config Debug
+    displayName: 'Build'
+
+  - script: |
+      cd build
+      ctest -j 4
+    displayName: 'Test'
+
+- job: 'linux_x64_release'
+  pool: 
+    vmImage: 'Ubuntu-16.04'
+  steps:
+  # Remove the install of CMake 3.12 once hosted image is updated from 3.10
+  - script: |
+      curl -sL https://cmake.org/files/v3.12/cmake-3.12.4-Linux-x86_64.sh -o cmakeinstall.sh
+      chmod +x cmakeinstall.sh
+      sudo ./cmakeinstall.sh --prefix=/usr/local --exclude-subdir
+      rm cmakeinstall.sh
+    displayName: 'Install CMake 3.12 on Linux'
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: .. -DBUILD_TESTING=1
+    displayName: 'Generate Solution'
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: --build . -j 4 --config Release
+    displayName: 'Build'
+
+  - script: |
+      cd build
+      ctest -j 4
+    displayName: 'Test'
+
+- job: 'android_x86_debug'
+  pool: 
+    vmImage: 'VS2017-Win2016'
+  steps:
+  - powershell: |
+          $temp = "$(ANDROID_NDK_PATH)"
+          $temp = $temp -replace '\\','/'
+          echo "##vso[task.setvariable variable=android_ndk;isOutput=true]$temp"
+    name: ConvertNDKPath
+
+  - script: cinst ninja
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: .. -G Ninja -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_ARCH_ABI=x86 -DCMAKE_ANDROID_NDK="$(ConvertNDKPath.android_ndk)"
+    displayName: 'Generate Solution'
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: --build . -j 4 --config Debug
+    displayName: 'Build'
+
+- job: 'android_x86_release'
+  pool: 
+    vmImage: 'VS2017-Win2016'
+  steps:
+  - powershell: |
+          $temp = "$(ANDROID_NDK_PATH)"
+          $temp = $temp -replace '\\','/'
+          echo "##vso[task.setvariable variable=android_ndk;isOutput=true]$temp"
+    name: ConvertNDKPath
+
+  - script: cinst ninja
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: .. -G Ninja -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_ARCH_ABI=x86 -DCMAKE_ANDROID_NDK="$(ConvertNDKPath.android_ndk)"
+    displayName: 'Generate Solution'
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: --build . -j 4 --config Release
+    displayName: 'Build'
+
+- job: 'android_arm64_v8a_debug'
+  pool: 
+    vmImage: 'VS2017-Win2016'
+  steps:
+  - powershell: |
+          $temp = "$(ANDROID_NDK_PATH)"
+          $temp = $temp -replace '\\','/'
+          echo "##vso[task.setvariable variable=android_ndk;isOutput=true]$temp"
+    name: ConvertNDKPath
+
+  - script: cinst ninja
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: .. -G Ninja -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_ARCH_ABI=arm64-v8a -DCMAKE_ANDROID_NDK="$(ConvertNDKPath.android_ndk)"
+    displayName: 'Generate Solution'
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: --build . -j 4 --config Debug
+    displayName: 'Build'
+
+- job: 'android_arm64_v8a_release'
+  pool: 
+    vmImage: 'VS2017-Win2016'
+  steps:
+  - powershell: |
+          $temp = "$(ANDROID_NDK_PATH)"
+          $temp = $temp -replace '\\','/'
+          echo "##vso[task.setvariable variable=android_ndk;isOutput=true]$temp"
+    name: ConvertNDKPath
+
+  - script: cinst ninja
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: .. -G Ninja -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_ARCH_ABI=arm64-v8a -DCMAKE_ANDROID_NDK="$(ConvertNDKPath.android_ndk)"
+    displayName: 'Generate Solution'
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: --build . -j 4 --config Release
+    displayName: 'Build'
+
+- job: 'android_armeabi_v7a_debug'
+  pool: 
+    vmImage: 'VS2017-Win2016'
+  steps:
+  - powershell: |
+          $temp = "$(ANDROID_NDK_PATH)"
+          $temp = $temp -replace '\\','/'
+          echo "##vso[task.setvariable variable=android_ndk;isOutput=true]$temp"
+    name: ConvertNDKPath
+
+  - script: cinst ninja
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: .. -G Ninja -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_ARCH_ABI=armeabi-v7a -DCMAKE_ANDROID_NDK="$(ConvertNDKPath.android_ndk)" -DCMAKE_ANDROID_ARM_NEON=ON -DCMAKE_ANDROID_ARM_MODE=ON
+    displayName: 'Generate Solution'
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: --build . -j 4 --config Debug
+    displayName: 'Build'
+
+- job: 'android_armeabi_v7a_release'
+  pool: 
+    vmImage: 'VS2017-Win2016'
+  steps:
+  - powershell: |
+          $temp = "$(ANDROID_NDK_PATH)"
+          $temp = $temp -replace '\\','/'
+          echo "##vso[task.setvariable variable=android_ndk;isOutput=true]$temp"
+    name: ConvertNDKPath
+
+  - script: cinst ninja
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: .. -G Ninja -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_ARCH_ABI=armeabi-v7a -DCMAKE_ANDROID_NDK="$(ConvertNDKPath.android_ndk)" -DCMAKE_ANDROID_ARM_NEON=ON -DCMAKE_ANDROID_ARM_MODE=ON
+    displayName: 'Generate Solution'
+
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: --build . -j 4 --config Release
+    displayName: 'Build'
