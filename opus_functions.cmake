@@ -4,12 +4,42 @@ but still have the option to use CMake with only lists at one place]]
 
 cmake_minimum_required(VERSION 3.1)
 
-function(check_and_set_flag NAME FLAG)
-  include(CheckCCompilerFlag)
-  check_c_compiler_flag(${FLAG} ${NAME}_FLAG_SUPPORTED)
-  if(${NAME}_FLAG_SUPPORTED)
-    add_definitions(${FLAG})
-  endif()
+function(get_library_version OPUS_LIBRARY_VERSION OPUS_LIBRARY_VERSION_MAJOR)
+  file(STRINGS configure.ac opus_lt_current_string
+       LIMIT_COUNT 1
+       REGEX "OPUS_LT_CURRENT=")
+  string(REGEX MATCH
+               "OPUS_LT_CURRENT=([0-9]*)"
+               _
+               ${opus_lt_current_string})
+  set(OPUS_LT_CURRENT ${CMAKE_MATCH_1})
+
+  file(STRINGS configure.ac opus_lt_revision_string
+       LIMIT_COUNT 1
+       REGEX "OPUS_LT_REVISION=")
+  string(REGEX MATCH
+               "OPUS_LT_REVISION=([0-9]*)"
+               _
+               ${opus_lt_revision_string})
+  set(OPUS_LT_REVISION ${CMAKE_MATCH_1})
+
+  file(STRINGS configure.ac opus_lt_age_string
+       LIMIT_COUNT 1
+       REGEX "OPUS_LT_AGE=")
+  string(REGEX MATCH
+               "OPUS_LT_AGE=([0-9]*)"
+               _
+               ${opus_lt_age_string})
+  set(OPUS_LT_AGE ${CMAKE_MATCH_1})
+
+  math(EXPR OPUS_LIBRARY_VERSION_MAJOR "${OPUS_LT_CURRENT} - ${OPUS_LT_AGE}")
+  set(OPUS_LIBRARY_VERSION_MINOR ${OPUS_LT_AGE})
+  set(OPUS_LIBRARY_VERSION_PATCH ${OPUS_LT_REVISION})
+  set(
+    OPUS_LIBRARY_VERSION
+    "${OPUS_LIBRARY_VERSION_MAJOR}.${OPUS_LIBRARY_VERSION_MINOR}.${OPUS_LIBRARY_VERSION_PATCH}"
+    PARENT_SCOPE)
+  set(OPUS_LIBRARY_VERSION_MAJOR ${OPUS_LIBRARY_VERSION_MAJOR} PARENT_SCOPE)
 endfunction()
 
 function(get_package_version PACKAGE_VERSION)
@@ -32,6 +62,14 @@ function(get_package_version PACKAGE_VERSION)
   endif(GIT_FOUND)
 endfunction()
 
+function(check_and_set_flag NAME FLAG)
+  include(CheckCCompilerFlag)
+  check_c_compiler_flag(${FLAG} ${NAME}_FLAG_SUPPORTED)
+  if(${NAME}_FLAG_SUPPORTED)
+    add_definitions(${FLAG})
+  endif()
+endfunction()
+
 include(CheckIncludeFile)
 function(opus_detect_sse HAVE_SSE)
   if(CMAKE_SYSTEM_PROCESSOR MATCHES "(i[0-9]86|x86|X86|amd64|AMD64|x86_64)")
@@ -49,7 +87,7 @@ endfunction()
 
 include(CheckIncludeFile)
 function(opus_detect_neon HAVE_NEON)
- if(CMAKE_SYSTEM_PROCESSOR MATCHES "(armv7-a|aarch64)")
+  if(CMAKE_SYSTEM_PROCESSOR MATCHES "(armv7-a|aarch64)")
     check_include_file(arm_neon.h HAVE_ARM_NEON_H)
     if(HAVE_ARM_NEON_H)
       set(HAVE_NEON ${HAVE_ARM_NEON_H} PARENT_SCOPE)

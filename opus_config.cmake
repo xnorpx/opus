@@ -1,7 +1,10 @@
 include(opus_functions.cmake)
 
+get_library_version(OPUS_LIBRARY_VERSION OPUS_LIBRARY_VERSION_MAJOR)
+message(STATUS "Opus library version: ${OPUS_LIBRARY_VERSION}")
+
 get_package_version(PACKAGE_VERSION)
-message(STATUS "Opus version: ${PACKAGE_VERSION}")
+message(STATUS "Opus package version: ${PACKAGE_VERSION}")
 configure_file(config.h.in config.h @ONLY)
 add_definitions(-DHAVE_CONFIG_H)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
@@ -27,7 +30,7 @@ endif()
 cmake_dependent_option(OPUS_PRESUME_NEON
                        "Use NEON always (requires CPU with NEON Support)"
                        ON
-		       "HAVE_NEON;OPUS_PRESUME_NEON"
+                       "HAVE_NEON;OPUS_PRESUME_NEON"
                        OFF)
 cmake_dependent_option(OPUS_MAY_HAVE_NEON
                        "Use NEON if available"
@@ -35,9 +38,10 @@ cmake_dependent_option(OPUS_MAY_HAVE_NEON
                        "HAVE_NEON;NOT OPUS_PRESUME_NEON"
                        OFF)
 
-option(FIXED_POINT "Use fixed-point code (for devices with less powerful FPU"
-       NO)
-option(USE_ALLOCA "Use alloca for stack arrays (on non-C99 compilers)" NO)
+option(FIXED_POINT "Use fixed-point code (for devices with less powerful FPU)"
+       OFF)
+option(USE_ALLOCA "Use alloca for stack arrays (on non-C99 compilers)" OFF)
+option(BUILD_PROGRAMS "Build programs" OFF)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set_property(GLOBAL PROPERTY C_STANDARD 99)
