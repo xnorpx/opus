@@ -8,7 +8,11 @@ message(STATUS "Opus library version: ${OPUS_LIBRARY_VERSION}")
 get_package_version(PACKAGE_VERSION)
 message(STATUS "Opus package version: ${PACKAGE_VERSION}")
 
-string(REGEX REPLACE "^v([0-9]+.[0-9]+\\.?([0-9]+)?).*" "\\1" PROJECT_VERSION ${PACKAGE_VERSION})
+string(REGEX
+       REPLACE "^v([0-9]+.[0-9]+\\.?([0-9]+)?).*"
+               "\\1"
+               PROJECT_VERSION
+               ${PACKAGE_VERSION})
 
 project(Opus LANGUAGES C VERSION ${PROJECT_VERSION})
 
@@ -19,31 +23,29 @@ include(GNUInstallDirs)
 add_library(opus ${opus_sources} ${opus_sources_float})
 
 set(Opus_PUBLIC_HEADER
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/opus.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/opus_custom.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/opus_defines.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/opus_multistream.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/opus_projection.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/opus_types.h
-)
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/opus.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/opus_custom.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/opus_defines.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/opus_multistream.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/opus_projection.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/opus_types.h)
 
 set_target_properties(opus
                       PROPERTIES SOVERSION
                                  ${OPUS_LIBRARY_VERSION_MAJOR}
                                  VERSION
                                  ${OPUS_LIBRARY_VERSION}
-                                 PUBLIC_HEADER "${Opus_PUBLIC_HEADER}"
-                                 )
+                                 PUBLIC_HEADER
+                                 "${Opus_PUBLIC_HEADER}")
 
 target_include_directories(
   opus
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
          $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-  PRIVATE
-        ${CMAKE_CURRENT_BINARY_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        celt
-        silk)
+  PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
+          ${CMAKE_CURRENT_SOURCE_DIR}
+          celt
+          silk)
 
 target_link_libraries(opus PRIVATE ${CMAKE_REQUIRED_LIBRARIES})
 
@@ -64,23 +66,24 @@ add_sources_group(opus celt ${celt_sources})
 
 if(FIXED_POINT)
   add_sources_group(opus silk ${silk_sources_fixed})
-  target_include_directories(
-    opus
-    PRIVATE silk/fixed)
+  target_include_directories(opus PRIVATE silk/fixed)
   target_compile_definitions(opus PRIVATE FIXED_POINT=1 DISABLE_FLOAT_API)
 else()
   add_sources_group(opus silk ${silk_sources_float})
-  target_include_directories(
-    opus
-    PRIVATE silk/float)
+  target_include_directories(opus PRIVATE silk/float)
 endif()
 
 if(HAVE_SSE)
 
-  add_sources_group(opus celt ${celt_sources_sse})
-  add_sources_group(opus celt ${celt_sources_sse2})
+  if(SSE_SUPPORTED)
+    add_sources_group(opus celt ${celt_sources_sse})
+  endif()
 
-  if(SSE4_FLAG_SUPPORTED)
+  if(SSE2_SUPPORTED)
+    add_sources_group(opus celt ${celt_sources_sse2})
+  endif()
+
+  if(SSE4_SUPPORTED)
     add_sources_group(opus celt ${celt_sources_sse4_1})
     if(FIXED_POINT)
       add_sources_group(opus silk ${silk_sources_fixed_sse4_1})
@@ -91,23 +94,34 @@ if(HAVE_SSE)
 
   if(OPUS_MAY_HAVE_SSE)
     # Do runtime check for SIMD
-    target_compile_definitions(opus
-                               PRIVATE
-                               OPUS_X86_MAY_HAVE_SSE
-                               OPUS_X86_MAY_HAVE_SSE2
-                               OPUS_HAVE_RTCD)
-    if(SSE4_FLAG_SUPPORTED)
+    target_compile_definitions(opus PRIVATE OPUS_HAVE_RTCD)
+
+    if(SSE_SUPPORTED)
+      target_compile_definitions(opus PRIVATE OPUS_X86_MAY_HAVE_SSE)
+    endif()
+
+    if(SSE2_SUPPORTED)
+      target_compile_definitions(opus PRIVATE OPUS_X86_MAY_HAVE_SSE2)
+    endif()
+
+    if(SSE4_SUPPORTED)
       target_compile_definitions(opus PRIVATE OPUS_X86_MAY_HAVE_SSE4_1)
     endif()
 
   elseif(OPUS_PRESUME_SSE)
-    target_compile_definitions(opus
-                               PRIVATE
-                               OPUS_X86_PRESUME_HAVE_SSE
-                               OPUS_X86_PRESUME_HAVE_SSE2)
-    if(SSE4_FLAG_SUPPORTED)
+
+    if(SSE_SUPPORTED)
+      target_compile_definitions(opus PRIVATE OPUS_X86_PRESUME_SSE)
+    endif()
+
+    if(SSE2_SUPPORTED)
+      target_compile_definitions(opus PRIVATE OPUS_X86_PRESUME_SSE)
+    endif()
+
+    if(SSE4_SUPPORTED)
       target_compile_definitions(opus PRIVATE OPUS_X86_PRESUME_SSE4_1)
     endif()
+
   endif()
 endif()
 
@@ -150,31 +164,27 @@ install(TARGETS opus
         PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/opus)
 
 set(CMAKE_INSTALL_PACKAGEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
-install(
-  EXPORT OpusTargets
-  NAMESPACE Opus::
-  DESTINATION ${CMAKE_INSTALL_PACKAGEDIR}
-)
+install(EXPORT OpusTargets
+        NAMESPACE Opus::
+        DESTINATION ${CMAKE_INSTALL_PACKAGEDIR})
 
 include(CMakePackageConfigHelpers)
 
 set(INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR})
-configure_package_config_file(OpusConfig.cmake.in OpusConfig.cmake
-  INSTALL_DESTINATION ${CMAKE_INSTALL_PACKAGEDIR}
-  PATH_VARS
-    INCLUDE_INSTALL_DIR
-  INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}
-)
+configure_package_config_file(OpusConfig.cmake.in
+                              OpusConfig.cmake
+                              INSTALL_DESTINATION
+                              ${CMAKE_INSTALL_PACKAGEDIR}
+                              PATH_VARS
+                              INCLUDE_INSTALL_DIR
+                              INSTALL_PREFIX
+                              ${CMAKE_INSTALL_PREFIX})
 write_basic_package_version_file(OpusConfigVersion.cmake
-  VERSION ${PROJECT_VERSION}
-  COMPATIBILITY SameMajorVersion
-)
-install(
-  FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/OpusConfig.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/OpusConfigVersion.cmake
-  DESTINATION ${CMAKE_INSTALL_PACKAGEDIR}
-)
+                                 VERSION ${PROJECT_VERSION}
+                                 COMPATIBILITY SameMajorVersion)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/OpusConfig.cmake
+              ${CMAKE_CURRENT_BINARY_DIR}/OpusConfigVersion.cmake
+        DESTINATION ${CMAKE_INSTALL_PACKAGEDIR})
 
 if(BUILD_PROGRAMS)
   # demo
@@ -193,7 +203,8 @@ if(BUILD_TESTING)
 
   # tests
   add_executable(test_opus_decode ${test_opus_decode_sources})
-  target_include_directories(test_opus_decode PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+  target_include_directories(test_opus_decode
+                             PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
   target_link_libraries(test_opus_decode PRIVATE opus)
   if(FIXED_POINT)
     target_compile_definitions(test_opus_decode PRIVATE DISABLE_FLOAT_API)
@@ -201,7 +212,8 @@ if(BUILD_TESTING)
   add_test(test_opus_decode test_opus_decode)
 
   add_executable(test_opus_padding ${test_opus_padding_sources})
-  target_include_directories(test_opus_padding PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+  target_include_directories(test_opus_padding
+                             PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
   target_link_libraries(test_opus_padding PRIVATE opus)
   add_test(test_opus_padding test_opus_padding)
 
@@ -209,9 +221,7 @@ if(BUILD_TESTING)
     # disable tests that depends on private API when building shared lib
     add_executable(test_opus_api ${test_opus_api_sources})
     target_include_directories(test_opus_api
-                               PRIVATE 
-                                      ${CMAKE_CURRENT_BINARY_DIR}
-                                      celt)
+                               PRIVATE ${CMAKE_CURRENT_BINARY_DIR} celt)
     target_link_libraries(test_opus_api PRIVATE opus)
     if(FIXED_POINT)
       target_compile_definitions(test_opus_api PRIVATE DISABLE_FLOAT_API)
@@ -220,9 +230,7 @@ if(BUILD_TESTING)
 
     add_executable(test_opus_encode ${test_opus_encode_sources})
     target_include_directories(test_opus_encode
-                               PRIVATE
-                                      ${CMAKE_CURRENT_BINARY_DIR}
-                                      celt)
+                               PRIVATE ${CMAKE_CURRENT_BINARY_DIR} celt)
     target_link_libraries(test_opus_encode PRIVATE opus)
     add_test(test_opus_encode test_opus_encode)
   endif()

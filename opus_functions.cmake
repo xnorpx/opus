@@ -64,23 +64,54 @@ endfunction()
 
 function(check_and_set_flag NAME FLAG)
   include(CheckCCompilerFlag)
-  check_c_compiler_flag(${FLAG} ${NAME}_FLAG_SUPPORTED)
-  if(${NAME}_FLAG_SUPPORTED)
+  check_c_compiler_flag(${FLAG} ${NAME}_SUPPORTED)
+  if(${NAME}_SUPPORTED)
     add_definitions(${FLAG})
   endif()
 endfunction()
 
 include(CheckIncludeFile)
+# function to check if compiler supports SSE, SSE2 and SSE4.1 if target systems
+# may not have SSE support then use OPUS_MAY_HAVE_SSE option if target system is
+# guaranteed to have SSE support then OPUS_PRESUME_SSE can be used to skip SSE
+# runtime check
 function(opus_detect_sse HAVE_SSE)
   if(CMAKE_SYSTEM_PROCESSOR MATCHES "(i[0-9]86|x86|X86|amd64|AMD64|x86_64)")
-    check_include_file(xmmintrin.h HAVE_XMMINTRIN_H)
+    check_include_file(xmmintrin.h HAVE_XMMINTRIN_H) # SSE
     if(HAVE_XMMINTRIN_H)
-      set(HAVE_SSE ${HAVE_XMMINTRIN_H} PARENT_SCOPE)
+      if(MSVC)
+        set(SSE_SUPPORTED 1 PARENT_SCOPE)
+      else()
+        check_and_set_flag(SSE -msse)
+      endif()
+    else()
+      set(SSE_SUPPORTED 0 PARENT_SCOPE)
+    endif()
+
+    check_include_file(emmintrin.h HAVE_EMMINTRIN_H) # SSE2
+    if(HAVE_EMMINTRIN_H)
+      if(MSVC)
+        set(SSE2_SUPPORTED 1 PARENT_SCOPE)
+      else()
+        check_and_set_flag(SSE2 -msse2)
+      endif()
+    else()
+      set(SSE2_SUPPORTED 0 PARENT_SCOPE)
+    endif()
+
+    check_include_file(smmintrin.h HAVE_SMMINTRIN_H) # SSE4.1
+    if(HAVE_SMMINTRIN_H)
       if(MSVC)
         check_and_set_flag(SSE4 /arch:AVX)
       else()
         check_and_set_flag(SSE4 -msse4.1)
       endif()
+    else()
+      set(SSE4_SUPPORTED 0 PARENT_SCOPE)
+    endif()
+
+    if(SSE_SUPPORTED OR SSE2_SUPPORTED OR SSE4_SUPPORTED)
+      set(HAVE_SSE 1 PARENT_SCOPE)
     endif()
   endif()
 endfunction()
