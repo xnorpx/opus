@@ -72,7 +72,7 @@ else()
   add_sources_group(opus silk ${silk_sources_float})
   target_include_directories(
     opus
-    PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/silk/float>)
+    PRIVATE silk/float)
 endif()
 
 if(HAVE_SSE)
