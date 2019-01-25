@@ -66,7 +66,7 @@ if(FIXED_POINT)
   add_sources_group(opus silk ${silk_sources_fixed})
   target_include_directories(
     opus
-    PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/silk/fixed>)
+    PRIVATE silk/fixed)
   target_compile_definitions(opus PRIVATE FIXED_POINT=1 DISABLE_FLOAT_API)
 else()
   add_sources_group(opus silk ${silk_sources_float})
