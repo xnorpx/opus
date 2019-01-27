@@ -73,55 +73,56 @@ else()
   target_include_directories(opus PRIVATE silk/float)
 endif()
 
-if(HAVE_SSE)
+if(COMPILER_SUPPORT_SIMD)
+  if(OPUS_MAY_HAVE_SSE1 OR 
+     OPUS_MAY_HAVE_SSE2 OR 
+     OPUS_MAY_HAVE_SSE4_1 OR
+     OPUS_MAY_HAVE_SSE_AVX)
+    # Do runtime check for SIMD
+    if(RUNTIME_CPU_CAPABILITY_DETECTION)
+      message(STATUS "OPUS_MAY_HAVE_SSE enabling runtime detection")
+      target_compile_definitions(opus PRIVATE OPUS_HAVE_RTCD)
+    else()
+      message(ERROR "Runtime cpu capability detection needed for MAY_HAVE_SSE")
+    endif()
+  endif()
 
-  if(SSE_SUPPORTED)
+  if(SSE1_SUPPORTED)
     add_sources_group(opus celt ${celt_sources_sse})
+    if (OPUS_MAY_HAVE_SSE1)
+      target_compile_definitions(opus PRIVATE OPUS_X86_MAY_HAVE_SSE)
+    elseif(OPUS_PRESUME_SSE1)
+      target_compile_definitions(opus PRIVATE OPUS_X86_PRESUME_SSE)
+    else()
+      message(ERROR "OPUS SSE1 OPTION ERROR")
+    endif()
   endif()
 
   if(SSE2_SUPPORTED)
     add_sources_group(opus celt ${celt_sources_sse2})
+    if (OPUS_MAY_HAVE_SSE2)
+      target_compile_definitions(opus PRIVATE OPUS_X86_MAY_HAVE_SSE2)
+    elseif(OPUS_PRESUME_SSE2)
+      target_compile_definitions(opus PRIVATE OPUS_X86_PRESUME_SSE2)
+    else()
+      message(ERROR "OPUS SSE2 OPTION ERROR")
+    endif()
   endif()
 
-  if(SSE4_SUPPORTED)
+  if(SSE4_1_SUPPORTED)
     add_sources_group(opus celt ${celt_sources_sse4_1})
     if(FIXED_POINT)
       add_sources_group(opus silk ${silk_sources_fixed_sse4_1})
     else()
       add_sources_group(opus silk ${silk_sources_sse4_1})
     endif()
-  endif()
-
-  if(OPUS_MAY_HAVE_SSE)
-    # Do runtime check for SIMD
-    target_compile_definitions(opus PRIVATE OPUS_HAVE_RTCD)
-
-    if(SSE_SUPPORTED)
-      target_compile_definitions(opus PRIVATE OPUS_X86_MAY_HAVE_SSE)
-    endif()
-
-    if(SSE2_SUPPORTED)
-      target_compile_definitions(opus PRIVATE OPUS_X86_MAY_HAVE_SSE2)
-    endif()
-
-    if(SSE4_SUPPORTED)
+    if(OPUS_MAY_HAVE_SSE4_1)
       target_compile_definitions(opus PRIVATE OPUS_X86_MAY_HAVE_SSE4_1)
-    endif()
-
-  elseif(OPUS_PRESUME_SSE)
-
-    if(SSE_SUPPORTED)
-      target_compile_definitions(opus PRIVATE OPUS_X86_PRESUME_SSE)
-    endif()
-
-    if(SSE2_SUPPORTED)
-      target_compile_definitions(opus PRIVATE OPUS_X86_PRESUME_SSE)
-    endif()
-
-    if(SSE4_SUPPORTED)
+    elseif(OPUS_PRESUME_SSE4_1)
       target_compile_definitions(opus PRIVATE OPUS_X86_PRESUME_SSE4_1)
+    else()
+      message(ERROR "OPUS SSE4.1 OPTION ERROR")
     endif()
-
   endif()
 endif()
 
@@ -129,8 +130,7 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "(armv7-a)")
   add_sources_group(opus celt ${celt_sources_arm})
 endif()
 
-if(HAVE_NEON)
-
+if(COMPILER_SUPPORT_NEON)
   add_sources_group(opus celt ${celt_sources_arm_neon_intr})
   add_sources_group(opus silk ${silk_sources_arm_neon_intr})
 
@@ -142,12 +142,16 @@ if(HAVE_NEON)
   endif()
 
   if(OPUS_MAY_HAVE_NEON)
-    # Do runtime check for NEON
-    target_compile_definitions(opus
-                               PRIVATE
-                               OPUS_ARM_MAY_HAVE_NEON
-                               OPUS_ARM_MAY_HAVE_NEON_INTR
-                               OPUS_HAVE_RTCD)
+    if(RUNTIME_CPU_CAPABILITY_DETECTION)
+      # Do runtime check for NEON
+      target_compile_definitions(opus
+                                PRIVATE
+                                OPUS_ARM_MAY_HAVE_NEON
+                                OPUS_ARM_MAY_HAVE_NEON_INTR
+                                OPUS_HAVE_RTCD)
+    else()
+      message(ERROR "Runtime cpu capability detection needed for MAY_HAVE_NEON")
+    endif()
   elseif(OPUS_PRESUME_NEON)
     target_compile_definitions(opus
                                PRIVATE
