@@ -70,6 +70,11 @@ function(check_and_set_flag NAME FLAG)
   endif()
 endfunction()
 
+function(check_flag NAME FLAG)
+  include(CheckCCompilerFlag)
+  check_c_compiler_flag(${FLAG} ${NAME}_SUPPORTED)
+endfunction()
+
 include(CheckIncludeFile)
 # function to check if compiler supports SSE, SSE2, SSE4.1 and AVX if target
 # systems may not have SSE support then use OPUS_MAY_HAVE_SSE option if target
@@ -83,7 +88,7 @@ function(opus_detect_sse COMPILER_SUPPORT_SIMD)
       if(MSVC)
         # different arch options for 32 and 64 bit target for MSVC
         if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-          check_and_set_flag(SSE1 /arch:SSE)
+          check_flag(SSE1 /arch:SSE)
         else()
           set(SSE1_SUPPORTED 1 PARENT_SCOPE)
         endif()
@@ -98,7 +103,7 @@ function(opus_detect_sse COMPILER_SUPPORT_SIMD)
     if(HAVE_EMMINTRIN_H)
       if(MSVC)
         if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-          check_and_set_flag(SSE2 /arch:SSE2)
+          check_flag(SSE2 /arch:SSE2)
         else()
           set(SSE2_SUPPORTED 1 PARENT_SCOPE)
         endif()
@@ -113,7 +118,7 @@ function(opus_detect_sse COMPILER_SUPPORT_SIMD)
     if(HAVE_SMMINTRIN_H)
       if(MSVC)
         if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-          check_and_set_flag(SSE4_1 /arch:SSE2) # SSE2 and above
+          check_flag(SSE4_1 /arch:SSE2) # SSE2 and above
         else()
           set(SSE4_1_SUPPORTED 1 PARENT_SCOPE)
         endif()
@@ -127,12 +132,24 @@ function(opus_detect_sse COMPILER_SUPPORT_SIMD)
     check_include_file(immintrin.h HAVE_IMMINTRIN_H) # AVX
     if(HAVE_IMMINTRIN_H)
       if(MSVC)
-        check_and_set_flag(AVX /arch:AVX)
+        check_flag(AVX /arch:AVX)
       else()
         check_and_set_flag(AVX -mavx)
       endif()
     else()
       set(AVX_SUPPORTED 0 PARENT_SCOPE)
+    endif()
+
+    if(MSVC) # To avoid warning D9025 of overriding compiler options
+      if(AVX_SUPPORTED) # on 64 bit and 32 bits
+        add_definitions(/arch:AVX)
+      elseif(CMAKE_SIZEOF_VOID_P EQUAL 4) # if AVX not supported then set SSE flag
+	if(SSE4_1_SUPPORTED OR SSE2_SUPPORTED)
+	  add_definitions(/arch:SSE2)
+  	elseif(SSE1_SUPPORTED)
+	  add_definitions(/arch:SSE)
+	endif()
+      endif()
     endif()
 
     if(SSE1_SUPPORTED OR SSE2_SUPPORTED OR SSE4_1_SUPPORTED OR AVX_SUPPORTED)
