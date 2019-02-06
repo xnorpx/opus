@@ -51,7 +51,7 @@ target_link_libraries(opus PRIVATE ${CMAKE_REQUIRED_LIBRARIES})
 
 target_compile_definitions(opus PRIVATE CUSTOM_MODES OPUS_BUILD)
 
-if(BUILD_SHARED_LIBS AND MSVC)
+if(BUILD_SHARED_LIBS AND WIN32)
   target_compile_definitions(opus PRIVATE DLL_EXPORT)
 elseif(BUILD_SHARED)
   include(CheckCCompilerFlag)
