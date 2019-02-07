@@ -17,6 +17,7 @@ string(REGEX
 project(Opus LANGUAGES C VERSION ${PROJECT_VERSION})
 
 option(OPUS_INSTALL_PKG_CONFIG_MODULE "Install PkgConfig module" ON)
+option(OPUS_INSTALL_CMAKE_CONFIG_MODULE "Install CMake package config module" ON)
 
 include(opus_config.cmake)
 include(opus_sources.cmake)
@@ -49,6 +50,7 @@ set_package_properties(Git PROPERTIES
 )
 
 add_feature_info(INSTALL_PKG_CONFIG_MODULE OPUS_INSTALL_PKG_CONFIG_MODULE "install PkgConfig module")
+add_feature_info(INSTALL_CMAKE_CONFIG_MODULE OPUS_INSTALL_CMAKE_CONFIG_MODULE "install CMake package config module")
 
 if(OPUS_CPU_X86 OR OPUS_CPU_X64)
   add_feature_info(X86_MAY_HAVE_SSE OPUS_X86_MAY_HAVE_SSE "does runtime check for SSE1 support")
@@ -207,28 +209,30 @@ if(OPUS_INSTALL_PKG_CONFIG_MODULE)
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/opus.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 endif()
 
-set(CMAKE_INSTALL_PACKAGEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
-install(EXPORT OpusTargets
-        NAMESPACE Opus::
-        DESTINATION ${CMAKE_INSTALL_PACKAGEDIR})
+if(OPUS_INSTALL_CMAKE_CONFIG_MODULE)
+  set(CMAKE_INSTALL_PACKAGEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+  install(EXPORT OpusTargets
+          NAMESPACE Opus::
+          DESTINATION ${CMAKE_INSTALL_PACKAGEDIR})
 
-include(CMakePackageConfigHelpers)
+  include(CMakePackageConfigHelpers)
 
-set(INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR})
-configure_package_config_file(OpusConfig.cmake.in
-                              OpusConfig.cmake
-                              INSTALL_DESTINATION
-                              ${CMAKE_INSTALL_PACKAGEDIR}
-                              PATH_VARS
-                              INCLUDE_INSTALL_DIR
-                              INSTALL_PREFIX
-                              ${CMAKE_INSTALL_PREFIX})
-write_basic_package_version_file(OpusConfigVersion.cmake
-                                 VERSION ${PROJECT_VERSION}
-                                 COMPATIBILITY SameMajorVersion)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/OpusConfig.cmake
-              ${CMAKE_CURRENT_BINARY_DIR}/OpusConfigVersion.cmake
-        DESTINATION ${CMAKE_INSTALL_PACKAGEDIR})
+  set(INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR})
+  configure_package_config_file(OpusConfig.cmake.in
+                                OpusConfig.cmake
+                                INSTALL_DESTINATION
+                                ${CMAKE_INSTALL_PACKAGEDIR}
+                                PATH_VARS
+                                INCLUDE_INSTALL_DIR
+                                INSTALL_PREFIX
+                                ${CMAKE_INSTALL_PREFIX})
+  write_basic_package_version_file(OpusConfigVersion.cmake
+                                  VERSION ${PROJECT_VERSION}
+                                  COMPATIBILITY SameMajorVersion)
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/OpusConfig.cmake
+                ${CMAKE_CURRENT_BINARY_DIR}/OpusConfigVersion.cmake
+          DESTINATION ${CMAKE_INSTALL_PACKAGEDIR})
+endif()
 
 if(BUILD_PROGRAMS)
   # demo
