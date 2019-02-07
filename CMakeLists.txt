@@ -16,6 +16,8 @@ string(REGEX
 
 project(Opus LANGUAGES C VERSION ${PROJECT_VERSION})
 
+option(OPUS_INSTALL_PKG_CONFIG_MODULE "Install PkgConfig module" ON)
+
 include(opus_config.cmake)
 include(opus_sources.cmake)
 include(GNUInstallDirs)
@@ -45,6 +47,8 @@ set_package_properties(Git PROPERTIES
   URL "https://git-scm.com/"
   PURPOSE "required to set up package version"
 )
+
+add_feature_info(INSTALL_PKG_CONFIG_MODULE OPUS_INSTALL_PKG_CONFIG_MODULE "install PkgConfig module")
 
 if(OPUS_CPU_X86 OR OPUS_CPU_X64)
   add_feature_info(X86_MAY_HAVE_SSE OPUS_X86_MAY_HAVE_SSE "does runtime check for SSE1 support")
@@ -188,6 +192,20 @@ install(TARGETS opus
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
         PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/opus)
+
+if(OPUS_INSTALL_PKG_CONFIG_MODULE)
+  set(prefix ${CMAKE_INSTALL_PREFIX})
+  set(exec_prefix ${CMAKE_INSTALL_PREFIX})
+  set(libdir ${CMAKE_INSTALL_FULL_LIBDIR})
+  set(includedir ${CMAKE_INSTALL_FULL_INCLUDEDIR})
+  set(VERSION ${OPUS_LIBRARY_VERSION})
+  set(VERSION ${OPUS_LIBRARY_VERSION})
+  if(HAVE_LIBM)
+    set(LIBM "-lm")
+  endif()
+  configure_file(opus.pc.in opus.pc)
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/opus.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+endif()
 
 set(CMAKE_INSTALL_PACKAGEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 install(EXPORT OpusTargets
