@@ -20,6 +20,7 @@ include(opus_config.cmake)
 include(opus_sources.cmake)
 include(GNUInstallDirs)
 include(CMakeDependentOption)
+include(FeatureSummary)
 
 if(OPUS_CPU_X86 OR OPUS_CPU_X64)
   cmake_dependent_option(OPUS_X86_MAY_HAVE_SSE "Does runtime check for SSE1 support" ON "SSE1_SUPPORTED" OFF)
@@ -34,9 +35,29 @@ if(OPUS_CPU_X86 OR OPUS_CPU_X64)
     cmake_dependent_option(OPUS_X86_PRESUME_SSE "Assume target CPU has SSE1 support" OFF "OPUS_X86_MAY_HAVE_SSE" OFF)
     cmake_dependent_option(OPUS_X86_PRESUME_SSE2 "Assume target CPU has SSE2 support" OFF "OPUS_X86_MAY_HAVE_SSE2" OFF)
   endif()
-  cmake_dependent_option(OPUS_X86_PRESUME_SSE4_1 "Assume target CPU has SSE4.1 support" ON "OPUS_X86_MAY_HAVE_SSE4_1" OFF)
-  cmake_dependent_option(OPUS_X86_PRESUME_AVX "Assume target CPU has AVX support" ON "OPUS_X86_MAY_HAVE_AVX" OFF)
+  cmake_dependent_option(OPUS_X86_PRESUME_SSE4_1 "Assume target CPU has SSE4.1 support" OFF "OPUS_X86_MAY_HAVE_SSE4_1" OFF)
+  cmake_dependent_option(OPUS_X86_PRESUME_AVX "Assume target CPU has AVX support" OFF "OPUS_X86_MAY_HAVE_AVX" OFF)
 endif()
+
+set_package_properties(Git PROPERTIES
+  TYPE REQUIRED
+  DESCRIPTION "fast, scalable, distributed revision control system"
+  URL "https://git-scm.com/"
+  PURPOSE "required to set up package version"
+)
+
+if(OPUS_CPU_X86 OR OPUS_CPU_X64)
+  add_feature_info(X86_MAY_HAVE_SSE OPUS_X86_MAY_HAVE_SSE "does runtime check for SSE1 support")
+  add_feature_info(X86_MAY_HAVE_SSE2 OPUS_X86_MAY_HAVE_SSE2 "does runtime check for SSE2 support")
+  add_feature_info(X86_MAY_HAVE_SSE4_1 OPUS_X86_MAY_HAVE_SSE4_1 "does runtime check for SSE4_1 support")
+  add_feature_info(X86_MAY_HAVE_AVX OPUS_X86_MAY_HAVE_AVX "does runtime check for AVX support")
+  add_feature_info(X86_PRESUME_SSE OPUS_X86_PRESUME_SSE "assume target CPU has SSE1 support")
+  add_feature_info(X86_PRESUME_SSE2 OPUS_X86_PRESUME_SSE2 "assume target CPU has SSE2 support")
+  add_feature_info(X86_PRESUME_SSE4_1 OPUS_X86_PRESUME_SSE4_1 "assume target CPU has SSE4_1 support")
+  add_feature_info(X86_PRESUME_AVX OPUS_X86_PRESUME_AVX "assume target CPU has AVX support")
+endif()
+
+feature_summary(WHAT ALL)
 
 add_library(opus ${opus_sources} ${opus_sources_float})
 
