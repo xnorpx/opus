@@ -16,6 +16,7 @@ string(REGEX
 
 project(Opus LANGUAGES C VERSION ${PROJECT_VERSION})
 
+option(OPUS_FIXED_POINT "Compile as fixed-point (for machines without a fast enough FPU)" OFF)
 option(OPUS_INSTALL_PKG_CONFIG_MODULE "Install PkgConfig module" ON)
 option(OPUS_INSTALL_CMAKE_CONFIG_MODULE "Install CMake package config module" ON)
 
@@ -49,6 +50,7 @@ set_package_properties(Git PROPERTIES
   PURPOSE "required to set up package version"
 )
 
+add_feature_info(FIXED_POINT OPUS_FIXED_POINT "compile as fixed-point (for machines without a fast enough FPU)")
 add_feature_info(INSTALL_PKG_CONFIG_MODULE OPUS_INSTALL_PKG_CONFIG_MODULE "install PkgConfig module")
 add_feature_info(INSTALL_CMAKE_CONFIG_MODULE OPUS_INSTALL_CMAKE_CONFIG_MODULE "install CMake package config module")
 
@@ -109,7 +111,7 @@ endif()
 add_sources_group(opus silk ${silk_sources})
 add_sources_group(opus celt ${celt_sources})
 
-if(FIXED_POINT)
+if(OPUS_FIXED_POINT)
   add_sources_group(opus silk ${silk_sources_fixed})
   target_include_directories(opus PRIVATE silk/fixed)
   target_compile_definitions(opus PRIVATE FIXED_POINT=1 DISABLE_FLOAT_API)
@@ -141,7 +143,7 @@ endif()
 if(OPUS_X86_MAY_HAVE_SSE)
   add_sources_group(opus celt ${celt_sources_sse4_1})
   add_sources_group(opus silk ${silk_sources_sse4_1})
-  if(FIXED_POINT)
+  if(OPUS_FIXED_POINT)
     add_sources_group(opus silk ${silk_sources_fixed_sse4_1})
   endif()
   target_compile_definitions(opus PRIVATE OPUS_X86_MAY_HAVE_SSE4_1)
@@ -176,7 +178,7 @@ if(COMPILER_SUPPORT_NEON AND OPUS_USE_NEON)
   # silk arm neon depends on main_Fix.h
   target_include_directories(opus PRIVATE silk/fixed)
 
-  if(FIXED_POINT)
+  if(OPUS_FIXED_POINT)
     add_sources_group(opus silk ${silk_sources_fixed_arm_neon_intr})
   endif()
 
@@ -254,7 +256,7 @@ if(BUILD_TESTING)
   target_include_directories(test_opus_decode
                              PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
   target_link_libraries(test_opus_decode PRIVATE opus)
-  if(FIXED_POINT)
+  if(OPUS_FIXED_POINT)
     target_compile_definitions(test_opus_decode PRIVATE DISABLE_FLOAT_API)
   endif()
   add_test(test_opus_decode test_opus_decode)
@@ -271,7 +273,7 @@ if(BUILD_TESTING)
     target_include_directories(test_opus_api
                                PRIVATE ${CMAKE_CURRENT_BINARY_DIR} celt)
     target_link_libraries(test_opus_api PRIVATE opus)
-    if(FIXED_POINT)
+    if(OPUS_FIXED_POINT)
       target_compile_definitions(test_opus_api PRIVATE DISABLE_FLOAT_API)
     endif()
     add_test(test_opus_api test_opus_api)
