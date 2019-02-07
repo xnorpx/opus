@@ -84,3 +84,6 @@ src/Debug
 src/Release
 src/x64
 /*[Bb]uild*/
+.vs/
+.vscode/
+CMakeSettings.json
