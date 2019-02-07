@@ -17,6 +17,7 @@ string(REGEX
 project(Opus LANGUAGES C VERSION ${PROJECT_VERSION})
 
 option(OPUS_FIXED_POINT "Compile as fixed-point (for machines without a fast enough FPU)" OFF)
+option(OPUS_ENABLE_FLOAT_API "Compile with the floating point API (for machines with float library" ON)
 option(OPUS_INSTALL_PKG_CONFIG_MODULE "Install PkgConfig module" ON)
 option(OPUS_INSTALL_CMAKE_CONFIG_MODULE "Install CMake package config module" ON)
 
@@ -51,6 +52,8 @@ set_package_properties(Git PROPERTIES
 )
 
 add_feature_info(FIXED_POINT OPUS_FIXED_POINT "compile as fixed-point (for machines without a fast enough FPU)")
+add_feature_info(FLOAT_API OPUS_ENABLE_FLOAT_API "compile with the floating point API (for machines with float library)")
+
 add_feature_info(INSTALL_PKG_CONFIG_MODULE OPUS_INSTALL_PKG_CONFIG_MODULE "install PkgConfig module")
 add_feature_info(INSTALL_CMAKE_CONFIG_MODULE OPUS_INSTALL_CMAKE_CONFIG_MODULE "install CMake package config module")
 
@@ -114,10 +117,14 @@ add_sources_group(opus celt ${celt_sources})
 if(OPUS_FIXED_POINT)
   add_sources_group(opus silk ${silk_sources_fixed})
   target_include_directories(opus PRIVATE silk/fixed)
-  target_compile_definitions(opus PRIVATE FIXED_POINT=1 DISABLE_FLOAT_API)
+  target_compile_definitions(opus PRIVATE FIXED_POINT=1)
 else()
   add_sources_group(opus silk ${silk_sources_float})
   target_include_directories(opus PRIVATE silk/float)
+endif()
+
+if(NOT OPUS_ENABLE_FLOAT_API)
+  target_compile_definitions(opus PRIVATE DISABLE_FLOAT_API)
 endif()
 
 if(OPUS_X86_MAY_HAVE_SSE OR OPUS_X86_MAY_HAVE_SSE2 OR OPUS_X86_MAY_HAVE_SSE4_1 OR OPUS_X86_MAY_HAVE_AVX)
