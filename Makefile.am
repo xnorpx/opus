@@ -210,7 +210,7 @@ EXTRA_DIST = opus.pc.in \
              opus.m4 \
              Makefile.mips \
              Makefile.unix \
-             CmakeLists.txt \
+             CMakeLists.txt \
              config.h.cmake.in \
              opus_config.cmake \
              opus_functions.cmake \
