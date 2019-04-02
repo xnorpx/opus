@@ -50,13 +50,18 @@ function(get_package_version PACKAGE_VERSION)
     if(OPUS_PACKAGE_VERSION)
       string(STRIP ${OPUS_PACKAGE_VERSION}, OPUS_PACKAGE_VERSION)
       string(REPLACE \n
-                    ""
-                    OPUS_PACKAGE_VERSION
-                    ${OPUS_PACKAGE_VERSION})
+                     ""
+                     OPUS_PACKAGE_VERSION
+                     ${OPUS_PACKAGE_VERSION})
       string(REPLACE ,
-                    ""
-                    OPUS_PACKAGE_VERSION
-                    ${OPUS_PACKAGE_VERSION})
+                     ""
+                     OPUS_PACKAGE_VERSION
+                     ${OPUS_PACKAGE_VERSION})
+
+      string(SUBSTRING ${OPUS_PACKAGE_VERSION}
+                       1
+                       -1
+                       OPUS_PACKAGE_VERSION)
       set(PACKAGE_VERSION ${OPUS_PACKAGE_VERSION} PARENT_SCOPE)
       return()
     endif()
@@ -65,21 +70,21 @@ function(get_package_version PACKAGE_VERSION)
   if(EXISTS "${CMAKE_SOURCE_DIR}/package_version")
     # Not a git repo, lets' try to parse it from package_version file if exists
     file(STRINGS package_version opus_package_version_string
-        LIMIT_COUNT 1
-        REGEX "PACKAGE_VERSION=")
+         LIMIT_COUNT 1
+         REGEX "PACKAGE_VERSION=")
     string(REPLACE "PACKAGE_VERSION="
-                  ""
-                  opus_package_version_string
-                  ${opus_package_version_string})
+                   ""
+                   opus_package_version_string
+                   ${opus_package_version_string})
     string(REPLACE "\""
-                  ""
-                  opus_package_version_string
-                  ${opus_package_version_string})
+                   ""
+                   opus_package_version_string
+                   ${opus_package_version_string})
     set(PACKAGE_VERSION ${opus_package_version_string} PARENT_SCOPE)
     return()
   endif()
 
-  # if all else fails set to 0 
+  # if all else fails set to 0
   set(PACKAGE_VERSION 0 PARENT_SCOPE)
 endfunction()
 

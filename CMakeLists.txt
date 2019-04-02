@@ -9,10 +9,11 @@ get_package_version(PACKAGE_VERSION)
 message(STATUS "Opus package version: ${PACKAGE_VERSION}")
 
 string(REGEX
-       REPLACE "^v([0-9]+.[0-9]+\\.?([0-9]+)?).*"
+       REPLACE "^([0-9]+.[0-9]+\\.?([0-9]+)?).*"
                "\\1"
                PROJECT_VERSION
                ${PACKAGE_VERSION})
+message(STATUS "Opus project version: ${PROJECT_VERSION}")
 
 project(Opus LANGUAGES C VERSION ${PROJECT_VERSION})
 
@@ -24,6 +25,9 @@ option(OPUS_ENABLE_FLOAT_API
 option(OPUS_INSTALL_PKG_CONFIG_MODULE "Install PkgConfig module" ON)
 option(OPUS_INSTALL_CMAKE_CONFIG_MODULE "Install CMake package config module"
        ON)
+option(BUILD_SHARED_LIBS "Compile as shared library" OFF)
+option(BUILD_PROGRAMS "Compile demo programs" OFF)
+option(BUILD_TESTING "Compile tests" OFF)
 
 include(opus_config.cmake)
 include(opus_sources.cmake)
@@ -163,13 +167,15 @@ target_link_libraries(opus PRIVATE ${OPUS_REQUIRED_LIBRARIES})
 
 target_compile_definitions(opus PRIVATE CUSTOM_MODES OPUS_BUILD)
 
-if(BUILD_SHARED_LIBS AND WIN32)
-  target_compile_definitions(opus PRIVATE DLL_EXPORT)
-elseif(BUILD_SHARED)
-  include(CheckCCompilerFlag)
-  check_c_compiler_flag(-fvisibility=hidden COMPILER_HAS_HIDDEN_VISIBILITY)
-  if(COMPILER_HAS_HIDDEN_VISIBILITY)
-    set_target_properties(opus PROPERTIES C_VISIBILITY_PRESET hidden)
+if(BUILD_SHARED_LIBS)
+  if(WIN32)
+    target_compile_definitions(opus PRIVATE DLL_EXPORT)
+  else()
+    include(CheckCCompilerFlag)
+    check_c_compiler_flag(-fvisibility=hidden COMPILER_HAS_HIDDEN_VISIBILITY)
+    if(COMPILER_HAS_HIDDEN_VISIBILITY)
+      set_target_properties(opus PROPERTIES C_VISIBILITY_PRESET hidden)
+    endif()
   endif()
 endif()
 
