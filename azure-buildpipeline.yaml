@@ -1,0 +1,21 @@
+jobs: 
+- job: WindowsShared
+  pool: 
+    vmImage: 'VS2017-Win2016'
+  strategy:
+    matrix:
+      0:
+        BUILD_TYPE: Release
+  steps:
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: .. -DBUILD_TESTING=1 -DCMAKE_GENERATOR_PLATFORM=Win32 -D $(BUILD_TYPE)
+    displayName: 'Generate Solution'
+  - task: CMake@1
+    inputs: 
+      cmakeArgs: --build . -j 4 --config $(BUILD_TYPE)
+    displayName: 'Build'
+  - script: |
+      cd build
+      ctest -j 4
+    displayName: 'Test'
