@@ -1,0 +1,21 @@
+me: CMake Build Matrix
+
+on: [push, pull_request]
+
+env:
+    CMAKE_VERSION 3.16.2
+
+jobs:
+    build:
+        name: ${{ matrix.config.name}}
+        runs-on: ${{ matrix.config.os }}
+        strategy:
+            fail-fast: false
+            matrix:
+                config:
+                    - {
+                        name: "Windows",
+                        os: windows-latest,
+                    }
+            steps:
+            - uses: actions/checkout@v1
