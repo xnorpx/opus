@@ -20,7 +20,11 @@ include(opus_buildtype.cmake)
 
 option(OPUS_BUILD_SHARED_LIBRARY "Build shared library" OFF)
 option(OPUS_STACK_PROTECTOR "Use stack protection" ON)
-option(OPUS_USE_ALLOCA "Use alloca for stack arrays (on non-C99 compilers)" OFF)
+if (MSVC)
+   option(OPUS_USE_ALLOCA "Use alloca for stack arrays (on non-C99 compilers)" ON)
+else()
+   option(OPUS_USE_ALLOCA "Use alloca for stack arrays (on non-C99 compilers)" OFF)
+endif()
 option(OPUS_CUSTOM_MODES "Enable non-Opus modes, e.g. 44.1 kHz & 2^n frames"
        OFF)
 option(OPUS_BUILD_PROGRAMS "Build programs" OFF)
@@ -206,7 +210,7 @@ endif()
 # variable-length arrays for stack allocation USE_ALLOCA: Use alloca() for stack
 # allocation If none is defined, then the fallback is a non-threadsafe global
 # array
-if(OPUS_USE_ALLOCA OR MSVC)
+if(OPUS_USE_ALLOCA)
   target_compile_definitions(opus PRIVATE USE_ALLOCA)
 else()
   target_compile_definitions(opus PRIVATE VAR_ARRAYS)
