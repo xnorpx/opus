@@ -42,6 +42,9 @@ else()
        "Enable floating point approximations (Ensure your platform supports IEEE 754 before enabling)"
        OFF)
 endif()
+option(OPUS_FAST_MATH
+       "Enable fast math for compilers that supports it, OPUS_ENABLE_FLOAT_APPROX needs to be on"
+       OFF)
 option(OPUS_INSTALL_PKG_CONFIG_MODULE "Install PkgConfig module" ON)
 option(OPUS_INSTALL_CMAKE_CONFIG_MODULE "Install CMake package config module"
        ON)
@@ -58,6 +61,7 @@ if(OPUS_BUILD_SHARED_LIBRARY OR BUILD_SHARED_LIBS)
   set(OPUS_BUILD_SHARED_LIBRARY ON)
 endif()
 
+
 if(OPUS_STACK_PROTECTOR)
   if(NOT MSVC) # GC on by default on MSVC
     check_and_set_flag(STACK_PROTECTION_STRONG -fstack-protector-strong)
@@ -70,6 +74,18 @@ endif()
 
 if(OPUS_ENABLE_FLOAT_APPROX)
   add_compile_definitions(FLOAT_APPROX)
+endif()
+
+if(OPUS_ENABLE_FAST_MATH)
+  if(OPUS_ENABLE_FLOAT_APPROX)
+    if(MSVC)
+      check_and_set_flag(ENABLE_FAST_MATH /fp:fast)
+    else()
+      check_and_set_flag(ENABLE_FAST_MATH -ffast-math)
+    endif()
+  else()
+    message(ERROR "OPUS_ENABLE_FLOAT_APPROX needs to be enabled to use OPUS_ENABLE_FAST_MATH")
+  endif()
 endif()
 
 if(OPUS_CPU_X86 OR OPUS_CPU_X64)
@@ -157,6 +173,9 @@ add_feature_info(
 add_feature_info(
   ENABLE_FLOAT_APPROX OPUS_ENABLE_FLOAT_APPROX
    "Enable floating point approximations")
+add_feature_info(
+  OPUS_ENABLE_FAST_MATH ENABLE_FAST_MATH_SUPPORTED
+   "Enable fast math for compilers that supports it, OPUS_ENABLE_FLOAT_APPROX needs to be on")
 
 add_feature_info(INSTALL_PKG_CONFIG_MODULE OPUS_INSTALL_PKG_CONFIG_MODULE
                  "install PkgConfig module")
