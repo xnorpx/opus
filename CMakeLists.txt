@@ -28,6 +28,7 @@ endif()
 option(OPUS_CUSTOM_MODES "Enable non-Opus modes, e.g. 44.1 kHz & 2^n frames"
        OFF)
 option(OPUS_BUILD_PROGRAMS "Build programs" OFF)
+option(OPUS_BUILD_TESTING "Build tests" OFF)
 option(OPUS_FIXED_POINT
        "Compile as fixed-point (for machines without a fast enough FPU)" OFF)
 option(OPUS_ENABLE_FLOAT_API
@@ -61,6 +62,10 @@ if(OPUS_BUILD_SHARED_LIBRARY OR BUILD_SHARED_LIBS)
   set(OPUS_BUILD_SHARED_LIBRARY ON)
 endif()
 
+if(OPUS_BUILD_TESTING OR BUILD_TESTING)
+  set(OPUS_BUILD_TESTING ON)
+  set(BUILD_TESTING ON)
+endif()
 
 if(OPUS_STACK_PROTECTOR)
   if(NOT MSVC) # GC on by default on MSVC
@@ -163,6 +168,7 @@ add_feature_info(USE_ALLOCA OPUS_USE_ALLOCA
                  "Use alloca for stack arrays (on non-C99 compilers)")
 add_feature_info(CUSTOM_MODES OPUS_CUSTOM_MODES
                  "Enable non-Opus modes, e.g. 44.1 kHz & 2^n frames")
+add_feature_info(BUILD_TESTING OPUS_BUILD_TESTING "Build test programs")
 add_feature_info(BUILD_PROGRAMS OPUS_BUILD_PROGRAMS "Build programs")
 add_feature_info(
   FIXED_POINT OPUS_FIXED_POINT
