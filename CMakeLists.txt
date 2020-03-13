@@ -33,6 +33,15 @@ option(OPUS_FIXED_POINT
 option(OPUS_ENABLE_FLOAT_API
        "Compile with the floating point API (for machines with float library"
        ON)
+if(AppleClang OR Clang OR GNU OR MSVC)
+  option(OPUS_ENABLE_FLOAT_APPROX
+       "Enable floating point approximations"
+       ON)
+else()
+  option(OPUS_ENABLE_FLOAT_APPROX
+       "Enable floating point approximations (Ensure your platform supports IEEE 754 before enabling)"
+       OFF)
+endif()
 option(OPUS_INSTALL_PKG_CONFIG_MODULE "Install PkgConfig module" ON)
 option(OPUS_INSTALL_CMAKE_CONFIG_MODULE "Install CMake package config module"
        ON)
@@ -59,6 +68,9 @@ else()
   endif()
 endif()
 
+if(OPUS_ENABLE_FLOAT_APPROX)
+  add_compile_definitions(FLOAT_APPROX)
+endif()
 
 if(OPUS_CPU_X86 OR OPUS_CPU_X64)
   cmake_dependent_option(OPUS_X86_MAY_HAVE_SSE
@@ -142,6 +154,9 @@ add_feature_info(
 add_feature_info(
   FLOAT_API OPUS_ENABLE_FLOAT_API
   "compile with the floating point API (for machines with float library)")
+add_feature_info(
+  ENABLE_FLOAT_APPROX OPUS_ENABLE_FLOAT_APPROX
+   "Enable floating point approximations")
 
 add_feature_info(INSTALL_PKG_CONFIG_MODULE OPUS_INSTALL_PKG_CONFIG_MODULE
                  "install PkgConfig module")
