@@ -12,171 +12,159 @@ jobs:
         config:
         - {
             name: "Windows/Dll/X86/Debug",
-            artifact: "libopus-shared-win-x86-debug.tar.xz",
             os: windows-latest,
             config: Debug,
             args: -G "Visual Studio 16 2019" -A Win32 -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
           }
         - {
             name: "Windows/Dll/X86/Release",
-            artifact: "libopus-shared-win-x86-release.tar.xz",
             os: windows-latest,
             config: Release,
             args: -G "Visual Studio 16 2019" -A Win32 -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
           }
         - {
             name: "Windows/Dll/X64/Debug",
-            artifact: "libopus-shared-win-x64-debug.tar.xz",
             os: windows-latest,
             config: Debug,
             args: -G "Visual Studio 16 2019" -A x64 -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
           }
         - {
             name: "Windows/Dll/X64/Release",
-            artifact: "libopus-shared-win-x64-release.tar.xz",
             os: windows-latest,
             config: Release,
             args: -G "Visual Studio 16 2019" -A Win32 -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
           }
         - {
             name: "Windows/Dll/ARMv7/Debug",
-            artifact: "libopus-shared-win-armv7-debug.tar.xz",
             os: windows-latest,
             config: Debug,
             args: -G "Visual Studio 16 2019" -A ARM -DBUILD_SHARED_LIBS=ON
           }
         - {
             name: "Windows/Dll/ARMv7/Release",
-            artifact: "libopus-shared-win-armv7-release.tar.xz",
             os: windows-latest,
             config: Release,
             args: -G "Visual Studio 16 2019" -A ARM -DBUILD_SHARED_LIBS=ON
           }
         - {
             name: "Windows/Dll/ARMv8/Debug",
-            artifact: "libopus-shared-win-armv8-debug.tar.xz",
             os: windows-latest,
             config: Debug,
             args: -G "Visual Studio 16 2019" -A ARM64 -DBUILD_SHARED_LIBS=ON
           }
         - {
             name: "Windows/Dll/ARMv8/Release",
-            artifact: "libopus-shared-win-armv8-release.tar.xz",
             os: windows-latest,
             config: Release,
             args: -G "Visual Studio 16 2019" -A ARM64 -DBUILD_SHARED_LIBS=ON
           }
         - {
             name: "Linux/Dll/X64/Debug",
-            artifact: "libopus-shared-linux-x64-debug.tar.xz",
             os: ubuntu-latest,
             config: Debug,
             args: -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
           }
         - {
             name: "Linux/Dll/X64/Release",
-            artifact: "libopus-shared-linux-x64-release.tar.xz",
             os: ubuntu-latest,
             config: Release,
             args: -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
           }
         - {
             name: "MacOSX/Dll/X64/Debug",
-            artifact: "libopus-shared-macosx-x64-debug.tar.xz",
             os: macos-latest,
             config: Debug,
             args: -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
           }
         - {
             name: "MacOSX/Dll/X64/Release",
-            artifact: "libopus-shared-macosx-x64-release.tar.xz",
             os: macos-latest,
             config: Release,
             args: -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
           }
         - {
             name: "Windows/Lib/X86/Debug",
-            artifact: "libopus-win-x86-debug.tar.xz",
             os: windows-latest,
             config: Debug,
             args: -G "Visual Studio 16 2019" -A Win32 -DBUILD_TESTING=ON
           }
         - {
             name: "Windows/Lib/X86/Release",
-            artifact: "libopus-win-x86-release.tar.xz",
             os: windows-latest,
             config: Release,
             args: -G "Visual Studio 16 2019" -A Win32 -DBUILD_TESTING=ON
           }
         - {
             name: "Windows/Lib/X64/Debug",
-            artifact: "libopus-win-x64-debug.tar.xz",
             os: windows-latest,
             config: Debug,
             args: -G "Visual Studio 16 2019" -A x64 -DBUILD_TESTING=ON
           }
         - {
             name: "Windows/Lib/X64/Release",
-            artifact: "libopus-win-x64-release.tar.xz",
             os: windows-latest,
             config: Release,
             args: -G "Visual Studio 16 2019" -A Win32 -DBUILD_TESTING=ON
           }
         - {
             name: "Windows/Lib/ARMv7/Debug",
-            artifact: "libopus-win-armv7-debug.tar.xz",
             os: windows-latest,
             config: Debug,
             args: -G "Visual Studio 16 2019" -A ARM
           }
         - {
             name: "Windows/Lib/ARMv7/Release",
-            artifact: "libopus-win-armv7-release.tar.xz",
             os: windows-latest,
             config: Release,
             args: -G "Visual Studio 16 2019" -A ARM
           }
         - {
             name: "Windows/Lib/ARMv8/Debug",
-            artifact: "libopus-win-armv8-debug.tar.xz",
             os: windows-latest,
             config: Debug,
             args: -G "Visual Studio 16 2019" -A ARM64 
           }
         - {
             name: "Windows/Lib/armv8/Release",
-            artifact: "libopus-win-armv8-release.tar.xz",
             os: windows-latest,
             config: Release,
             args: -G "Visual Studio 16 2019" -A ARM64
           }
         - {
             name: "Linux/Lib/X64/Debug",
-            artifact: "libopus-linux-x64-debug.tar.xz",
             os: ubuntu-latest,
             config: Debug,
             args: -DBUILD_TESTING=ON,
           }
         - {
             name: "Linux/Lib/X64/Release",
-            artifact: "libopus-linux-x64-release.tar.xz",
             os: ubuntu-latest,
             config: Release,
             args: -DBUILD_TESTING=ON,
           }
         - {
             name: "MacOSX/Lib/X64/Debug",
-            artifact: "libopus-macosx-x64-debug.tar.xz",
             os: macos-latest,
             config: Debug,
             args: -DBUILD_TESTING=ON,
           }
         - {
             name: "MacOSX/Lib/X64/Release",
-            artifact: "libopus-macosx-x64-release.tar.xz",
             os: macos-latest,
             config: Release,
             args: -DBUILD_TESTING=ON,
+          }
+        - {
+            name: "iOS/Lib/arm64/Debug",
+            os: macos-latest,
+            config: Debug-iphoneos,
+            args: -GXcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=arm64
+          }
+        - {
+            name: "iOS/Lib/arm64/Release",
+            os: macos-latest,
+            config: Release-iphoneos,
+            args: -GXcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=arm64
           }
     steps:
       - uses: actions/checkout@v1
@@ -196,21 +184,10 @@ jobs:
         run: cmake .. ${{ matrix.config.args }}
       - name: Build
         working-directory: ./build
-        run: cmake --build . -j 2 --config ${{ matrix.config.config }}
+        run: cmake --build . -j 2 --config ${{ matrix.config.config }} --target package
       - name: Test
         working-directory: ./build
         run: ctest -j 2
-      - name: Install
-        working-directory: ./build
-        run: cmake --install . --config ${{ matrix.config.config }} --prefix opus
-      - name: Pack Artifact
-        working-directory: ./build
-        run: cmake -E tar cJfv ${{ matrix.config.artifact }} opus
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v1
-        with:
-          path: ./build/${{ matrix.config.artifact }}
-          name: ${{ matrix.config.artifact }}
 
   AutoMakeBuild:
     name: AutoMake/${{ matrix.config.name }}
