@@ -11,6 +11,54 @@ jobs:
       matrix:
         config:
         - {
+            name: "Android/Dll/ARMv8/Debug",
+            os: ubuntu-latest,
+            config: Debug,
+            args: "-DCMAKE_ANDROID_ARCH_ABI=arm64-v8a -DBUILD_SHARED_LIBS=ON -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
+          }
+        - {
+            name: "Android/Dll/ARMv8/Release",
+            os: ubuntu-latest,
+            config: Release,
+            args: "-DCMAKE_ANDROID_ARCH_ABI=arm64-v8a -DBUILD_SHARED_LIBS=ON -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
+          }
+        - {
+            name: "Android/Dll/ARMv7/Debug",
+            os: ubuntu-latest,
+            config: Debug,
+            args: "-DCMAKE_ANDROID_ARCH_ABI=armeabi-v7a -DBUILD_SHARED_LIBS=ON -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
+          }
+        - {
+            name: "Android/Dll/ARMv7/Release",
+            os: ubuntu-latest,
+            config: Release,
+            args: "-DCMAKE_ANDROID_ARCH_ABI=armeabi-v7a -DBUILD_SHARED_LIBS=ON -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
+          }
+        - {
+            name: "Android/Dll/X86/Debug",
+            os: ubuntu-latest,
+            config: Debug,
+            args: "-DCMAKE_ANDROID_ARCH_ABI=x86 -DBUILD_SHARED_LIBS=ON -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
+          }
+        - {
+            name: "Android/Dll/X86/Release",
+            os: ubuntu-latest,
+            config: Release,
+            args: "-DCMAKE_ANDROID_ARCH_ABI=x86 -DBUILD_SHARED_LIBS=ON -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
+          }
+        - {
+            name: "Android/Dll/X64/Debug",
+            os: ubuntu-latest,
+            config: Debug,
+            args: "-DCMAKE_ANDROID_ARCH_ABI=x86_64 -DBUILD_SHARED_LIBS=ON -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
+          }
+        - {
+            name: "Android/Dll/X64/Release",
+            os: ubuntu-latest,
+            config: Release,
+            args: "-DCMAKE_ANDROID_ARCH_ABI=x86_64 -DBUILD_SHARED_LIBS=ON -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
+          }
+        - {
             name: "Windows/Dll/X86/Debug",
             os: windows-latest,
             config: Debug,
@@ -38,25 +86,25 @@ jobs:
             name: "Windows/Dll/ARMv7/Debug",
             os: windows-latest,
             config: Debug,
-            args: -G "Visual Studio 16 2019" -A ARM -DBUILD_SHARED_LIBS=ON
+            args: -G "Visual Studio 16 2019" -A ARM -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
           }
         - {
             name: "Windows/Dll/ARMv7/Release",
             os: windows-latest,
             config: Release,
-            args: -G "Visual Studio 16 2019" -A ARM -DBUILD_SHARED_LIBS=ON
+            args: -G "Visual Studio 16 2019" -A ARM -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
           }
         - {
             name: "Windows/Dll/ARMv8/Debug",
             os: windows-latest,
             config: Debug,
-            args: -G "Visual Studio 16 2019" -A ARM64 -DBUILD_SHARED_LIBS=ON
+            args: -G "Visual Studio 16 2019" -A ARM64 -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
           }
         - {
             name: "Windows/Dll/ARMv8/Release",
             os: windows-latest,
             config: Release,
-            args: -G "Visual Studio 16 2019" -A ARM64 -DBUILD_SHARED_LIBS=ON
+            args: -G "Visual Studio 16 2019" -A ARM64 -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
           }
         - {
             name: "Linux/Dll/X64/Debug",
@@ -104,31 +152,31 @@ jobs:
             name: "Windows/Lib/X64/Release",
             os: windows-latest,
             config: Release,
-            args: -G "Visual Studio 16 2019" -A Win32 -DBUILD_TESTING=ON
+            args: -G "Visual Studio 16 2019" -A Win32 -DBUILD_TESTING=ON 
           }
         - {
             name: "Windows/Lib/ARMv7/Debug",
             os: windows-latest,
             config: Debug,
-            args: -G "Visual Studio 16 2019" -A ARM
+            args: -G "Visual Studio 16 2019" -A ARM -DBUILD_TESTING=ON
           }
         - {
             name: "Windows/Lib/ARMv7/Release",
             os: windows-latest,
             config: Release,
-            args: -G "Visual Studio 16 2019" -A ARM
+            args: -G "Visual Studio 16 2019" -A ARM -DBUILD_TESTING=ON
           }
         - {
             name: "Windows/Lib/ARMv8/Debug",
             os: windows-latest,
             config: Debug,
-            args: -G "Visual Studio 16 2019" -A ARM64 
+            args: -G "Visual Studio 16 2019" -A ARM64 -DBUILD_TESTING=ON
           }
         - {
             name: "Windows/Lib/armv8/Release",
             os: windows-latest,
             config: Release,
-            args: -G "Visual Studio 16 2019" -A ARM64
+            args: -G "Visual Studio 16 2019" -A ARM64 -DBUILD_TESTING=ON
           }
         - {
             name: "Linux/Lib/X64/Debug",
@@ -166,6 +214,54 @@ jobs:
             config: Release-iphoneos,
             args: -GXcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=arm64
           }
+        - {
+            name: "Android/Lib/ARMv8/Debug",
+            os: ubuntu-latest,
+            config: Debug,
+            args: "-DCMAKE_ANDROID_ARCH_ABI=arm64-v8a -DBUILD_TESTING=ON -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
+          }
+        - {
+            name: "Android/Lib/ARMv8/Release",
+            os: ubuntu-latest,
+            config: Release,
+            args: "-DCMAKE_ANDROID_ARCH_ABI=arm64-v8a -DBUILD_TESTING=ON -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
+          }
+        - {
+            name: "Android/Lib/ARMv7/Debug",
+            os: ubuntu-latest,
+            config: Debug,
+            args: "-DCMAKE_ANDROID_ARCH_ABI=armeabi-v7a -DBUILD_TESTING=ON -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
+          }
+        - {
+            name: "Android/Lib/ARMv7/Release",
+            os: ubuntu-latest,
+            config: Release,
+            args: "-DCMAKE_ANDROID_ARCH_ABI=armeabi-v7a -DBUILD_TESTING=ON -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
+          }
+        - {
+            name: "Android/Lib/X86/Debug",
+            os: ubuntu-latest,
+            config: Debug,
+            args: "-DCMAKE_ANDROID_ARCH_ABI=x86 -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
+          }
+        - {
+            name: "Android/Lib/X86/Release",
+            os: ubuntu-latest,
+            config: Release,
+            args: "-DCMAKE_ANDROID_ARCH_ABI=x86 -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
+          }
+        - {
+            name: "Android/Lib/X64/Debug",
+            os: ubuntu-latest,
+            config: Debug,
+            args: "-DCMAKE_ANDROID_ARCH_ABI=x86_64 -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
+          }
+        - {
+            name: "Android/Lib/X64/Release",
+            os: ubuntu-latest,
+            config: Release,
+            args: "-DCMAKE_ANDROID_ARCH_ABI=x86_64 -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
+          }
     steps:
       - uses: actions/checkout@v1
         # No we need at least CMake 3.15 to use the cmake --install command
@@ -181,11 +277,14 @@ jobs:
         run: mkdir build 
       - name: Configure
         working-directory: ./build
-        run: cmake .. ${{ matrix.config.args }}
+        run: cmake .. ${{ matrix.config.args }} -DCMAKE_BUILD_TYPE=${{ matrix.config.config }} 
       - name: Build
         working-directory: ./build
         run: cmake --build . -j 2 --config ${{ matrix.config.config }} --target package
       - name: Test
+        if: contains(matrix.config.name, 'Windows') && !contains(matrix.config.name, 'ARM') ||
+            contains(matrix.config.name, 'MacOSX') && !contains(matrix.config.name, 'ARM') ||
+            contains(matrix.config.name, 'Linux') && !contains(matrix.config.name, 'ARM')
         working-directory: ./build
         run: ctest -j 2
 
