@@ -18,7 +18,7 @@ jobs:
         run: mkdir build 
       - name: Configure
         working-directory: ./build
-        run: cmake .. -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
+        run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DBUILD_TESTING=ON
       - name: Build
         working-directory: ./build
         run: make -j 2 -s
@@ -85,181 +85,197 @@ jobs:
             name: "Windows/Dll/X86/Debug",
             os: windows-latest,
             config: Debug,
-            args: -G "Visual Studio 16 2019" -A Win32 -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
+            args: -G "Visual Studio 16 2019" -A Win32 -DBUILD_SHARED_LIBS=ON
           }
         - {
             name: "Windows/Dll/X86/Release",
             os: windows-latest,
             config: Release,
-            args: -G "Visual Studio 16 2019" -A Win32 -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
+            args: -G "Visual Studio 16 2019" -A Win32 -DBUILD_SHARED_LIBS=ON
           }
         - {
             name: "Windows/Dll/X64/Debug",
             os: windows-latest,
             config: Debug,
-            args: -G "Visual Studio 16 2019" -A x64 -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
+            args: -G "Visual Studio 16 2019" -A x64 -DBUILD_SHARED_LIBS=ON
           }
         - {
             name: "Windows/Dll/X64/Release",
             os: windows-latest,
             config: Release,
-            args: -G "Visual Studio 16 2019" -A Win32 -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
+            args: -G "Visual Studio 16 2019" -A Win32 -DBUILD_SHARED_LIBS=ON
           }
         - {
             name: "Windows/Dll/ARMv7/Debug",
             os: windows-latest,
             config: Debug,
-            args: -G "Visual Studio 16 2019" -A ARM -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
+            args: -G "Visual Studio 16 2019" -A ARM -DBUILD_SHARED_LIBS=ON
           }
         - {
             name: "Windows/Dll/ARMv7/Release",
             os: windows-latest,
             config: Release,
-            args: -G "Visual Studio 16 2019" -A ARM -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
+            args: -G "Visual Studio 16 2019" -A ARM -DBUILD_SHARED_LIBS=ON
           }
         - {
             name: "Windows/Dll/ARMv8/Debug",
             os: windows-latest,
             config: Debug,
-            args: -G "Visual Studio 16 2019" -A ARM64 -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
+            args: -G "Visual Studio 16 2019" -A ARM64 -DBUILD_SHARED_LIBS=ON
           }
         - {
             name: "Windows/Dll/ARMv8/Release",
             os: windows-latest,
             config: Release,
-            args: -G "Visual Studio 16 2019" -A ARM64 -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
+            args: -G "Visual Studio 16 2019" -A ARM64 -DBUILD_SHARED_LIBS=ON
           }
         - {
             name: "Linux/Dll/X64/Debug",
             os: ubuntu-latest,
             config: Debug,
-            args: -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
+            args: -DBUILD_SHARED_LIBS=ON
           }
         - {
             name: "Linux/Dll/X64/Release",
             os: ubuntu-latest,
             config: Release,
-            args: -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
+            args: -DBUILD_SHARED_LIBS=ON
           }
         - {
             name: "MacOSX/Dll/X64/Debug",
             os: macos-latest,
             config: Debug,
-            args: -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
+            args: -DBUILD_SHARED_LIBS=ON
           }
         - {
             name: "MacOSX/Dll/X64/Release",
             os: macos-latest,
             config: Release,
-            args: -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
+            args: -DBUILD_SHARED_LIBS=ON
+          }
+          # use unix makefiles for iOS to avoid Xcode to complain about signing.
+        - {
+            name: "iOS/Dll/arm64/Debug",
+            os: macos-latest,
+            config: Debug,
+            args: -G "Unix Makefiles" -DBUILD_SHARED_LIBS=ON -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=arm64
+          }
+          # use unix makefiles for iOS to avoid Xcode to complain about signing.
+        - {
+            name: "iOS/Dll/arm64/Release",
+            os: macos-latest,
+            config: Release,
+            args: -G "Unix Makefiles" -DBUILD_SHARED_LIBS=ON -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=arm64
           }
         - {
             name: "Windows/Lib/X86/Debug",
             os: windows-latest,
             config: Debug,
-            args: -G "Visual Studio 16 2019" -A Win32 -DBUILD_TESTING=ON
+            args: -G "Visual Studio 16 2019" -A Win32
           }
         - {
             name: "Windows/Lib/X86/Release",
             os: windows-latest,
             config: Release,
-            args: -G "Visual Studio 16 2019" -A Win32 -DBUILD_TESTING=ON
+            args: -G "Visual Studio 16 2019" -A Win32
           }
         - {
             name: "Windows/Lib/X64/Debug",
             os: windows-latest,
             config: Debug,
-            args: -G "Visual Studio 16 2019" -A x64 -DBUILD_TESTING=ON
+            args: -G "Visual Studio 16 2019" -A x64
           }
         - {
             name: "Windows/Lib/X64/Release",
             os: windows-latest,
             config: Release,
-            args: -G "Visual Studio 16 2019" -A Win32 -DBUILD_TESTING=ON 
+            args: -G "Visual Studio 16 2019" -A Win32 
           }
         - {
             name: "Windows/Lib/ARMv7/Debug",
             os: windows-latest,
             config: Debug,
-            args: -G "Visual Studio 16 2019" -A ARM -DBUILD_TESTING=ON
+            args: -G "Visual Studio 16 2019" -A ARM
           }
         - {
             name: "Windows/Lib/ARMv7/Release",
             os: windows-latest,
             config: Release,
-            args: -G "Visual Studio 16 2019" -A ARM -DBUILD_TESTING=ON
+            args: -G "Visual Studio 16 2019" -A ARM
           }
         - {
             name: "Windows/Lib/ARMv8/Debug",
             os: windows-latest,
             config: Debug,
-            args: -G "Visual Studio 16 2019" -A ARM64 -DBUILD_TESTING=ON
+            args: -G "Visual Studio 16 2019" -A ARM64
           }
         - {
             name: "Windows/Lib/armv8/Release",
             os: windows-latest,
             config: Release,
-            args: -G "Visual Studio 16 2019" -A ARM64 -DBUILD_TESTING=ON
+            args: -G "Visual Studio 16 2019" -A ARM64
           }
         - {
             name: "Linux/Lib/X64/Debug",
             os: ubuntu-latest,
             config: Debug,
-            args: -DBUILD_TESTING=ON,
+            args: ""
           }
         - {
             name: "Linux/Lib/X64/Release",
             os: ubuntu-latest,
             config: Release,
-            args: -DBUILD_TESTING=ON,
+            args: ""
           }
         - {
             name: "MacOSX/Lib/X64/Debug",
             os: macos-latest,
             config: Debug,
-            args: -DBUILD_TESTING=ON,
+            args: ""
           }
         - {
             name: "MacOSX/Lib/X64/Release",
             os: macos-latest,
             config: Release,
-            args: -DBUILD_TESTING=ON,
+            args: ""
           }
+          # use unix makefiles for iOS to avoid Xcode to complain about signing.
         - {
             name: "iOS/Lib/arm64/Debug",
             os: macos-latest,
-            config: Debug-iphoneos,
-            args: -GXcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=arm64
+            config: Debug,
+            args: -G "Unix Makefiles" -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=arm64
           }
+          # use unix makefiles for iOS to avoid Xcode to complain about signing.
         - {
             name: "iOS/Lib/arm64/Release",
             os: macos-latest,
-            config: Release-iphoneos,
-            args: -GXcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=arm64
+            config: Release,
+            args: -G "Unix Makefiles" -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=arm64
           }
         - {
             name: "Android/Lib/ARMv8/Debug",
             os: ubuntu-latest,
             config: Debug,
-            args: "-DCMAKE_ANDROID_ARCH_ABI=arm64-v8a -DBUILD_TESTING=ON -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
+            args: "-DCMAKE_ANDROID_ARCH_ABI=arm64-v8a -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
           }
         - {
             name: "Android/Lib/ARMv8/Release",
             os: ubuntu-latest,
             config: Release,
-            args: "-DCMAKE_ANDROID_ARCH_ABI=arm64-v8a -DBUILD_TESTING=ON -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
+            args: "-DCMAKE_ANDROID_ARCH_ABI=arm64-v8a -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
           }
         - {
             name: "Android/Lib/ARMv7/Debug",
             os: ubuntu-latest,
             config: Debug,
-            args: "-DCMAKE_ANDROID_ARCH_ABI=armeabi-v7a -DBUILD_TESTING=ON -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
+            args: "-DCMAKE_ANDROID_ARCH_ABI=armeabi-v7a -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
           }
         - {
             name: "Android/Lib/ARMv7/Release",
             os: ubuntu-latest,
             config: Release,
-            args: "-DCMAKE_ANDROID_ARCH_ABI=armeabi-v7a -DBUILD_TESTING=ON -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
+            args: "-DCMAKE_ANDROID_ARCH_ABI=armeabi-v7a -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
           }
         - {
             name: "Android/Lib/X86/Debug",
@@ -300,7 +316,7 @@ jobs:
         run: mkdir build 
       - name: Configure
         working-directory: ./build
-        run: cmake .. ${{ matrix.config.args }} -DCMAKE_BUILD_TYPE=${{ matrix.config.config }} 
+        run: cmake .. ${{ matrix.config.args }} -DCMAKE_BUILD_TYPE=${{ matrix.config.config }} -DOPUS_BUILD_PROGRAMS=ON -DBUILD_TESTING=ON
       - name: Build
         working-directory: ./build
         run: cmake --build . -j 2 --config ${{ matrix.config.config }} --target package
