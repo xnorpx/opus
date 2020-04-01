@@ -3,6 +3,29 @@ name: Opus Build Matrix
 on: [push, pull_request]
 
 jobs:
+  CMakeVersionTest:
+    name: Test build with CMake 3.1.0
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install CMake 3.1
+        run: |
+          curl -sL https://github.com/Kitware/CMake/releases/download/v3.1.0/cmake-3.1.0-Linux-x86_64.sh -o cmakeinstall.sh
+          chmod +x cmakeinstall.sh
+          sudo ./cmakeinstall.sh --prefix=/usr/local --exclude-subdir
+          rm cmakeinstall.sh
+      - name: Create Work Dir
+        run: mkdir build 
+      - name: Configure
+        working-directory: ./build
+        run: cmake .. -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
+      - name: Build
+        working-directory: ./build
+        run: make -j 2 -s
+      - name: Test
+        working-directory: ./build
+        run: ctest -j 2
+
   CMakeBuild:
     name: CMake/${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
@@ -263,7 +286,7 @@ jobs:
             args: "-DCMAKE_ANDROID_ARCH_ABI=x86_64 -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
           }
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
         # No we need at least CMake 3.15 to use the cmake --install command
         # Current linux build nodes only have 3.12
       - name: Install CMake 3.16 on Linux
@@ -416,7 +439,7 @@ jobs:
             automakeconfig: --enable-fixed-point --enable-assertions
           }
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
         # No AutoMake on Mac so let's install it
       - name: Install AutoConf, AutoMake and LibTool on MacOSX
         if: matrix.config.os == 'macos-latest'
