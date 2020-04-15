@@ -178,6 +178,18 @@ jobs:
             config: Release,
             args: -DBUILD_SHARED_LIBS=ON
           }
+        - {
+            name: "MacOSX/Framework/X64/Debug",
+            os: macos-latest,
+            config: Debug,
+            args: -DBUILD_FRAMEWORK=ON -DCMAKE_INSTALL_PREFIX=install
+          }
+        - {
+            name: "MacOSX/Framework/X64/Release",
+            os: macos-latest,
+            config: Release,
+            args: -DBUILD_FRAMEWORK=ON -DCMAKE_INSTALL_PREFIX=install
+          }
           # use unix makefiles for iOS to avoid Xcode to complain about signing.
         - {
             name: "iOS/Dll/arm64/Debug",
@@ -191,6 +203,20 @@ jobs:
             os: macos-latest,
             config: Release,
             args: -G "Unix Makefiles" -DBUILD_SHARED_LIBS=ON -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=arm64
+          }
+          # use unix makefiles for iOS to avoid Xcode to complain about signing.
+        - {
+            name: "iOS/Framework/arm64/Debug",
+            os: macos-latest,
+            config: Debug,
+            args: -G "Unix Makefiles" -DBUILD_FRAMEWORK=ON -DCMAKE_INSTALL_PREFIX=install -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=arm64
+          }
+          # use unix makefiles for iOS to avoid Xcode to complain about signing.
+        - {
+            name: "iOS/Framework/arm64/Release",
+            os: macos-latest,
+            config: Release,
+            args: -G "Unix Makefiles" -DBUILD_FRAMEWORK=ON -DCMAKE_INSTALL_PREFIX=install -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=arm64
           }
         - {
             name: "Windows/Lib/X86/Debug",
