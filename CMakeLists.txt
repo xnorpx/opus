@@ -445,6 +445,29 @@ target_compile_definitions(opus
                            PRIVATE
                            $<$<BOOL:${HAVE_LRINT}>:HAVE_LRINT>
                            $<$<BOOL:${HAVE_LRINTF}>:HAVE_LRINTF>)
+if(TRUE)
+  find_package(Doxygen)
+  if(DOXYGEN_FOUND)
+    set(DOXYGEN_IN ${PROJECT_SOURCE_DIR}/doc/Doxyfile.in)
+    set(DOXYGEN_OUT ${PROJECT_BINARY_DIR}/Doxyfile)
+    set(top_srcdir ${PROJECT_SOURCE_DIR})
+    set(HAVE_DOT YES)
+    set(VERSION ${PROJECT_VERSION})
+    set(GENERATE_HTML YES)
+
+    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+
+    add_custom_target(Doxygen ALL
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+        WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+        COMMENT "Generating docs"
+        VERBATIM )
+else()
+  message(ERROR "Doxygen need to be installed to generate the documentation")
+endif()
+  
+endif()
+
 
 if(OPUS_BUILD_FRAMEWORK)
   set_target_properties(opus PROPERTIES
