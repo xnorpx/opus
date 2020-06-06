@@ -32,8 +32,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "SigProc_FIX.h"
 #include "define.h"
 
-#define QA                          24
-#define A_LIMIT                     SILK_FIX_CONST( 0.99975, QA )
+#define LPC_QA                          24
+#define A_LIMIT                     SILK_FIX_CONST( 0.99975, LPC_QA )
 
 #define MUL32_FRAC_Q(a32, b32, Q)   ((opus_int32)(silk_RSHIFT_ROUND64(silk_SMULL(a32, b32), Q)))
 
@@ -55,7 +55,7 @@ static opus_int32 LPC_inverse_pred_gain_QA_c(               /* O   Returns inver
         }
 
         /* Set RC equal to negated AR coef */
-        rc_Q31 = -silk_LSHIFT( A_QA[ k ], 31 - QA );
+        rc_Q31 = -silk_LSHIFT( A_QA[ k ], 31 - LPC_QA );
 
         /* rc_mult1_Q30 range: [ 1 : 2^30 ] */
         rc_mult1_Q30 = silk_SUB32( SILK_FIX_CONST( 1, 30 ), silk_SMMUL( rc_Q31, rc_Q31 ) );
@@ -101,7 +101,7 @@ static opus_int32 LPC_inverse_pred_gain_QA_c(               /* O   Returns inver
     }
 
     /* Set RC equal to negated AR coef */
-    rc_Q31 = -silk_LSHIFT( A_QA[ 0 ], 31 - QA );
+    rc_Q31 = -silk_LSHIFT( A_QA[ 0 ], 31 - LPC_QA );
 
     /* Range: [ 1 : 2^30 ] */
     rc_mult1_Q30 = silk_SUB32( SILK_FIX_CONST( 1, 30 ), silk_SMMUL( rc_Q31, rc_Q31 ) );
@@ -131,7 +131,7 @@ opus_int32 silk_LPC_inverse_pred_gain_c(            /* O   Returns inverse predi
     /* Increase Q domain of the AR coefficients */
     for( k = 0; k < order; k++ ) {
         DC_resp += (opus_int32)A_Q12[ k ];
-        Atmp_QA[ k ] = silk_LSHIFT32( (opus_int32)A_Q12[ k ], QA - 12 );
+        Atmp_QA[ k ] = silk_LSHIFT32( (opus_int32)A_Q12[ k ], LPC_QA - 12 );
     }
     /* If the DC is unstable, we don't even need to do the full calculations */
     if( DC_resp >= 4096 ) {

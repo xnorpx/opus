@@ -36,9 +36,6 @@
 #include "main.h"
 #include "stack_alloc.h"
 
-/* Weighting factors for tilt measure */
-static const opus_int32 tiltWeights[ VAD_N_BANDS ] = { 30000, 6000, -12000, -12000 };
-
 /***************************************/
 /* Get the speech activity level in Q8 */
 /***************************************/
@@ -60,6 +57,9 @@ opus_int silk_VAD_GetSA_Q8_sse4_1(                  /* O    Return value, 0 if s
     opus_int   X_offset[ VAD_N_BANDS ];
     opus_int   ret = 0;
     silk_VAD_state *psSilk_VAD = &psEncC->sVAD;
+
+    /* Weighting factors for tilt measure */
+    const opus_int32 tiltWeights[ VAD_N_BANDS ] = { 30000, 6000, -12000, -12000 };
 
     SAVE_STACK;
 

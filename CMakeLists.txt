@@ -446,6 +446,12 @@ target_compile_definitions(opus
                            $<$<BOOL:${HAVE_LRINT}>:HAVE_LRINT>
                            $<$<BOOL:${HAVE_LRINTF}>:HAVE_LRINTF>)
 
+if(${CMAKE_VERSION} VERSION_GREATER 3.15.7)
+  set_target_properties(opus PROPERTIES UNITY_BUILD ON)
+  set_target_properties(opus PROPERTIES UNITY_BUILD_BATCH_SIZE 16)
+  target_compile_definitions(opus PRIVATE OPUS_BUILD CELT_C)
+endif()
+
 if(OPUS_BUILD_FRAMEWORK)
   set_target_properties(opus PROPERTIES
                         FRAMEWORK TRUE

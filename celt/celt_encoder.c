@@ -127,12 +127,6 @@ struct OpusCustomEncoder {
    /* opus_val16 energyError[],  Size = channels*mode->nbEBands */
 };
 
-int celt_encoder_get_size(int channels)
-{
-   CELTMode *mode = opus_custom_mode_create(48000, 960, NULL);
-   return opus_custom_encoder_get_size(mode, channels);
-}
-
 OPUS_CUSTOM_NOSTATIC int opus_custom_encoder_get_size(const CELTMode *mode, int channels)
 {
    int size = sizeof(struct CELTEncoder)
@@ -144,6 +138,13 @@ OPUS_CUSTOM_NOSTATIC int opus_custom_encoder_get_size(const CELTMode *mode, int 
                                                           /* opus_val16 energyError[channels*mode->nbEBands]; */
    return size;
 }
+
+int celt_encoder_get_size(int channels)
+{
+   CELTMode *mode = opus_custom_mode_create(48000, 960, NULL);
+   return opus_custom_encoder_get_size(mode, channels);
+}
+
 
 #ifdef CUSTOM_MODES
 CELTEncoder *opus_custom_encoder_create(const CELTMode *mode, int channels, int *error)

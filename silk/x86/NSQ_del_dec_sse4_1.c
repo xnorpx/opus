@@ -49,7 +49,7 @@ typedef struct {
     opus_int32 Seed;
     opus_int32 SeedInit;
     opus_int32 RD_Q10;
-} NSQ_del_dec_struct;
+} NSQ_del_dec_struct_sse4_1;
 
 typedef struct {
     opus_int32 Q_Q10;
@@ -58,14 +58,14 @@ typedef struct {
     opus_int32 LF_AR_Q14;
     opus_int32 sLTP_shp_Q14;
     opus_int32 LPC_exc_Q14;
-} NSQ_sample_struct;
+} NSQ_sample_struct_sse4_1;
 
-typedef NSQ_sample_struct  NSQ_sample_pair[ 2 ];
+typedef NSQ_sample_struct_sse4_1  NSQ_sample_pair_sse4_1[ 2 ];
 
 static OPUS_INLINE void silk_nsq_del_dec_scale_states_sse4_1(
     const silk_encoder_state *psEncC,               /* I    Encoder State                       */
     silk_nsq_state      *NSQ,                       /* I/O  NSQ state                           */
-    NSQ_del_dec_struct  psDelDec[],                 /* I/O  Delayed decision states             */
+    NSQ_del_dec_struct_sse4_1  psDelDec[],                 /* I/O  Delayed decision states             */
     const opus_int32    x_Q3[],                     /* I    Input in Q3                         */
     opus_int32          x_sc_Q10[],                 /* O    Input scaled with 1/Gain in Q10     */
     const opus_int16    sLTP[],                     /* I    Re-whitened LTP state in Q0         */
@@ -84,7 +84,7 @@ static OPUS_INLINE void silk_nsq_del_dec_scale_states_sse4_1(
 /******************************************/
 static OPUS_INLINE void silk_noise_shape_quantizer_del_dec_sse4_1(
     silk_nsq_state      *NSQ,                   /* I/O  NSQ state                           */
-    NSQ_del_dec_struct  psDelDec[],             /* I/O  Delayed decision states             */
+    NSQ_del_dec_struct_sse4_1  psDelDec[],             /* I/O  Delayed decision states             */
     opus_int            signalType,             /* I    Signal type                         */
     const opus_int32    x_Q10[],                /* I                                        */
     opus_int8           pulses[],               /* O                                        */
@@ -140,8 +140,8 @@ void silk_NSQ_del_dec_sse4_1(
     opus_int32          RDmin_Q10, Gain_Q10;
     VARDECL( opus_int32, x_sc_Q10 );
     VARDECL( opus_int32, delayedGain_Q10 );
-    VARDECL( NSQ_del_dec_struct, psDelDec );
-    NSQ_del_dec_struct  *psDD;
+    VARDECL( NSQ_del_dec_struct_sse4_1, psDelDec );
+    NSQ_del_dec_struct_sse4_1  *psDD;
     SAVE_STACK;
 
     /* Set unvoiced lag to the previous one, overwrite later for voiced */
@@ -150,8 +150,8 @@ void silk_NSQ_del_dec_sse4_1(
     silk_assert( NSQ->prev_gain_Q16 != 0 );
 
     /* Initialize delayed decision states */
-    ALLOC( psDelDec, psEncC->nStatesDelayedDecision, NSQ_del_dec_struct );
-    silk_memset( psDelDec, 0, psEncC->nStatesDelayedDecision * sizeof( NSQ_del_dec_struct ) );
+    ALLOC( psDelDec, psEncC->nStatesDelayedDecision, NSQ_del_dec_struct_sse4_1 );
+    silk_memset( psDelDec, 0, psEncC->nStatesDelayedDecision * sizeof( NSQ_del_dec_struct_sse4_1 ) );
     for( k = 0; k < psEncC->nStatesDelayedDecision; k++ ) {
         psDD                 = &psDelDec[ k ];
         psDD->Seed           = ( k + psIndices->Seed ) & 3;
@@ -311,7 +311,7 @@ void silk_NSQ_del_dec_sse4_1(
 /******************************************/
 static OPUS_INLINE void silk_noise_shape_quantizer_del_dec_sse4_1(
     silk_nsq_state      *NSQ,                   /* I/O  NSQ state                           */
-    NSQ_del_dec_struct  psDelDec[],             /* I/O  Delayed decision states             */
+    NSQ_del_dec_struct_sse4_1  psDelDec[],             /* I/O  Delayed decision states             */
     opus_int            signalType,             /* I    Signal type                         */
     const opus_int32    x_Q10[],                /* I                                        */
     opus_int8           pulses[],               /* O                                        */
@@ -345,16 +345,16 @@ static OPUS_INLINE void silk_noise_shape_quantizer_del_dec_sse4_1(
     opus_int32   q1_Q0, q1_Q10, q2_Q10, exc_Q14, LPC_exc_Q14, xq_Q14, Gain_Q10;
     opus_int32   tmp1, tmp2, sLF_AR_shp_Q14;
     opus_int32   *pred_lag_ptr, *shp_lag_ptr, *psLPC_Q14;
-    VARDECL( NSQ_sample_pair, psSampleState );
-    NSQ_del_dec_struct *psDD;
-    NSQ_sample_struct  *psSS;
+    VARDECL( NSQ_sample_pair_sse4_1, psSampleState );
+    NSQ_del_dec_struct_sse4_1 *psDD;
+    NSQ_sample_struct_sse4_1  *psSS;
 
     __m128i a_Q12_0123, a_Q12_4567, a_Q12_89AB, a_Q12_CDEF;
     __m128i b_Q12_0123, b_sr_Q12_0123;
     SAVE_STACK;
 
     celt_assert( nStatesDelayedDecision > 0 );
-    ALLOC( psSampleState, nStatesDelayedDecision, NSQ_sample_pair );
+    ALLOC( psSampleState, nStatesDelayedDecision, NSQ_sample_pair_sse4_1 );
 
     shp_lag_ptr  = &NSQ->sLTP_shp_Q14[ NSQ->sLTP_shp_buf_idx - lag + HARM_SHAPE_FIR_TAPS / 2 ];
     pred_lag_ptr = &sLTP_Q15[ NSQ->sLTP_buf_idx - lag + LTP_ORDER / 2 ];
@@ -684,8 +684,8 @@ static OPUS_INLINE void silk_noise_shape_quantizer_del_dec_sse4_1(
         /* Replace a state if best from second set outperforms worst in first set */
         if( RDmin_Q10 < RDmax_Q10 ) {
             silk_memcpy( ( (opus_int32 *)&psDelDec[ RDmax_ind ] ) + i,
-                         ( (opus_int32 *)&psDelDec[ RDmin_ind ] ) + i, sizeof( NSQ_del_dec_struct ) - i * sizeof( opus_int32) );
-            silk_memcpy( &psSampleState[ RDmax_ind ][ 0 ], &psSampleState[ RDmin_ind ][ 1 ], sizeof( NSQ_sample_struct ) );
+                         ( (opus_int32 *)&psDelDec[ RDmin_ind ] ) + i, sizeof( NSQ_del_dec_struct_sse4_1 ) - i * sizeof( opus_int32) );
+            silk_memcpy( &psSampleState[ RDmax_ind ][ 0 ], &psSampleState[ RDmin_ind ][ 1 ], sizeof( NSQ_sample_struct_sse4_1 ) );
         }
 
         /* Write samples from winner to output and long-term filter states */
@@ -727,7 +727,7 @@ static OPUS_INLINE void silk_noise_shape_quantizer_del_dec_sse4_1(
 static OPUS_INLINE void silk_nsq_del_dec_scale_states_sse4_1(
     const silk_encoder_state *psEncC,               /* I    Encoder State                       */
     silk_nsq_state      *NSQ,                       /* I/O  NSQ state                           */
-    NSQ_del_dec_struct  psDelDec[],                 /* I/O  Delayed decision states             */
+    NSQ_del_dec_struct_sse4_1  psDelDec[],                 /* I/O  Delayed decision states             */
     const opus_int32    x_Q3[],                     /* I    Input in Q3                         */
     opus_int32          x_sc_Q10[],                 /* O    Input scaled with 1/Gain in Q10     */
     const opus_int16    sLTP[],                     /* I    Re-whitened LTP state in Q0         */
@@ -743,7 +743,7 @@ static OPUS_INLINE void silk_nsq_del_dec_scale_states_sse4_1(
 {
     opus_int            i, k, lag;
     opus_int32          gain_adj_Q16, inv_gain_Q31, inv_gain_Q23;
-    NSQ_del_dec_struct  *psDD;
+    NSQ_del_dec_struct_sse4_1  *psDD;
     __m128i xmm_inv_gain_Q23, xmm_x_Q3_x2x0, xmm_x_Q3_x3x1;
 
     lag          = pitchL[ subfr ];

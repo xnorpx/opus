@@ -38,7 +38,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #define OVERRIDE_silk_noise_shape_quantizer_del_dec
 static inline void silk_noise_shape_quantizer_del_dec(
     silk_nsq_state      *NSQ,                   /* I/O  NSQ state                           */
-    NSQ_del_dec_struct  psDelDec[],             /* I/O  Delayed decision states             */
+    NSQ_del_dec_struct_sse4_1  psDelDec[],             /* I/O  Delayed decision states             */
     opus_int            signalType,             /* I    Signal type                         */
     const opus_int32    x_Q10[],                /* I                                        */
     opus_int8           pulses[],               /* O                                        */
@@ -74,7 +74,7 @@ static inline void silk_noise_shape_quantizer_del_dec(
     opus_int32   tmp1, tmp2, sLF_AR_shp_Q14;
     opus_int32   *pred_lag_ptr, *shp_lag_ptr, *psLPC_Q14;
     NSQ_sample_struct  psSampleState[ MAX_DEL_DEC_STATES ][ 2 ];
-    NSQ_del_dec_struct *psDD;
+    NSQ_del_dec_struct_sse4_1 *psDD;
     NSQ_sample_struct  *psSS;
     opus_int16 b_Q14_0, b_Q14_1, b_Q14_2, b_Q14_3, b_Q14_4;
     opus_int16 a_Q12_0, a_Q12_1, a_Q12_2, a_Q12_3, a_Q12_4, a_Q12_5, a_Q12_6;
@@ -368,7 +368,7 @@ static inline void silk_noise_shape_quantizer_del_dec(
         /* Replace a state if best from second set outperforms worst in first set */
         if( RDmin_Q10 < RDmax_Q10 ) {
             silk_memcpy( ( (opus_int32 *)&psDelDec[ RDmax_ind ] ) + i,
-                         ( (opus_int32 *)&psDelDec[ RDmin_ind ] ) + i, sizeof( NSQ_del_dec_struct ) - i * sizeof( opus_int32) );
+                         ( (opus_int32 *)&psDelDec[ RDmin_ind ] ) + i, sizeof( NSQ_del_dec_struct_sse4_1 ) - i * sizeof( opus_int32) );
             silk_memcpy( &psSampleState[ RDmax_ind ][ 0 ], &psSampleState[ RDmin_ind ][ 1 ], sizeof( NSQ_sample_struct ) );
         }
 
