@@ -33,7 +33,7 @@ extern "C"
 {
 #endif
 
-/*#define silk_MACRO_COUNT */          /* Used to enable WMOPS counting */
+#define silk_MACRO_COUNT          /* Used to enable WMOPS counting */
 
 #define SILK_MAX_ORDER_LPC            24            /* max order of the LPC analysis in schur() and k2a() */
 
