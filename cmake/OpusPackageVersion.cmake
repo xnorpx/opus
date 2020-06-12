@@ -13,13 +13,13 @@ function(get_package_version PACKAGE_VERSION PROJECT_VERSION)
   endif()
 
   find_package(Git)
-  if(DEFINED Git_FOUND)
+  if(GIT_FOUND)
     message(STATUS "Git found")
   else()
     message(STATUS "Git not found")
   endif()
   
-  if(DEFINED Git_FOUND AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/.git")
+  if(DEFINED GIT_FOUND AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/.git")
     message(STATUS "Debug1")
     execute_process(COMMAND ${GIT_EXECUTABLE} 
      --git-dir=${CMAKE_CURRENT_LIST_DIR}/.git describe --tags --match "v*"
