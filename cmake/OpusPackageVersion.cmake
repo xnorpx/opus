@@ -7,6 +7,12 @@ function(get_package_version PACKAGE_VERSION PROJECT_VERSION)
 
   find_package(Git)
   message(STATUS "${CMAKE_CURRENT_LIST_DIR}/.git")
+  if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/.git")
+    message(STATUS "Exists")
+  else()
+    message(STATUS "Does not exist")
+  endif()
+    
   if(Git_FOUND AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/.git")
     execute_process(COMMAND ${GIT_EXECUTABLE} 
      --git-dir=${CMAKE_CURRENT_LIST_DIR}/.git describe --tags --match "v*"
