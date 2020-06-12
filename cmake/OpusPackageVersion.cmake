@@ -14,10 +14,13 @@ function(get_package_version PACKAGE_VERSION PROJECT_VERSION)
   endif()
     
   if(Git_FOUND AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/.git")
+    message(STATUS "Debug1")
     execute_process(COMMAND ${GIT_EXECUTABLE} 
      --git-dir=${CMAKE_CURRENT_LIST_DIR}/.git describe --tags --match "v*"
                     OUTPUT_VARIABLE OPUS_PACKAGE_VERSION)
+    message(STATUS "Debug2")
     if(OPUS_PACKAGE_VERSION)
+      message(STATUS "Debug3")
       string(STRIP ${OPUS_PACKAGE_VERSION}, OPUS_PACKAGE_VERSION)
       string(REPLACE \n
                      ""
