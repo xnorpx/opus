@@ -23,12 +23,14 @@ jobs:
         run: for F in opus*.tar.gz; do tar -xvf "$F"; done
       - name: ls
         run: ls
+      - name: Remove CMakeLists.txt
+        run: rm CMakeLists.txt
+      - name: Create new CMakeLists.txt for submodule
+        run: for F in opus*.tar.gz; do printf '%s\n' 'cmake_minimum_required(VERSION 3.1)' 'project(OpusAsSubModule LANGUAGES C)' 'add_subdirectory("${F%%.*}")' > CMakeLists.txt; done
+      - name: cat CMakeLists.txt
+        run: cat CMakeLists.txt
       # - name: Remove .git folder
       #   run: rm -rf .git
-      # - name: Remove CMakeLists.txt
-      #   run: rm CMakeLists.txt
-      # - name: Create new CMakeLists.txt for submodule
-      #   run: printf '%s\n' 'cmake_minimum_required(VERSION 3.1)' 'project(OpusAsSubModule LANGUAGES C)' 'add_subdirectory(opus-unknown)' > CMakeLists.txt
       # - name: Create Work Dir
       #   run: mkdir build
       # - name: Configure submodule build
