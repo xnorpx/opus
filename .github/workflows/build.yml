@@ -26,7 +26,10 @@ jobs:
       - name: Remove CMakeLists.txt
         run: rm CMakeLists.txt
       - name: Create new CMakeLists.txt for submodule
-        run: for F in opus*.tar.gz; do printf '%s\n' 'cmake_minimum_required(VERSION 3.1)' 'project(OpusAsSubModule LANGUAGES C)' 'add_subdirectory("$F")' > CMakeLists.txt; done
+        #run: for F in opus*.tar.gz; do printf '%s\n' 'cmake_minimum_required(VERSION 3.1)' 'project(OpusAsSubModule LANGUAGES C)' 'add_subdirectory("$F")' > CMakeLists.txt; done
+        run: printf '%s\n' 'cmake_minimum_required(VERSION 3.1)' 'project(OpusAsSubModule LANGUAGES C)' 'add_subdirectory(REPLACE_ME)' > CMakeLists.txt; done
+      - name: Add correct subdirectory
+        run: sed -i 's/REPLACE_ME/something/g' CMakeLists.txt
       - name: cat CMakeLists.txt
         run: cat CMakeLists.txt
       # - name: Remove .git folder
