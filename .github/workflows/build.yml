@@ -16,8 +16,8 @@ jobs:
       #   run: make distcheck -j 2
       - name: ls
         run: ls
-      - name: cd..
-        run: cd..
+      - name: cd ..
+        run: cd ..
       - name: ls
         run: ls
       # - name: pwd
