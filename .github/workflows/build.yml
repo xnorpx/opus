@@ -3,30 +3,30 @@ name: Opus Build Matrix
 on: [push, pull_request]
 
 jobs:
-  # CMakeDistCheckTest:
-  #   name: Dist Check Test CMake
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Autogen
-  #       run: ./autogen.sh
-  #     - name: Configure
-  #       run: ./configure
-  #     - name: DistCheck
-  #       run: make distcheck -j 2
-  #     - name: Untar dist
-  #       run: tar -xf opus-unknown.tar.gz
-  #     - name: Create Work Dir
-  #       run: mkdir opus-unknown/build 
-  #     - name: Configure
-  #       working-directory: ./opus-unknown/build
-  #       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DBUILD_TESTING=ON
-  #     - name: Build
-  #       working-directory: ./opus-unknown/build
-  #       run: make -j 2 -s
-  #     - name: Test
-  #       working-directory: ./opus-unknown/build
-  #       run: ctest -j 2
+  CMakeDistCheckTest:
+    name: Dist Check Test CMake
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Autogen
+        run: ./autogen.sh
+      - name: Configure
+        run: ./configure
+      - name: DistCheck
+        run: make distcheck -j 2
+      - name: Untar dist
+        run: tar -xf opus-unknown.tar.gz
+      - name: Create Work Dir
+        run: mkdir opus-unknown/build 
+      - name: Configure
+        working-directory: ./opus-unknown/build
+        run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DBUILD_TESTING=ON
+      - name: Build
+        working-directory: ./opus-unknown/build
+        run: make -j 2 -s
+      - name: Test
+        working-directory: ./opus-unknown/build
+        run: ctest -j 2
 
   CMakeVersionTest:
     name: Test build with CMake 3.1.0

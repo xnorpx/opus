@@ -48,7 +48,6 @@ function(get_package_version PACKAGE_VERSION PROJECT_VERSION)
                    ${OPUS_PACKAGE_VERSION})
   endif()
 
-  message(STATUS "Opus package version: ${OPUS_PACKAGE_VERSION}")
   if(OPUS_PACKAGE_VERSION)
     string(REGEX
       REPLACE "^([0-9]+.[0-9]+\\.?([0-9]+)?).*"
@@ -57,7 +56,7 @@ function(get_package_version PACKAGE_VERSION PROJECT_VERSION)
                ${OPUS_PACKAGE_VERSION})
   else()
     # fail to parse version from git and package version
-    message(WARNING "Could not get package version ")
+    message(WARNING "Could not get package version.")
     set(OPUS_PACKAGE_VERSION 0)
     set(OPUS_PROJECT_VERSION 0)
   endif()
