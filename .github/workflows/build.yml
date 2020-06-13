@@ -20,18 +20,22 @@ jobs:
         run: ls
       - name: Untar dist
         #run: tar -xf opus-unknown.tar.gz
-        run: for F in opus*.tar.gz; do tar -xvf "$F"; done
+        run: for F in opus*.tar.gz; do tar -xvf "$F" -C opus_submodule; done
       - name: ls
         run: ls
-      - name: Remove CMakeLists.txt
-        run: rm CMakeLists.txt
-      - name: Create new CMakeLists.txt for submodule
-        #run: for F in opus*.tar.gz; do printf '%s\n' 'cmake_minimum_required(VERSION 3.1)' 'project(OpusAsSubModule LANGUAGES C)' 'add_subdirectory("$F")' > CMakeLists.txt; done
-        run: printf '%s\n' 'cmake_minimum_required(VERSION 3.1)' 'project(OpusSubModule LANGUAGES C)' 'add_subdirectory(REPLACE_ME)' > CMakeLists.txt
-      - name: Add correct subdirectory
-        run: for F in opus*.tar.gz; do sed -i "s/REPLACE_ME/${F%%.*}/g" CMakeLists.txt; done
-      - name: cat CMakeLists.txt
-        run: cat CMakeLists.txt
+      - name: ls
+        run: ls
+        working-directory: ./opus_submodule
+
+      # - name: Remove CMakeLists.txt
+      #   run: rm CMakeLists.txt
+      # - name: Create new CMakeLists.txt for submodule
+      #   #run: for F in opus*.tar.gz; do printf '%s\n' 'cmake_minimum_required(VERSION 3.1)' 'project(OpusAsSubModule LANGUAGES C)' 'add_subdirectory("$F")' > CMakeLists.txt; done
+      #   run: printf '%s\n' 'cmake_minimum_required(VERSION 3.1)' 'project(OpusSubModule LANGUAGES C)' 'add_subdirectory(REPLACE_ME)' > CMakeLists.txt
+      # - name: Add correct subdirectory
+      #   run: for F in opus*.tar.gz; do sed -i "s/REPLACE_ME/${F%%.*}/g" CMakeLists.txt; done
+      # - name: cat CMakeLists.txt
+      #   run: cat CMakeLists.txt
       # - name: Remove .git folder
       #   run: rm -rf .git
       # - name: Create Work Dir
