@@ -21,6 +21,7 @@ function(get_package_version PACKAGE_VERSION PROJECT_VERSION)
   
   if(DEFINED GIT_FOUND AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/.git")
     message(STATUS "Debug1")
+    message(STATUS "${CMAKE_CURRENT_LIST_DIR}/.git")
     execute_process(COMMAND ${GIT_EXECUTABLE} 
      --git-dir=${CMAKE_CURRENT_LIST_DIR}/.git describe --tags --match "v*"
                     OUTPUT_VARIABLE OPUS_PACKAGE_VERSION)
@@ -65,7 +66,7 @@ function(get_package_version PACKAGE_VERSION PROJECT_VERSION)
   endif()
 
   message(STATUS "Opus package version: ${OPUS_PACKAGE_VERSION}")
-  if(DEFINED OPUS_PACKAGE_VERSION)
+  if(OPUS_PACKAGE_VERSION)
     string(REGEX
       REPLACE "^([0-9]+.[0-9]+\\.?([0-9]+)?).*"
                "\\1"
