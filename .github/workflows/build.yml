@@ -8,47 +8,55 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Autogen
-        run: ./autogen.sh
-      - name: Configure
-        run: ./configure
-      - name: DistCheck
-        run: make distcheck -j 2
-      - name: Untar dist
-        run: tar -xf opus-unknown.tar.gz
+      # - name: Autogen
+      #   run: ./autogen.sh
+      # - name: Configure
+      #   run: ./configure
+      # - name: DistCheck
+      #   run: make distcheck -j 2
+      - name: cd ..
+        run: cd ..
+      - name: pwd
+        run: pwd
       - name: Create Work Dir
-        run: mkdir opus-unknown/build 
-      - name: Configure
-        working-directory: ./opus-unknown/build
-        run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DBUILD_TESTING=ON
-      - name: Build
-        working-directory: ./opus-unknown/build
-        run: make -j 2 -s
-      - name: Test
-        working-directory: ./opus-unknown/build
-        run: ctest -j 2
+        run: mkdir build
+      - name: ls
+        run: ls
+      # - name: Untar dist
+      #   run: tar -xf opus-unknown.tar.gz
+      # - name: Create Work Dir
+      #   run: mkdir opus-unknown/build 
+      # - name: Configure
+      #   working-directory: ./opus-unknown/build
+      #   run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DBUILD_TESTING=ON
+      # - name: Build
+      #   working-directory: ./opus-unknown/build
+      #   run: make -j 2 -s
+      # - name: Test
+      #   working-directory: ./opus-unknown/build
+      #   run: ctest -j 2
 
-  CMakeVersionTest:
-    name: Test build with CMake 3.1.0
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Install CMake 3.1
-        run: |
-          curl -sL https://github.com/Kitware/CMake/releases/download/v3.1.0/cmake-3.1.0-Linux-x86_64.sh -o cmakeinstall.sh
-          chmod +x cmakeinstall.sh
-          sudo ./cmakeinstall.sh --prefix=/usr/local --exclude-subdir
-          rm cmakeinstall.sh
-      - name: Create Work Dir
-        run: mkdir build 
-      - name: Configure
-        working-directory: ./build
-        run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DBUILD_TESTING=ON
-      - name: Build
-        working-directory: ./build
-        run: make -j 2 -s
+  # CMakeVersionTest:
+  #   name: Test build with CMake 3.1.0
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - name: Install CMake 3.1
+  #       run: |
+  #         curl -sL https://github.com/Kitware/CMake/releases/download/v3.1.0/cmake-3.1.0-Linux-x86_64.sh -o cmakeinstall.sh
+  #         chmod +x cmakeinstall.sh
+  #         sudo ./cmakeinstall.sh --prefix=/usr/local --exclude-subdir
+  #         rm cmakeinstall.sh
+  #     - name: Create Work Dir
+  #       run: mkdir build 
+  #     - name: Configure
+  #       working-directory: ./build
+  #       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DBUILD_TESTING=ON
+  #     - name: Build
+  #       working-directory: ./build
+  #       run: make -j 2 -s
       # - name: Test
       #   working-directory: ./build
       #   run: ctest -j 2
