@@ -8,25 +8,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Autogen
         run: ./autogen.sh
       - name: Configure
         run: ./configure
       - name: DistCheck
         run: make distcheck -j 2
-      - name: Untar dist
-        run: tar -xf opus-unknown.tar.gz
-      - name: Remove .git folder
-        run: rm -rf .git
-      - name: Remove CMakeLists.txt
-        run: rm CMakeLists.txt
-      - name: Create new CMakeLists.txt for submodule
-        run: printf '%s\n' 'cmake_minimum_required(VERSION 3.1)' 'project(OpusAsSubModule LANGUAGES C)' 'add_subdirectory(opus-unknown)' > CMakeLists.txt
-      - name: Create Work Dir
-        run: mkdir build
-      - name: Configure submodule build
-        working-directory: ./build
-        run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DBUILD_TESTING=ON
+      - name: ls
+        run: ls
+      # - name: Untar dist
+      #   run: tar -xf opus-unknown.tar.gz
+      # - name: Remove .git folder
+      #   run: rm -rf .git
+      # - name: Remove CMakeLists.txt
+      #   run: rm CMakeLists.txt
+      # - name: Create new CMakeLists.txt for submodule
+      #   run: printf '%s\n' 'cmake_minimum_required(VERSION 3.1)' 'project(OpusAsSubModule LANGUAGES C)' 'add_subdirectory(opus-unknown)' > CMakeLists.txt
+      # - name: Create Work Dir
+      #   run: mkdir build
+      # - name: Configure submodule build
+      #   working-directory: ./build
+      #   run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DBUILD_TESTING=ON
       # - name: Build
       #   working-directory: ./opus-unknown/build
       #   run: make -j 2 -s
