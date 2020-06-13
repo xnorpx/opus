@@ -20,7 +20,8 @@ jobs:
         run: ls
       - name: Untar dist
         #run: tar -xf opus-unknown.tar.gz
-        run: for F in opus*.tar.gz; do tar -xf "$F" --directory ./opus_submodule; done
+        # run: for F in opus*.tar.gz; do tar -xf "$F" --directory ./opus_submodule; done
+        run: for F in opus*.tar.gz; do tar -xf "$F" -C ./opus_submodule --strip-components=1; done
       - name: ls
         run: ls
       - name: ls
