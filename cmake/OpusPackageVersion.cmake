@@ -25,6 +25,7 @@ function(get_package_version PACKAGE_VERSION PROJECT_VERSION)
                        1
                        -1
                        OPUS_PACKAGE_VERSION)
+      message(STATUS "Opus package version from git repo: ${OPUS_PACKAGE_VERSION}")
     endif()
 
   elseif(EXISTS "${CMAKE_CURRENT_LIST_DIR}/package_version" 
@@ -46,6 +47,7 @@ function(get_package_version PACKAGE_VERSION PROJECT_VERSION)
                    "0"
                    OPUS_PACKAGE_VERSION
                    ${OPUS_PACKAGE_VERSION})
+      message(STATUS "Opus package version from package_version file: ${OPUS_PACKAGE_VERSION}")
   endif()
 
   if(OPUS_PACKAGE_VERSION)
@@ -61,7 +63,6 @@ function(get_package_version PACKAGE_VERSION PROJECT_VERSION)
     set(OPUS_PROJECT_VERSION 0)
   endif()
 
-  message(STATUS "Opus package version: ${OPUS_PACKAGE_VERSION}")
   message(STATUS "Opus project version: ${OPUS_PROJECT_VERSION}")
 
   set(PACKAGE_VERSION ${OPUS_PACKAGE_VERSION} PARENT_SCOPE)
