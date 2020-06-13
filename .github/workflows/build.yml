@@ -18,8 +18,11 @@ jobs:
         run: make distcheck -j 2
       - name: ls
         run: ls
-      # - name: Untar dist
-      #   run: tar -xf opus-unknown.tar.gz
+      - name: Untar dist
+        #run: tar -xf opus-unknown.tar.gz
+        run: for F in opus*.targz; do tar -xvf "$F"; done
+      - name: ls
+        run: ls
       # - name: Remove .git folder
       #   run: rm -rf .git
       # - name: Remove CMakeLists.txt
