@@ -18,6 +18,8 @@ jobs:
         run: make distcheck -j 2
       - name: ls
         run: ls
+      - name: Create submodule dir
+        run: mkdir opus_submodule
       - name: Untar dist
         #run: tar -xf opus-unknown.tar.gz
         # run: for F in opus*.tar.gz; do tar -xf "$F" --directory ./opus_submodule; done
