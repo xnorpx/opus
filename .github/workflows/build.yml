@@ -20,7 +20,7 @@ jobs:
         run: ls
       - name: Untar dist
         #run: tar -xf opus-unknown.tar.gz
-        run: for F in opus*.targz; do tar -xvf "$F"; done
+        run: for F in opus*.tar.gz; do tar -xvf "$F"; done
       - name: ls
         run: ls
       # - name: Remove .git folder
