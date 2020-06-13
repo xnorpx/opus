@@ -5,20 +5,7 @@ set(__opus_version INCLUDED)
 
 function(get_package_version PACKAGE_VERSION PROJECT_VERSION)
 
-  message(STATUS "${CMAKE_CURRENT_LIST_DIR}/.git")
-  if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/.git")
-    message(STATUS "Exists")
-  else()
-    message(STATUS "Does not exist")
-  endif()
-
   find_package(Git)
-  if(GIT_FOUND)
-    message(STATUS "Git found")
-  else()
-    message(STATUS "Git not found")
-  endif()
-  
   if(GIT_FOUND AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/.git")
     execute_process(COMMAND ${GIT_EXECUTABLE} 
                     --git-dir=${CMAKE_CURRENT_LIST_DIR}/.git describe 
