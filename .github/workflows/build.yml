@@ -39,7 +39,7 @@ jobs:
         working-directory: ./build
         run: make -j 2 -s
       - name: Test
-        working-directory: ./opus-unknown/build
+        working-directory: ./build
         run: ctest -j 2
 
   # CMakeVersionTest:
