@@ -23,7 +23,8 @@ function(get_package_version PACKAGE_VERSION PROJECT_VERSION)
     message(STATUS "Debug1")
     message(STATUS "${CMAKE_CURRENT_LIST_DIR}/.git")
     execute_process(COMMAND ${GIT_EXECUTABLE} 
-     --git-dir=${CMAKE_CURRENT_LIST_DIR}/.git describe --tags --match "v*"
+     describe --tags --match "v*"
+     #--git-dir=${CMAKE_CURRENT_LIST_DIR}/.git describe --tags --match "v*"
                     OUTPUT_VARIABLE OPUS_PACKAGE_VERSION)
     message(STATUS "Debug2")
     if(OPUS_PACKAGE_VERSION)
