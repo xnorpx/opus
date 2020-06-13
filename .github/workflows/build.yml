@@ -14,14 +14,18 @@ jobs:
       #   run: ./configure
       # - name: DistCheck
       #   run: make distcheck -j 2
-      - name: cd ..
-        run: cd ..
-      - name: pwd
-        run: pwd
-      - name: Create Work Dir
-        run: mkdir build
       - name: ls
         run: ls
+      - name: cd..
+        run: cd..
+      - name: ls
+        run: ls
+      # - name: pwd
+      #   run: pwd
+      # - name: Create Work Dir
+      #   run: mkdir build
+      # - name: ls
+      #   run: ls
       # - name: Untar dist
       #   run: tar -xf opus-unknown.tar.gz
       # - name: Create Work Dir
