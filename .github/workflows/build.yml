@@ -17,7 +17,8 @@ jobs:
       - name: DistCheck
         run: make distcheck -j 2
       - name: Clean out gitrep
-        run: rm -v !("opus*.tar.gz") 
+        #run: rm -v !("opus*.tar.gz") 
+        run: find . ! -name 'opus*.tar.gz' -type f -exec rm -f {} +
       - name: Create submodule dir
         run: mkdir opus_submodule
       - name: Untar dist
