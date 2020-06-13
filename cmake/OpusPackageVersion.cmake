@@ -4,31 +4,12 @@ endif()
 set(__opus_version INCLUDED)
 
 function(get_package_version PACKAGE_VERSION PROJECT_VERSION)
-
-  message(STATUS "${CMAKE_CURRENT_LIST_DIR}/.git")
-  if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/.git")
-    message(STATUS "Exists")
-  else()
-    message(STATUS "Does not exist")
-  endif()
-
-  find_package(Git)
-  if(GIT_FOUND)
-    message(STATUS "Git found")
-  else()
-    message(STATUS "Git not found")
-  endif()
   
-  if(DEFINED GIT_FOUND AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/.git")
-    message(STATUS "Debug1")
-    message(STATUS "${CMAKE_CURRENT_LIST_DIR}/.git")
+  if(GIT_FOUND AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/.git")
     execute_process(COMMAND ${GIT_EXECUTABLE} 
-     describe --tags --match "v*"
-     #--git-dir=${CMAKE_CURRENT_LIST_DIR}/.git describe --tags --match "v*"
-                    OUTPUT_VARIABLE OPUS_PACKAGE_VERSION)
-    message(STATUS "Debug2")
+                    --git-dir=${CMAKE_CURRENT_LIST_DIR}/.git describe 
+                    --tags --match "v*" OUTPUT_VARIABLE OPUS_PACKAGE_VERSION)
     if(OPUS_PACKAGE_VERSION)
-      message(STATUS "Debug3")
       string(STRIP ${OPUS_PACKAGE_VERSION}, OPUS_PACKAGE_VERSION)
       string(REPLACE \n
                      ""
@@ -46,7 +27,7 @@ function(get_package_version PACKAGE_VERSION PROJECT_VERSION)
     endif()
 
   elseif(EXISTS "${CMAKE_CURRENT_LIST_DIR}/package_version" 
-         AND NOT DEFINED OPUS_PACKAGE_VERSION)
+         AND NOT OPUS_PACKAGE_VERSION)
     # Not a git repo, lets' try to parse it from package_version file if exists
     file(STRINGS package_version OPUS_PACKAGE_VERSION
          LIMIT_COUNT 1
