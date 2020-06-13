@@ -81,6 +81,48 @@ On Apple macOS, install Xcode and brew.sh, then in the Terminal enter:
 
     % sudo make install
 
+Experimental CMake support
+To build with CMake 3.1 and above, the following steps are necessary:
+
+On an Ubuntu or Debian family Linux distribution:
+
+    % sudo apt-get install git cmake gcc make
+
+On a Fedora/Redhat based Linux:
+
+    % sudo dnf install git cmake gcc make
+
+Or for older Redhat/Centos Linux releases:
+
+    % sudo yum install git cmake gcc make
+
+On Apple macOS, install Xcode and brew.sh, then in the Terminal enter:
+
+    % brew install cmake
+
+On Windows, install chocolatey:
+
+    % choco install visualstudio2019buildtools cmake
+
+1) Clone the repository:
+
+    % git clone https://gitlab.xiph.org/xiph/opus.git
+    % cd opus
+
+2) Compiling the source:
+
+    % mkdir build
+    % cd build
+    % cmake .. -DOPUS_BUILD_TESTING=ON -DOPUS_BUILD_PROGRAMS=ON
+    % cmake --build .
+
+    For cross compile iOS/Android etc.
+    see https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html
+
+3) Install the codec libraries (optional)
+
+    % sudo cmake --build . --target install
+
 Once you have compiled the codec, there will be a opus_demo executable
 in the top directory.
 
@@ -122,6 +164,10 @@ time it is run on a new platform.
 To run the integrated tests:
 
     % make check
+
+For CMake run:
+
+    % ctest
 
 There is also collection of standard test vectors which are not
 included in this package for size reasons but can be obtained from:
