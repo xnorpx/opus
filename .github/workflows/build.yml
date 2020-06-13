@@ -23,7 +23,7 @@ jobs:
       - name: Remove .git folder
         run: rm -rf .git
       - name: Remove CMakeLists.txt
-        run: del CMakeLists.txt
+        run: rm CMakeLists.txt
       - name: ls
         run: ls
       #   working-directory: ./opus-unknown/build
