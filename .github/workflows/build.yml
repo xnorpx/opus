@@ -27,7 +27,7 @@ jobs:
         run: rm CMakeLists.txt
       - name: Create new CMakeLists.txt for submodule
         #run: for F in opus*.tar.gz; do printf '%s\n' 'cmake_minimum_required(VERSION 3.1)' 'project(OpusAsSubModule LANGUAGES C)' 'add_subdirectory("$F")' > CMakeLists.txt; done
-        run: printf '%s\n' 'cmake_minimum_required(VERSION 3.1)' 'project(OpusAsSubModule LANGUAGES C)' 'add_subdirectory(REPLACE_ME)' > CMakeLists.txt; done
+        run: printf '%s\n' 'cmake_minimum_required(VERSION 3.1)' 'project(OpusSubModule LANGUAGES C)' 'add_subdirectory(REPLACE_ME)' > CMakeLists.txt
       - name: Add correct subdirectory
         run: sed -i 's/REPLACE_ME/something/g' CMakeLists.txt
       - name: cat CMakeLists.txt
