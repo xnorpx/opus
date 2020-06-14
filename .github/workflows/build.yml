@@ -2,12 +2,12 @@ name: Opus Build Matrix
 
 on: [push, pull_request]
 
+jobs:
   CMakeDistCheckTest:
     name: Dist Check Test CMake
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: harupy/find-trailing-whitespace@master
       - name: Autogen
         run: ./autogen.sh
       - name: Configure
