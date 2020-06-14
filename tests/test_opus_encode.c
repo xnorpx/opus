@@ -691,11 +691,11 @@ int main(int _argc, char **_argv)
    run_test1(getenv("TEST_OPUS_NOFUZZ")!=NULL);
 
    /* Fuzz encoder settings online */
-   if(getenv("TEST_OPUS_NOFUZZ")==NULL) {
-      fprintf(stderr,"Running fuzz_encoder_settings with %d encoder(s) and %d setting change(s) each.\n",
-              num_encoders_to_fuzz, num_setting_changes);
-      fuzz_encoder_settings(num_encoders_to_fuzz, num_setting_changes);
-   }
+   //if(getenv("TEST_OPUS_NOFUZZ")==NULL) {
+   //   fprintf(stderr,"Running fuzz_encoder_settings with %d encoder(s) and %d setting change(s) each.\n",
+   //           num_encoders_to_fuzz, num_setting_changes);
+   //   fuzz_encoder_settings(num_encoders_to_fuzz, num_setting_changes);
+   //}
 
    fprintf(stderr,"Tests completed successfully.\n");
 

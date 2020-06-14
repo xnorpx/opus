@@ -370,13 +370,13 @@ jobs:
         run: cmake .. ${{ matrix.config.args }} -DCMAKE_BUILD_TYPE=${{ matrix.config.config }} -DOPUS_BUILD_PROGRAMS=ON -DBUILD_TESTING=ON
       - name: Build
         working-directory: ./build
-        run: cmake --build . -j 2 --config ${{ matrix.config.config }} --target package
+        run: cmake --build . -j 4 --config ${{ matrix.config.config }} --target package
       - name: Test
         if: contains(matrix.config.name, 'Windows') && !contains(matrix.config.name, 'ARM') ||
             contains(matrix.config.name, 'MacOSX') && !contains(matrix.config.name, 'ARM') ||
             contains(matrix.config.name, 'Linux') && !contains(matrix.config.name, 'ARM')
         working-directory: ./build
-        run: ctest -j 2
+        run: ctest -j 4
 
   AutoMakeBuild:
     name: AutoMake/${{ matrix.config.name }}
