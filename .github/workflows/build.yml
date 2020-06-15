@@ -10,8 +10,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Check Whitespaces
         run: |
-          if [ $(ls -A) ]; then echo; "there are files"; else echo; "no files found"; fi;
-          git diff-tree --check origin/master HEAD
+          /bin/sh -c 'if [ls]; then echo "true"; fi'
+#git diff-tree --check origin/master HEAD
 
 # jobs:
 #   CMakeDistCheckTest:
