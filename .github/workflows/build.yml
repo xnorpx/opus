@@ -3,8 +3,8 @@ name: Opus Build Matrix
 on: [push, pull_request]
 
 jobs:
-  Check trailing white spaces in commits:
-    name: Check trailing white spaces in commits
+  x:
+    name: xx
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
