@@ -102,6 +102,7 @@ noinst_PROGRAMS = celt/tests/test_unit_cwrs32 \
                   tests/test_opus_api \
                   tests/test_opus_decode \
                   tests/test_opus_encode \
+                  tests/test_opus_encode_fuzz \
                   tests/test_opus_padding \
                   tests/test_opus_projection \
                   trivial_example
@@ -118,6 +119,7 @@ TESTS = celt/tests/test_unit_cwrs32 \
         tests/test_opus_api \
         tests/test_opus_decode \
         tests/test_opus_encode \
+        tests/test_opus_encode_fuzz \
         tests/test_opus_padding \
         tests/test_opus_projection
 
@@ -140,6 +142,9 @@ tests_test_opus_api_LDADD = libopus.la $(NE10_LIBS) $(LIBM)
 
 tests_test_opus_encode_SOURCES = tests/test_opus_encode.c tests/opus_encode_regressions.c tests/test_opus_common.h
 tests_test_opus_encode_LDADD = libopus.la $(NE10_LIBS) $(LIBM)
+
+tests_test_opus_encode_fuzz_SOURCES = tests/test_opus_encode_fuzz.c tests/test_opus_common.h
+tests_test_opus_encode_fuzz_LDADD = libopus.la $(NE10_LIBS) $(LIBM)
 
 tests_test_opus_decode_SOURCES = tests/test_opus_decode.c tests/test_opus_common.h
 tests_test_opus_decode_LDADD = libopus.la $(NE10_LIBS) $(LIBM)

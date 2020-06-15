@@ -562,5 +562,11 @@ if(BUILD_TESTING)
                                PRIVATE ${CMAKE_CURRENT_BINARY_DIR} celt)
     target_link_libraries(test_opus_encode PRIVATE opus)
     add_test(test_opus_encode test_opus_encode)
+
+    add_executable(test_opus_encode_fuzz ${test_opus_encode_fuzz_sources})
+    target_include_directories(test_opus_encode_fuzz
+                               PRIVATE ${CMAKE_CURRENT_BINARY_DIR} celt)
+    target_link_libraries(test_opus_encode_fuzz PRIVATE opus)
+    add_test(test_opus_encode_fuzz test_opus_encode_fuzz)
   endif()
 endif()

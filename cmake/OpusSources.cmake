@@ -40,6 +40,8 @@ get_opus_sources(opus_compare_SOURCES Makefile.am opus_compare_sources)
 get_opus_sources(tests_test_opus_api_SOURCES Makefile.am test_opus_api_sources)
 get_opus_sources(tests_test_opus_encode_SOURCES Makefile.am
                  test_opus_encode_sources)
+get_opus_sources(tests_test_opus_encode_fuzz_SOURCES Makefile.am
+                 test_opus_encode_fuzz_sources)
 get_opus_sources(tests_test_opus_decode_SOURCES Makefile.am
                  test_opus_decode_sources)
 get_opus_sources(tests_test_opus_padding_SOURCES Makefile.am

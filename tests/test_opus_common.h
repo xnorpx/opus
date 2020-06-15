@@ -25,6 +25,14 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#ifndef TEST_OPUS_COMMON_H
+#define TEST_OPUS_COMMON_H
+
+#include "opus_defines.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 static OPUS_INLINE void deb2_impl(unsigned char *_t,unsigned char **_p,int _k,int _x,int _y)
 {
   int i;
@@ -83,3 +91,62 @@ static OPUS_INLINE void _test_failed(const char *file, int line)
 #define test_failed() _test_failed(__FILE__, __LINE__);
 
 void regression_test(void);
+
+static void generate_music(short *buf, opus_int32 len)
+{
+   opus_int32 a1,b1,a2,b2;
+   opus_int32 c1,c2,d1,d2;
+   opus_int32 i,j;
+   a1=b1=a2=b2=0;
+   c1=c2=d1=d2=0;
+   j=0;
+   /*60ms silence*/
+   for(i=0;i<2880;i++)buf[i*2]=buf[i*2+1]=0;
+   for(i=2880;i<len;i++)
+   {
+     opus_uint32 r;
+     opus_int32 v1,v2;
+     v1=v2=(((j*((j>>12)^((j>>10|j>>12)&26&j>>7)))&128)+128)<<15;
+     r=fast_rand();v1+=r&65535;v1-=r>>16;
+     r=fast_rand();v2+=r&65535;v2-=r>>16;
+     b1=v1-a1+((b1*61+32)>>6);a1=v1;
+     b2=v2-a2+((b2*61+32)>>6);a2=v2;
+     c1=(30*(c1+b1+d1)+32)>>6;d1=b1;
+     c2=(30*(c2+b2+d2)+32)>>6;d2=b2;
+     v1=(c1+128)>>8;
+     v2=(c2+128)>>8;
+     buf[i*2]=v1>32767?32767:(v1<-32768?-32768:v1);
+     buf[i*2+1]=v2>32767?32767:(v2<-32768?-32768:v2);
+     if(i%6==0)j++;
+   }
+}
+
+static int get_frame_size_enum(int frame_size, int sampling_rate)
+{
+   int frame_size_enum;
+
+   if(frame_size==sampling_rate/400)
+      frame_size_enum = OPUS_FRAMESIZE_2_5_MS;
+   else if(frame_size==sampling_rate/200)
+      frame_size_enum = OPUS_FRAMESIZE_5_MS;
+   else if(frame_size==sampling_rate/100)
+      frame_size_enum = OPUS_FRAMESIZE_10_MS;
+   else if(frame_size==sampling_rate/50)
+      frame_size_enum = OPUS_FRAMESIZE_20_MS;
+   else if(frame_size==sampling_rate/25)
+      frame_size_enum = OPUS_FRAMESIZE_40_MS;
+   else if(frame_size==3*sampling_rate/50)
+      frame_size_enum = OPUS_FRAMESIZE_60_MS;
+   else if(frame_size==4*sampling_rate/50)
+      frame_size_enum = OPUS_FRAMESIZE_80_MS;
+   else if(frame_size==5*sampling_rate/50)
+      frame_size_enum = OPUS_FRAMESIZE_100_MS;
+   else if(frame_size==6*sampling_rate/50)
+      frame_size_enum = OPUS_FRAMESIZE_120_MS;
+   else
+      test_failed();
+
+   return frame_size_enum;
+}
+
+#endif
