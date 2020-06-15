@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Check Whitespaces
         run: |
-          /bin/sh -c 'if [[ls]]; then echo "true"; fi'
+          /bin/sh -c 'if [/bin/ls]; then echo "true"; fi'
 #git diff-tree --check origin/master HEAD
 
 # jobs:
