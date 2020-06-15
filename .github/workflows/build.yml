@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Check Whitespaces
         run: |
-          /bin/sh -c 'if [git diff-tree --check origin/master HEAD]; then echo "true"; fi'
+          /bin/sh -c 'if ["git diff-tree --check origin/master HEAD"]; then echo "true"; fi'
 
 # jobs:
 #   CMakeDistCheckTest:
