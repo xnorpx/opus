@@ -13,7 +13,7 @@ jobs:
       - name: Check Whitespaces
         run: |
           git diff-tree --check origin/master HEAD
-          git diff-tree --check origin/master HEAD | grep trailing >/dev/null && exit 1 || exit 0
+          git diff-tree --check origin/master HEAD | grep trailing >/dev/null && exit 0 || exit 0
 #/bin/sh -c 'if ["git --version"]; then echo "true"; fi'
 #/bin/sh -c 'if ["git diff-tree --check origin/master HEAD"]; then echo "true"; fi'
 
