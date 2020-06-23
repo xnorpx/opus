@@ -43,7 +43,7 @@ endfunction()
 
 function(get_package_version PACKAGE_VERSION)
   find_package(Git)
-  if(Git_FOUND AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/.git")
+  if(GIT_FOUND AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/.git")
     execute_process(COMMAND ${GIT_EXECUTABLE} describe --tags --match "v*"
                     OUTPUT_VARIABLE OPUS_PACKAGE_VERSION)
     if(OPUS_PACKAGE_VERSION)
