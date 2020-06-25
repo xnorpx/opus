@@ -19,6 +19,7 @@ include(CheckLibraryExists)
 check_library_exists(m floor "" HAVE_LIBM)
 if(HAVE_LIBM)
   list(APPEND OPUS_REQUIRED_LIBRARIES m)
+  set(CMAKE_REQUIRED_LIBRARIES m)
 endif()
 
 include(CFeatureCheck)
