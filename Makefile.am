@@ -215,6 +215,7 @@ EXTRA_DIST = opus.pc.in \
              Makefile.mips \
              Makefile.unix \
              CMakeLists.txt \
+	     cmake/OpusPackageVersion.cmake \
              cmake/CFeatureCheck.cmake \
              cmake/OpusBuildtype.cmake \
              cmake/OpusConfig.cmake \
