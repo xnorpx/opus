@@ -530,13 +530,13 @@ if(BUILD_TESTING)
   if(OPUS_FIXED_POINT)
     target_compile_definitions(test_opus_decode PRIVATE DISABLE_FLOAT_API)
   endif()
-  add_test(test_opus_decode test_opus_decode)
+  add_test(NAME opus_decode COMMAND test_opus_decode)
 
   add_executable(test_opus_padding ${test_opus_padding_sources})
   target_include_directories(test_opus_padding
                              PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
   target_link_libraries(test_opus_padding PRIVATE opus)
-  add_test(test_opus_padding test_opus_padding)
+  add_test(NAME opus_padding COMMAND test_opus_padding)
 
   if(NOT BUILD_SHARED_LIBS)
     # disable tests that depends on private API when building shared lib
@@ -547,12 +547,12 @@ if(BUILD_TESTING)
     if(OPUS_FIXED_POINT)
       target_compile_definitions(test_opus_api PRIVATE DISABLE_FLOAT_API)
     endif()
-    add_test(test_opus_api test_opus_api)
+    add_test(NAME opus_api COMMAND test_opus_api)
 
     add_executable(test_opus_encode ${test_opus_encode_sources})
     target_include_directories(test_opus_encode
                                PRIVATE ${CMAKE_CURRENT_BINARY_DIR} celt)
     target_link_libraries(test_opus_encode PRIVATE opus)
-    add_test(test_opus_encode test_opus_encode)
+    add_test(NAME opus_encode COMMAND test_opus_encode)
   endif()
 endif()
