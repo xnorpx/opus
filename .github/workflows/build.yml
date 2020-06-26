@@ -9,4 +9,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: QEMU
-        run: ls -1 /proc/sys/fs/binfmt_misc | grep qemu
+        run: ls /proc/sys/fs/binfmt_misc
