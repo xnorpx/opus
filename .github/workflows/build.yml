@@ -282,7 +282,7 @@ jobs:
       - name: Test
         if: contains(matrix.config.name, 'Windows') && !contains(matrix.config.name, 'ARM') ||
             contains(matrix.config.name, 'MacOSX') && !contains(matrix.config.name, 'ARM') ||
-            contains(matrix.config.name, 'Linux') && !contains(matrix.config.name, 'ARM')
+            contains(matrix.config.name, 'Linux')
         working-directory: ./build
         run: ctest -j 2
 
