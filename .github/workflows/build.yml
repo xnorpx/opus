@@ -215,10 +215,22 @@ jobs:
         #     args: ""
         #   }
         - {
-            name: "Linux/Lib/armV7/Release",
+            name: "Linux/Lib/armV7-hf/Release",
             os: ubuntu-latest,
             config: Release,
             args: -DCMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_CROSSCOMPILING_EMULATOR="qemu-arm;-L;/usr/arm-linux-gnueabihf"
+          }
+        - {
+            name: "Linux/Lib/armV7/Release",
+            os: ubuntu-latest,
+            config: Release,
+            args: -DCMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabi-gcc -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_CROSSCOMPILING_EMULATOR="qemu-arm;-L;/usr/arm-linux-gnueabi"
+          }
+        - {
+            name: "Linux/Lib/arm64/Release",
+            os: ubuntu-latest,
+            config: Release,
+            args: -DCMAKE_C_COMPILER=/usr/bin/aarch64-linux-gnu-gcc -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_CROSSCOMPILING_EMULATOR="qemu-aarch64;-L;/usr/aarch64-linux-gnu"
           }
         # - {
         #     name: "MacOSX/Lib/X64/Release",
