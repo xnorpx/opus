@@ -3,7 +3,7 @@ name: Opus Build Matrix
 on: [push, pull_request]
 
 jobs:
-  CMake:
+  #CMake:
   #   name: CMake as submodule
   #   runs-on: ubuntu-latest
   #   steps:
