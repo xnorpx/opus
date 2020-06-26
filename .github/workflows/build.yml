@@ -8,5 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Install QEMU
+        run: sudo apt-get install qemu
       - name: QEMU
         run: ls /proc/sys/fs/binfmt_misc
