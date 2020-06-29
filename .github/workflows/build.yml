@@ -11,10 +11,16 @@ jobs:
       matrix:
         config:
         - {
-            name: "Android/Dll/ARMv8/Release",
+            name: "Android/CMake",
             os: ubuntu-latest,
             config: Release,
-            args: "-DCMAKE_ANDROID_ARCH_ABI=arm64-v8a -DBUILD_SHARED_LIBS=ON -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
+            args: "-DCMAKE_ANDROID_ARCH_ABI=arm64-v8a -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
+          }
+        - {
+            name: "Android/CMake/NDKToolchain",
+            os: ubuntu-latest,
+            config: Release,
+            args: "-DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake"
           }
     steps:
       - uses: actions/checkout@v2
