@@ -17,10 +17,16 @@ jobs:
             args: "-DCMAKE_ANDROID_ARCH_ABI=arm64-v8a -DCMAKE_SYSTEM_NAME=Android -DCMAKE_SYSTEM_VERSION=21 -DCMAKE_ANDROID_NDK=${ANDROID_HOME}/ndk-bundle"
           }
         - {
-            name: "Android/CMake/NDKToolchain",
+            name: "Android/CMake/NDKToolchain/ARMEABI-v7a",
             os: ubuntu-latest,
             config: Release,
-            args: "-DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake"
+            args: "-DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake -DANDROID_ABI=armeabi-v7a"
+          }
+        - {
+            name: "Android/CMake/NDKToolchain/ARMEABI-v7a",
+            os: ubuntu-latest,
+            config: Release,
+            args: "-DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a"
           }
     steps:
       - uses: actions/checkout@v2
