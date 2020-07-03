@@ -1,23 +1,23 @@
+on:
+- push
+- pull_request
 jobs:
   Something:
-    name: Test build with CMake 3.1.0
-    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - name: Create Work Dir
-      run: mkdir build
-    - name: Configure
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: ./build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -#DBUILD_TESTING=ON
-      working-directory: ./build
-    - name: Build
+      name: Configure
+    - working-directory: ./build
       run: make -j 2 -s
-      working-directory: ./build
-    - name: Test
+      name: Build
+    - working-directory: ./build
       run: ctest -j 2
-      working-directory: ./build
+      name: Test
+    name: Test build with CMake 3.1.0
+    runs-on: ubuntu-latest
 name: Opus Build Matrix
-'true':
-- push
-- pull_request
