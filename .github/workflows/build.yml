@@ -2,8 +2,8 @@ on:
 - push
 - pull_request
 jobs:
-  win/x86_64:
-    name: win/x86_64
+  win-x86_64:
+    name: win-x86_64
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
