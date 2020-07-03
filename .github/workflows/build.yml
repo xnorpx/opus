@@ -10,7 +10,25 @@ jobs:
     - run: mkdir build
       name: Create Work Dir
     - working-directory: ./build
-      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -#DBUILD_TESTING=ON
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DBUILD_TESTING=ON
+      name: Configure
+    - working-directory: ./build
+      run: make -j 2 -s
+      name: Build
+    - working-directory: ./build
+      run: ctest -j 2
+      name: Test
+    name: Test build with CMake 3.1.0
+    runs-on: ubuntu-latest
+  Something2:
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: ./build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DBUILD_TESTING=ON
       name: Configure
     - working-directory: ./build
       run: make -j 2 -s
