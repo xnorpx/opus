@@ -2,8 +2,122 @@ on:
 - push
 - pull_request
 jobs:
-  win-x86_64:
-    name: win-x86_64
+  win-x86_64-disable_intrinsics-off-fixed_point-off:
+    name: win-x86_64-disable_intrinsics-off-fixed_point-off
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=OFF -G "Visual Studio 16 2019" -A x64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  linux-x86_64-disable_intrinsics-off-fixed_point-off:
+    name: linux-x86_64-disable_intrinsics-off-fixed_point-off
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=OFF
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-x86_64-disable_intrinsics-off-fixed_point-on:
+    name: win-x86_64-disable_intrinsics-off-fixed_point-on
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=ON -G "Visual Studio 16 2019" -A x64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  linux-x86_64-disable_intrinsics-off-fixed_point-on:
+    name: linux-x86_64-disable_intrinsics-off-fixed_point-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=ON
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-x86_64-disable_intrinsics-on-fixed_point-off:
+    name: win-x86_64-disable_intrinsics-on-fixed_point-off
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=OFF -G "Visual Studio 16 2019" -A x64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  linux-x86_64-disable_intrinsics-on-fixed_point-off:
+    name: linux-x86_64-disable_intrinsics-on-fixed_point-off
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=OFF
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-x86_64-disable_intrinsics-on-fixed_point-on:
+    name: win-x86_64-disable_intrinsics-on-fixed_point-on
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
@@ -14,6 +128,25 @@ jobs:
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
         -DOPUS_FIXED_POINT=ON -G "Visual Studio 16 2019" -A x64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  linux-x86_64-disable_intrinsics-on-fixed_point-on:
+    name: linux-x86_64-disable_intrinsics-on-fixed_point-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=ON
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
