@@ -97,6 +97,27 @@ jobs:
         working-directory: ./build
         run: ctest -j 2
 
+  MinGW:
+    name: Test build with MinGW-64
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install MinGW-64
+        run: sudo apt-get install mingw-w64
+      - name: Create Work Dir
+        run: mkdir build
+      - name: Configure
+        working-directory: ./build
+        run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DBUILD_TESTING=ON -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_C_COMPILER=x86_64-w64-mingw32-gcc
+      - name: Build
+        working-directory: ./build
+        run: make -j 2 -s
+      - name: Test
+        working-directory: ./build
+        run: ctest -j 2
+
   CMakeBuild:
     name: CMake/${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
@@ -415,6 +436,6 @@ jobs:
       - name: Autogen
         run: CC=${{ matrix.config.compiler }} ./autogen.sh
       - name: Configure
-        run: ./configure ${{ matrix.config.buildconfig }}
+        run: ./configure ${{ matrix.config.automakeconfig }}
       - name: DistCheck
         run: make distcheck -j 2
