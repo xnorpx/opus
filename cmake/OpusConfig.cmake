@@ -5,7 +5,7 @@ set(__opus_config INCLUDED)
 
 include(OpusFunctions)
 
-configure_file(${PROJECT_SOURCE_DIR}/cmake/config.h.cmake.in config.h @ONLY)
+configure_file(config.h.cmake.in config.h @ONLY)
 add_definitions(-DHAVE_CONFIG_H)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -20,7 +20,6 @@ check_library_exists(m floor "" HAVE_LIBM)
 if(HAVE_LIBM)
   list(APPEND OPUS_REQUIRED_LIBRARIES m)
 endif()
-
 include(CFeatureCheck)
 c_feature_check(VLA)
 
