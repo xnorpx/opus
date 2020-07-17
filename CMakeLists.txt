@@ -101,13 +101,15 @@ cmake_dependent_option(OPUS_FAST_MATH
                        OFF)
 add_feature_info(OPUS_FAST_MATH OPUS_FAST_MATH ${OPUS_FAST_MATH_HELP_STR})
 
-set(OPUS_STACK_PROTECTOR_HELP_STR "use stack protection.")
-cmake_dependent_option(OPUS_STACK_PROTECTOR
-                       ${OPUS_STACK_PROTECTOR_HELP_STR}
-                       ON
-                       "STACK_PROTECTOR_SUPPORTED"
-                       OFF)
-add_feature_info(OPUS_STACK_PROTECTOR OPUS_STACK_PROTECTOR ${OPUS_STACK_PROTECTOR_HELP_STR})
+if(NOT MINGW)
+  set(OPUS_STACK_PROTECTOR_HELP_STR "use stack protection.")
+  cmake_dependent_option(OPUS_STACK_PROTECTOR
+                         ${OPUS_STACK_PROTECTOR_HELP_STR}
+                         ON
+                         "STACK_PROTECTOR_SUPPORTED"
+                         OFF)
+  add_feature_info(OPUS_STACK_PROTECTOR OPUS_STACK_PROTECTOR ${OPUS_STACK_PROTECTOR_HELP_STR})
+endif()
 
 if(NOT MSVC AND NOT MINGW)
     set(OPUS_FORTIFY_SOURCE_HELP_STR "add protection against buffer overflows.")
