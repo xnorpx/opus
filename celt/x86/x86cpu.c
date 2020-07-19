@@ -82,9 +82,12 @@ static void cpuid(unsigned int CPUInfo[4], unsigned int InfoType)
 #endif
 #elif defined(CPU_INFO_BY_C)
     __get_cpuid(InfoType, &(CPUInfo[0]), &(CPUInfo[1]), &(CPUInfo[2]), &(CPUInfo[3]));
+#else
+#error no supported Get CPU Info method is defined, \
+       define CPU_INFO_BY ASM OR CPU_INFO_BY_C or \
+       disable run-time CPU capabilities detection
 #endif
 }
-
 #endif
 
 typedef struct CPU_Feature{
