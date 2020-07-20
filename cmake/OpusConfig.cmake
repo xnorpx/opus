@@ -47,6 +47,8 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "(i[0-9]86|x86|X86|amd64|AMD64|x86_64)")
   endif()
 elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "(arm|aarch64)")
   set(OPUS_CPU_ARM 1)
+else()
+  message(ERROR ${CMAKE_SYSTEM_PROCESSOR} not supported in CMake)
 endif()
 
 if(NOT OPUS_DISABLE_INTRINSICS)

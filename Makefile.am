@@ -223,6 +223,8 @@ EXTRA_DIST = opus.pc.in \
              cmake/OpusPackageVersion.cmake \
              cmake/OpusSources.cmake \
              cmake/config.h.cmake.in \
+             cmake/cpu_info_by_asm.c \
+             cmake/cpu_info_by_c.c \
              cmake/vla.c \
              tests/run_vectors.sh \
              celt/arm/arm2gnu.pl \
