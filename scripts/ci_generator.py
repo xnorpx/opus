@@ -103,7 +103,7 @@ class CMakeTransformer(Transformer):
             #     'arm64': True
             # },
             'ios': {
-                'x86_64': True,
+                #'x86_64': True,
                 'arm64': True
             }
         }

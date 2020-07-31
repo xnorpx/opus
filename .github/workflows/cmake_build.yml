@@ -2,23 +2,6 @@ on:
 - push
 - pull_request
 jobs:
-  ios-x86_64-disable_intrinsics-off-fixed_point-off-custom_modes-off:
-    name: ios-x86_64-disable_intrinsics-off-fixed_point-off-custom_modes-off
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - run: mkdir build
-      name: Create Work Dir
-    - working-directory: build
-      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
-        -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=x86_64
-      name: Configure
-    - working-directory: build
-      run: cmake --build . --config Release
-      name: Build
   ios-arm64-disable_intrinsics-off-fixed_point-off-custom_modes-off:
     name: ios-arm64-disable_intrinsics-off-fixed_point-off-custom_modes-off
     runs-on: macos-latest
@@ -32,23 +15,6 @@ jobs:
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
         -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=arm64
-      name: Configure
-    - working-directory: build
-      run: cmake --build . --config Release
-      name: Build
-  ios-x86_64-disable_intrinsics-off-fixed_point-off-custom_modes-on:
-    name: ios-x86_64-disable_intrinsics-off-fixed_point-off-custom_modes-on
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - run: mkdir build
-      name: Create Work Dir
-    - working-directory: build
-      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
-        -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=x86_64
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -70,23 +36,6 @@ jobs:
     - working-directory: build
       run: cmake --build . --config Release
       name: Build
-  ios-x86_64-disable_intrinsics-off-fixed_point-on-custom_modes-off:
-    name: ios-x86_64-disable_intrinsics-off-fixed_point-on-custom_modes-off
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - run: mkdir build
-      name: Create Work Dir
-    - working-directory: build
-      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
-        -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=x86_64
-      name: Configure
-    - working-directory: build
-      run: cmake --build . --config Release
-      name: Build
   ios-arm64-disable_intrinsics-off-fixed_point-on-custom_modes-off:
     name: ios-arm64-disable_intrinsics-off-fixed_point-on-custom_modes-off
     runs-on: macos-latest
@@ -100,23 +49,6 @@ jobs:
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
         -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=arm64
-      name: Configure
-    - working-directory: build
-      run: cmake --build . --config Release
-      name: Build
-  ios-x86_64-disable_intrinsics-off-fixed_point-on-custom_modes-on:
-    name: ios-x86_64-disable_intrinsics-off-fixed_point-on-custom_modes-on
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - run: mkdir build
-      name: Create Work Dir
-    - working-directory: build
-      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
-        -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=x86_64
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -138,23 +70,6 @@ jobs:
     - working-directory: build
       run: cmake --build . --config Release
       name: Build
-  ios-x86_64-disable_intrinsics-on-fixed_point-off-custom_modes-off:
-    name: ios-x86_64-disable_intrinsics-on-fixed_point-off-custom_modes-off
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - run: mkdir build
-      name: Create Work Dir
-    - working-directory: build
-      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
-        -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=x86_64
-      name: Configure
-    - working-directory: build
-      run: cmake --build . --config Release
-      name: Build
   ios-arm64-disable_intrinsics-on-fixed_point-off-custom_modes-off:
     name: ios-arm64-disable_intrinsics-on-fixed_point-off-custom_modes-off
     runs-on: macos-latest
@@ -168,23 +83,6 @@ jobs:
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
         -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=arm64
-      name: Configure
-    - working-directory: build
-      run: cmake --build . --config Release
-      name: Build
-  ios-x86_64-disable_intrinsics-on-fixed_point-off-custom_modes-on:
-    name: ios-x86_64-disable_intrinsics-on-fixed_point-off-custom_modes-on
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - run: mkdir build
-      name: Create Work Dir
-    - working-directory: build
-      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
-        -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=x86_64
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -206,23 +104,6 @@ jobs:
     - working-directory: build
       run: cmake --build . --config Release
       name: Build
-  ios-x86_64-disable_intrinsics-on-fixed_point-on-custom_modes-off:
-    name: ios-x86_64-disable_intrinsics-on-fixed_point-on-custom_modes-off
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - run: mkdir build
-      name: Create Work Dir
-    - working-directory: build
-      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
-        -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=x86_64
-      name: Configure
-    - working-directory: build
-      run: cmake --build . --config Release
-      name: Build
   ios-arm64-disable_intrinsics-on-fixed_point-on-custom_modes-off:
     name: ios-arm64-disable_intrinsics-on-fixed_point-on-custom_modes-off
     runs-on: macos-latest
@@ -236,23 +117,6 @@ jobs:
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
         -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=arm64
-      name: Configure
-    - working-directory: build
-      run: cmake --build . --config Release
-      name: Build
-  ios-x86_64-disable_intrinsics-on-fixed_point-on-custom_modes-on:
-    name: ios-x86_64-disable_intrinsics-on-fixed_point-on-custom_modes-on
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - run: mkdir build
-      name: Create Work Dir
-    - working-directory: build
-      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
-        -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=x86_64
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
