@@ -1,0 +1,901 @@
+on:
+- push
+- pull_request
+jobs:
+  win-x86-disable_intrinsics-off-fixed_point-off-custom_modes-off:
+    name: win-x86-disable_intrinsics-off-fixed_point-off-custom_modes-off
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019"
+        -A Win32
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-x86_64-disable_intrinsics-off-fixed_point-off-custom_modes-off:
+    name: win-x86_64-disable_intrinsics-off-fixed_point-off-custom_modes-off
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019"
+        -A x64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-armv7-disable_intrinsics-off-fixed_point-off-custom_modes-off:
+    name: win-armv7-disable_intrinsics-off-fixed_point-off-custom_modes-off
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019"
+        -A ARM
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  win-arm64-disable_intrinsics-off-fixed_point-off-custom_modes-off:
+    name: win-arm64-disable_intrinsics-off-fixed_point-off-custom_modes-off
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019"
+        -A ARM64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  linux-x86_64-disable_intrinsics-off-fixed_point-off-custom_modes-off:
+    name: linux-x86_64-disable_intrinsics-off-fixed_point-off-custom_modes-off
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  mac-x86_64-disable_intrinsics-off-fixed_point-off-custom_modes-off:
+    name: mac-x86_64-disable_intrinsics-off-fixed_point-off-custom_modes-off
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-x86-disable_intrinsics-off-fixed_point-off-custom_modes-on:
+    name: win-x86-disable_intrinsics-off-fixed_point-off-custom_modes-on
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
+        Win32
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-x86_64-disable_intrinsics-off-fixed_point-off-custom_modes-on:
+    name: win-x86_64-disable_intrinsics-off-fixed_point-off-custom_modes-on
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
+        x64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-armv7-disable_intrinsics-off-fixed_point-off-custom_modes-on:
+    name: win-armv7-disable_intrinsics-off-fixed_point-off-custom_modes-on
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
+        ARM
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  win-arm64-disable_intrinsics-off-fixed_point-off-custom_modes-on:
+    name: win-arm64-disable_intrinsics-off-fixed_point-off-custom_modes-on
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
+        ARM64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  linux-x86_64-disable_intrinsics-off-fixed_point-off-custom_modes-on:
+    name: linux-x86_64-disable_intrinsics-off-fixed_point-off-custom_modes-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  mac-x86_64-disable_intrinsics-off-fixed_point-off-custom_modes-on:
+    name: mac-x86_64-disable_intrinsics-off-fixed_point-off-custom_modes-on
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-x86-disable_intrinsics-off-fixed_point-on-custom_modes-off:
+    name: win-x86-disable_intrinsics-off-fixed_point-on-custom_modes-off
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -A
+        Win32
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-x86_64-disable_intrinsics-off-fixed_point-on-custom_modes-off:
+    name: win-x86_64-disable_intrinsics-off-fixed_point-on-custom_modes-off
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -A
+        x64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-armv7-disable_intrinsics-off-fixed_point-on-custom_modes-off:
+    name: win-armv7-disable_intrinsics-off-fixed_point-on-custom_modes-off
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -A
+        ARM
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  win-arm64-disable_intrinsics-off-fixed_point-on-custom_modes-off:
+    name: win-arm64-disable_intrinsics-off-fixed_point-on-custom_modes-off
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -A
+        ARM64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  linux-x86_64-disable_intrinsics-off-fixed_point-on-custom_modes-off:
+    name: linux-x86_64-disable_intrinsics-off-fixed_point-on-custom_modes-off
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  mac-x86_64-disable_intrinsics-off-fixed_point-on-custom_modes-off:
+    name: mac-x86_64-disable_intrinsics-off-fixed_point-on-custom_modes-off
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-x86-disable_intrinsics-off-fixed_point-on-custom_modes-on:
+    name: win-x86-disable_intrinsics-off-fixed_point-on-custom_modes-on
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
+        Win32
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-x86_64-disable_intrinsics-off-fixed_point-on-custom_modes-on:
+    name: win-x86_64-disable_intrinsics-off-fixed_point-on-custom_modes-on
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
+        x64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-armv7-disable_intrinsics-off-fixed_point-on-custom_modes-on:
+    name: win-armv7-disable_intrinsics-off-fixed_point-on-custom_modes-on
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
+        ARM
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  win-arm64-disable_intrinsics-off-fixed_point-on-custom_modes-on:
+    name: win-arm64-disable_intrinsics-off-fixed_point-on-custom_modes-on
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
+        ARM64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  linux-x86_64-disable_intrinsics-off-fixed_point-on-custom_modes-on:
+    name: linux-x86_64-disable_intrinsics-off-fixed_point-on-custom_modes-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  mac-x86_64-disable_intrinsics-off-fixed_point-on-custom_modes-on:
+    name: mac-x86_64-disable_intrinsics-off-fixed_point-on-custom_modes-on
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-x86-disable_intrinsics-on-fixed_point-off-custom_modes-off:
+    name: win-x86-disable_intrinsics-on-fixed_point-off-custom_modes-off
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019"
+        -A Win32
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-x86_64-disable_intrinsics-on-fixed_point-off-custom_modes-off:
+    name: win-x86_64-disable_intrinsics-on-fixed_point-off-custom_modes-off
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019"
+        -A x64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-armv7-disable_intrinsics-on-fixed_point-off-custom_modes-off:
+    name: win-armv7-disable_intrinsics-on-fixed_point-off-custom_modes-off
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019"
+        -A ARM
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  win-arm64-disable_intrinsics-on-fixed_point-off-custom_modes-off:
+    name: win-arm64-disable_intrinsics-on-fixed_point-off-custom_modes-off
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019"
+        -A ARM64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  linux-x86_64-disable_intrinsics-on-fixed_point-off-custom_modes-off:
+    name: linux-x86_64-disable_intrinsics-on-fixed_point-off-custom_modes-off
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  mac-x86_64-disable_intrinsics-on-fixed_point-off-custom_modes-off:
+    name: mac-x86_64-disable_intrinsics-on-fixed_point-off-custom_modes-off
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-x86-disable_intrinsics-on-fixed_point-off-custom_modes-on:
+    name: win-x86-disable_intrinsics-on-fixed_point-off-custom_modes-on
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
+        Win32
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-x86_64-disable_intrinsics-on-fixed_point-off-custom_modes-on:
+    name: win-x86_64-disable_intrinsics-on-fixed_point-off-custom_modes-on
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
+        x64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-armv7-disable_intrinsics-on-fixed_point-off-custom_modes-on:
+    name: win-armv7-disable_intrinsics-on-fixed_point-off-custom_modes-on
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
+        ARM
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  win-arm64-disable_intrinsics-on-fixed_point-off-custom_modes-on:
+    name: win-arm64-disable_intrinsics-on-fixed_point-off-custom_modes-on
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
+        ARM64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  linux-x86_64-disable_intrinsics-on-fixed_point-off-custom_modes-on:
+    name: linux-x86_64-disable_intrinsics-on-fixed_point-off-custom_modes-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  mac-x86_64-disable_intrinsics-on-fixed_point-off-custom_modes-on:
+    name: mac-x86_64-disable_intrinsics-on-fixed_point-off-custom_modes-on
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-x86-disable_intrinsics-on-fixed_point-on-custom_modes-off:
+    name: win-x86-disable_intrinsics-on-fixed_point-on-custom_modes-off
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -A
+        Win32
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-x86_64-disable_intrinsics-on-fixed_point-on-custom_modes-off:
+    name: win-x86_64-disable_intrinsics-on-fixed_point-on-custom_modes-off
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -A
+        x64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-armv7-disable_intrinsics-on-fixed_point-on-custom_modes-off:
+    name: win-armv7-disable_intrinsics-on-fixed_point-on-custom_modes-off
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -A
+        ARM
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  win-arm64-disable_intrinsics-on-fixed_point-on-custom_modes-off:
+    name: win-arm64-disable_intrinsics-on-fixed_point-on-custom_modes-off
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -A
+        ARM64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  linux-x86_64-disable_intrinsics-on-fixed_point-on-custom_modes-off:
+    name: linux-x86_64-disable_intrinsics-on-fixed_point-on-custom_modes-off
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  mac-x86_64-disable_intrinsics-on-fixed_point-on-custom_modes-off:
+    name: mac-x86_64-disable_intrinsics-on-fixed_point-on-custom_modes-off
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-x86-disable_intrinsics-on-fixed_point-on-custom_modes-on:
+    name: win-x86-disable_intrinsics-on-fixed_point-on-custom_modes-on
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
+        Win32
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-x86_64-disable_intrinsics-on-fixed_point-on-custom_modes-on:
+    name: win-x86_64-disable_intrinsics-on-fixed_point-on-custom_modes-on
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
+        x64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  win-armv7-disable_intrinsics-on-fixed_point-on-custom_modes-on:
+    name: win-armv7-disable_intrinsics-on-fixed_point-on-custom_modes-on
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
+        ARM
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  win-arm64-disable_intrinsics-on-fixed_point-on-custom_modes-on:
+    name: win-arm64-disable_intrinsics-on-fixed_point-on-custom_modes-on
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
+        ARM64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  linux-x86_64-disable_intrinsics-on-fixed_point-on-custom_modes-on:
+    name: linux-x86_64-disable_intrinsics-on-fixed_point-on-custom_modes-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+  mac-x86_64-disable_intrinsics-on-fixed_point-on-custom_modes-on:
+    name: mac-x86_64-disable_intrinsics-on-fixed_point-on-custom_modes-on
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+    - working-directory: build
+      run: ctest
+      name: Test
+name: CMake Build Matrix
