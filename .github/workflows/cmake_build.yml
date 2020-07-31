@@ -114,6 +114,74 @@ jobs:
     - working-directory: build
       run: ctest
       name: Test
+  android-x86-disable_intrinsics-off-fixed_point-off-custom_modes-off:
+    name: android-x86-disable_intrinsics-off-fixed_point-off-custom_modes-off
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=x86
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-x86_64-disable_intrinsics-off-fixed_point-off-custom_modes-off:
+    name: android-x86_64-disable_intrinsics-off-fixed_point-off-custom_modes-off
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=x86_64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-armv7-disable_intrinsics-off-fixed_point-off-custom_modes-off:
+    name: android-armv7-disable_intrinsics-off-fixed_point-off-custom_modes-off
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=armeabi-v7a
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-arm64-disable_intrinsics-off-fixed_point-off-custom_modes-off:
+    name: android-arm64-disable_intrinsics-off-fixed_point-off-custom_modes-off
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=arm64-v8a
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
   win-x86-disable_intrinsics-off-fixed_point-off-custom_modes-on:
     name: win-x86-disable_intrinsics-off-fixed_point-off-custom_modes-on
     runs-on: windows-latest
@@ -226,6 +294,74 @@ jobs:
     - working-directory: build
       run: ctest
       name: Test
+  android-x86-disable_intrinsics-off-fixed_point-off-custom_modes-on:
+    name: android-x86-disable_intrinsics-off-fixed_point-off-custom_modes-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=x86
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-x86_64-disable_intrinsics-off-fixed_point-off-custom_modes-on:
+    name: android-x86_64-disable_intrinsics-off-fixed_point-off-custom_modes-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=x86_64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-armv7-disable_intrinsics-off-fixed_point-off-custom_modes-on:
+    name: android-armv7-disable_intrinsics-off-fixed_point-off-custom_modes-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=armeabi-v7a
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-arm64-disable_intrinsics-off-fixed_point-off-custom_modes-on:
+    name: android-arm64-disable_intrinsics-off-fixed_point-off-custom_modes-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=arm64-v8a
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
   win-x86-disable_intrinsics-off-fixed_point-on-custom_modes-off:
     name: win-x86-disable_intrinsics-off-fixed_point-on-custom_modes-off
     runs-on: windows-latest
@@ -338,6 +474,74 @@ jobs:
     - working-directory: build
       run: ctest
       name: Test
+  android-x86-disable_intrinsics-off-fixed_point-on-custom_modes-off:
+    name: android-x86-disable_intrinsics-off-fixed_point-on-custom_modes-off
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=x86
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-x86_64-disable_intrinsics-off-fixed_point-on-custom_modes-off:
+    name: android-x86_64-disable_intrinsics-off-fixed_point-on-custom_modes-off
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=x86_64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-armv7-disable_intrinsics-off-fixed_point-on-custom_modes-off:
+    name: android-armv7-disable_intrinsics-off-fixed_point-on-custom_modes-off
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=armeabi-v7a
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-arm64-disable_intrinsics-off-fixed_point-on-custom_modes-off:
+    name: android-arm64-disable_intrinsics-off-fixed_point-on-custom_modes-off
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=arm64-v8a
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
   win-x86-disable_intrinsics-off-fixed_point-on-custom_modes-on:
     name: win-x86-disable_intrinsics-off-fixed_point-on-custom_modes-on
     runs-on: windows-latest
@@ -450,6 +654,74 @@ jobs:
     - working-directory: build
       run: ctest
       name: Test
+  android-x86-disable_intrinsics-off-fixed_point-on-custom_modes-on:
+    name: android-x86-disable_intrinsics-off-fixed_point-on-custom_modes-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=x86
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-x86_64-disable_intrinsics-off-fixed_point-on-custom_modes-on:
+    name: android-x86_64-disable_intrinsics-off-fixed_point-on-custom_modes-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=x86_64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-armv7-disable_intrinsics-off-fixed_point-on-custom_modes-on:
+    name: android-armv7-disable_intrinsics-off-fixed_point-on-custom_modes-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=armeabi-v7a
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-arm64-disable_intrinsics-off-fixed_point-on-custom_modes-on:
+    name: android-arm64-disable_intrinsics-off-fixed_point-on-custom_modes-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=arm64-v8a
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
   win-x86-disable_intrinsics-on-fixed_point-off-custom_modes-off:
     name: win-x86-disable_intrinsics-on-fixed_point-off-custom_modes-off
     runs-on: windows-latest
@@ -562,6 +834,74 @@ jobs:
     - working-directory: build
       run: ctest
       name: Test
+  android-x86-disable_intrinsics-on-fixed_point-off-custom_modes-off:
+    name: android-x86-disable_intrinsics-on-fixed_point-off-custom_modes-off
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=x86
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-x86_64-disable_intrinsics-on-fixed_point-off-custom_modes-off:
+    name: android-x86_64-disable_intrinsics-on-fixed_point-off-custom_modes-off
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=x86_64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-armv7-disable_intrinsics-on-fixed_point-off-custom_modes-off:
+    name: android-armv7-disable_intrinsics-on-fixed_point-off-custom_modes-off
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=armeabi-v7a
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-arm64-disable_intrinsics-on-fixed_point-off-custom_modes-off:
+    name: android-arm64-disable_intrinsics-on-fixed_point-off-custom_modes-off
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=arm64-v8a
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
   win-x86-disable_intrinsics-on-fixed_point-off-custom_modes-on:
     name: win-x86-disable_intrinsics-on-fixed_point-off-custom_modes-on
     runs-on: windows-latest
@@ -674,6 +1014,74 @@ jobs:
     - working-directory: build
       run: ctest
       name: Test
+  android-x86-disable_intrinsics-on-fixed_point-off-custom_modes-on:
+    name: android-x86-disable_intrinsics-on-fixed_point-off-custom_modes-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=x86
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-x86_64-disable_intrinsics-on-fixed_point-off-custom_modes-on:
+    name: android-x86_64-disable_intrinsics-on-fixed_point-off-custom_modes-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=x86_64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-armv7-disable_intrinsics-on-fixed_point-off-custom_modes-on:
+    name: android-armv7-disable_intrinsics-on-fixed_point-off-custom_modes-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=armeabi-v7a
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-arm64-disable_intrinsics-on-fixed_point-off-custom_modes-on:
+    name: android-arm64-disable_intrinsics-on-fixed_point-off-custom_modes-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=arm64-v8a
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
   win-x86-disable_intrinsics-on-fixed_point-on-custom_modes-off:
     name: win-x86-disable_intrinsics-on-fixed_point-on-custom_modes-off
     runs-on: windows-latest
@@ -786,6 +1194,74 @@ jobs:
     - working-directory: build
       run: ctest
       name: Test
+  android-x86-disable_intrinsics-on-fixed_point-on-custom_modes-off:
+    name: android-x86-disable_intrinsics-on-fixed_point-on-custom_modes-off
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=x86
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-x86_64-disable_intrinsics-on-fixed_point-on-custom_modes-off:
+    name: android-x86_64-disable_intrinsics-on-fixed_point-on-custom_modes-off
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=x86_64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-armv7-disable_intrinsics-on-fixed_point-on-custom_modes-off:
+    name: android-armv7-disable_intrinsics-on-fixed_point-on-custom_modes-off
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=armeabi-v7a
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-arm64-disable_intrinsics-on-fixed_point-on-custom_modes-off:
+    name: android-arm64-disable_intrinsics-on-fixed_point-on-custom_modes-off
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=arm64-v8a
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
   win-x86-disable_intrinsics-on-fixed_point-on-custom_modes-on:
     name: win-x86-disable_intrinsics-on-fixed_point-on-custom_modes-on
     runs-on: windows-latest
@@ -898,4 +1374,72 @@ jobs:
     - working-directory: build
       run: ctest
       name: Test
+  android-x86-disable_intrinsics-on-fixed_point-on-custom_modes-on:
+    name: android-x86-disable_intrinsics-on-fixed_point-on-custom_modes-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=x86
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-x86_64-disable_intrinsics-on-fixed_point-on-custom_modes-on:
+    name: android-x86_64-disable_intrinsics-on-fixed_point-on-custom_modes-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=x86_64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-armv7-disable_intrinsics-on-fixed_point-on-custom_modes-on:
+    name: android-armv7-disable_intrinsics-on-fixed_point-on-custom_modes-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=armeabi-v7a
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  android-arm64-disable_intrinsics-on-fixed_point-on-custom_modes-on:
+    name: android-arm64-disable_intrinsics-on-fixed_point-on-custom_modes-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=arm64-v8a
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
 name: CMake Build Matrix

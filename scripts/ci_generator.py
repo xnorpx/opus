@@ -83,16 +83,37 @@ class Transformer():
 class CMakeTransformer(Transformer):
     def __init__(self):
         super(CMakeTransformer, self).__init__()
-        self.cmake_build = {'win': {'x86_64': True, 'x86': True, 'armv7': True, 'arm64': True},
-                            'linux': {'x86_64': True}, 'mac': {'x86_64': True}}
-        self.cmake_test = {'win': {'x86_64': True, 'x86': True}, 'linux': {
-            'x86_64': True}, 'mac':  {'x86_64': True}}
-        self.cmake_generator = {'win': '"Visual Studio 16 2019"'}
-        self.cmake_platform_build_options = {'win': {
-            'x86_64': '-A x64',
-            'x86': '-A Win32',
-            'armv7': '-A ARM',
-            'arm64': '-A ARM64'}}
+        self.cmake_build = {
+            'win': {'x86_64': True, 'x86': True, 'armv7': True, 'arm64': True},
+            'linux': {'x86_64': True},
+            'mac': {'x86_64': True},
+            'android': {'x86_64': True, 'x86': True, 'armv7': True, 'arm64': True}
+        }
+        self.cmake_test = {
+            'win': {'x86_64': True, 'x86': True},
+            'linux': {'x86_64': True},
+            'mac':  {'x86_64': True}
+        }
+        self.cmake_generator = {
+            'win': '"Visual Studio 16 2019"'
+        }
+        self.cmake_platform_build_options = {
+            # https://cmake.org/cmake/help/latest/generator/Visual%20Studio%2016%202019.html
+            'win': {
+                'x86_64': '-A x64',
+                'x86': '-A Win32',
+                'armv7': '-A ARM',
+                'arm64': '-A ARM64'
+            },
+            'android': {
+                # https://developer.android.com/ndk/guides/cmake
+                'common': '-DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake',
+                'x86_64': '-DANDROID_ABI=x86_64',
+                'x86': '-DANDROID_ABI=x86',
+                'armv7': '-DANDROID_ABI=armeabi-v7a',
+                'arm64': '-DANDROID_ABI=arm64-v8a'
+            }
+        }
 
     def transform(self, configs):
         cmake_configs = []
@@ -128,8 +149,14 @@ class CMakeTransformer(Transformer):
 
     def _platform_build_option(self, platform, arch):
         platform_build_options = ''
+
         try:
             platform_build_options += ' -G ' + self.cmake_generator[platform]
+        except:
+            pass
+        try:
+            platform_build_options += " " + \
+                self.cmake_platform_build_options[platform]['common']
         except:
             pass
         try:
@@ -137,6 +164,7 @@ class CMakeTransformer(Transformer):
                 self.cmake_platform_build_options[platform][arch]
         except:
             pass
+
         return platform_build_options
 
     def _add_config_step(self, config):
