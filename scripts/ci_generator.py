@@ -96,10 +96,14 @@ class CMakeTransformer(Transformer):
             # 'mac': {
             #     'x86_64': True
             # },
-            'android': {
+            # 'android': {
+            #     'x86_64': True,
+            #     'x86': True,
+            #     'armv7': True,
+            #     'arm64': True
+            # },
+            'ios': {
                 'x86_64': True,
-                'x86': True,
-                'armv7': True,
                 'arm64': True
             }
         }
@@ -116,7 +120,8 @@ class CMakeTransformer(Transformer):
             }
         }
         self.cmake_generator = {
-            'win': '"Visual Studio 16 2019"'
+            'win': '"Visual Studio 16 2019"',
+            'ios': '"Unix Makefiles"'
         }
         self.cmake_platform_build_options = {
             'common': '-DCMAKE_BUILD_TYPE=Release',
@@ -134,6 +139,12 @@ class CMakeTransformer(Transformer):
                 'x86': '-DANDROID_ABI=x86',
                 'armv7': '-DANDROID_ABI=armeabi-v7a',
                 'arm64': '-DANDROID_ABI=arm64-v8a'
+            },
+            'ios': {
+                # https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html#cross-compiling-for-ios-tvos-or-watchos
+                'common': '-DCMAKE_SYSTEM_NAME=iOS',
+                'x86_64': '-DCMAKE_OSX_ARCHITECTURES=x86_64',
+                'arm64': '-DCMAKE_OSX_ARCHITECTURES=arm64'
             }
         }
 
