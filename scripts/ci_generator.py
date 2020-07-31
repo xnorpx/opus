@@ -84,15 +84,36 @@ class CMakeTransformer(Transformer):
     def __init__(self):
         super(CMakeTransformer, self).__init__()
         self.cmake_build = {
-            'win': {'x86_64': True, 'x86': True, 'armv7': True, 'arm64': True},
-            'linux': {'x86_64': True},
-            'mac': {'x86_64': True},
-            'android': {'x86_64': True, 'x86': True, 'armv7': True, 'arm64': True}
+            # 'win': {
+            #     'x86_64': True,
+            #     'x86': True,
+            #     'armv7': True,
+            #     'arm64': True
+            # },
+            # 'linux': {
+            #     'x86_64': True
+            # },
+            # 'mac': {
+            #     'x86_64': True
+            # },
+            'android': {
+                'x86_64': True,
+                'x86': True,
+                'armv7': True,
+                'arm64': True
+            }
         }
         self.cmake_test = {
-            'win': {'x86_64': True, 'x86': True},
-            'linux': {'x86_64': True},
-            'mac':  {'x86_64': True}
+            'win': {
+                'x86_64': True,
+                'x86': True
+            },
+            'linux': {
+                'x86_64': True
+            },
+            'mac':  {
+                'x86_64': True
+            }
         }
         self.cmake_generator = {
             'win': '"Visual Studio 16 2019"'
