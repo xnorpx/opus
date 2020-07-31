@@ -84,26 +84,26 @@ class CMakeTransformer(Transformer):
     def __init__(self):
         super(CMakeTransformer, self).__init__()
         self.cmake_build = {
-            # 'win': {
-            #     'x86_64': True,
-            #     'x86': True,
-            #     'armv7': True,
-            #     'arm64': True
-            # },
-            # 'linux': {
-            #     'x86_64': True
-            # },
-            # 'mac': {
-            #     'x86_64': True
-            # },
+            'win': {
+                'x86_64': True,
+                'x86': True,
+                'armv7': True,
+                'arm64': True
+            },
+            'linux': {
+                'x86_64': True
+            },
+            'mac': {
+                # 'arm64': True, # TODO: Add support for arm64 mac
+                'x86_64': True
+            },
             # 'android': {
             #     'x86_64': True,
-            #     'x86': True,
             #     'armv7': True,
             #     'arm64': True
             # },
             'ios': {
-                #'x86_64': True,
+                # 'x86_64': True, # fixme?
                 'arm64': True
             }
         }
