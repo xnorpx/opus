@@ -8,7 +8,7 @@ build_settings = ['disable_intrinsics', 'fixed_point', 'custom_modes']
 platforms = ['win', 'linux', 'mac', 'ios', 'android']
 archs = ['x86', 'x86_64', 'armv7', 'arm64']
 
-# TODO: Add build support for ios, android
+# TODO: Add build support for ios
 # TODO: Add support for custom scrips add hock scripts
 # TODO: Add support to pick generator cmake
 # TODO: Add support for gitlab
@@ -98,6 +98,7 @@ class CMakeTransformer(Transformer):
             'win': '"Visual Studio 16 2019"'
         }
         self.cmake_platform_build_options = {
+            'common': '-DCMAKE_BUILD_TYPE=Release',
             # https://cmake.org/cmake/help/latest/generator/Visual%20Studio%2016%202019.html
             'win': {
                 'x86_64': '-A x64',
@@ -149,9 +150,13 @@ class CMakeTransformer(Transformer):
 
     def _platform_build_option(self, platform, arch):
         platform_build_options = ''
-
         try:
             platform_build_options += ' -G ' + self.cmake_generator[platform]
+        except:
+            pass
+        try:
+            platform_build_options += " " + \
+                self.cmake_platform_build_options['common']
         except:
             pass
         try:

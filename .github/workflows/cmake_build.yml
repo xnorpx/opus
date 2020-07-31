@@ -14,7 +14,7 @@ jobs:
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
         -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019"
-        -A Win32
+        -DCMAKE_BUILD_TYPE=Release -A Win32
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -34,7 +34,7 @@ jobs:
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
         -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019"
-        -A x64
+        -DCMAKE_BUILD_TYPE=Release -A x64
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -54,7 +54,7 @@ jobs:
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
         -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019"
-        -A ARM
+        -DCMAKE_BUILD_TYPE=Release -A ARM
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -71,7 +71,7 @@ jobs:
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
         -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019"
-        -A ARM64
+        -DCMAKE_BUILD_TYPE=Release -A ARM64
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -87,7 +87,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -106,7 +106,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -125,7 +125,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release
+        -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=x86
       name: Configure
     - working-directory: build
@@ -142,7 +143,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release
+        -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=x86_64
       name: Configure
     - working-directory: build
@@ -159,7 +161,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release
+        -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=armeabi-v7a
       name: Configure
     - working-directory: build
@@ -176,7 +179,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release
+        -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=arm64-v8a
       name: Configure
     - working-directory: build
@@ -193,8 +197,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
-        Win32
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A Win32
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -213,8 +217,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
-        x64
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A x64
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -233,8 +237,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
-        ARM
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A ARM
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -250,8 +254,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
-        ARM64
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A ARM64
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -267,7 +271,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -286,7 +290,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -305,7 +309,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=x86
       name: Configure
     - working-directory: build
@@ -322,7 +326,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=x86_64
       name: Configure
     - working-directory: build
@@ -339,7 +343,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=armeabi-v7a
       name: Configure
     - working-directory: build
@@ -356,7 +360,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=arm64-v8a
       name: Configure
     - working-directory: build
@@ -373,8 +377,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -A
-        Win32
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A Win32
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -393,8 +397,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -A
-        x64
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A x64
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -413,8 +417,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -A
-        ARM
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A ARM
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -430,8 +434,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -A
-        ARM64
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A ARM64
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -447,7 +451,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -466,7 +470,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -485,7 +489,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=x86
       name: Configure
     - working-directory: build
@@ -502,7 +506,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=x86_64
       name: Configure
     - working-directory: build
@@ -519,7 +523,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=armeabi-v7a
       name: Configure
     - working-directory: build
@@ -536,7 +540,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=arm64-v8a
       name: Configure
     - working-directory: build
@@ -553,8 +557,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
-        Win32
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A Win32
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -573,8 +577,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
-        x64
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A x64
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -593,8 +597,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
-        ARM
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A ARM
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -610,8 +614,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
-        ARM64
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A ARM64
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -627,7 +631,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -646,7 +650,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -665,7 +669,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=x86
       name: Configure
     - working-directory: build
@@ -682,7 +686,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=x86_64
       name: Configure
     - working-directory: build
@@ -699,7 +703,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=armeabi-v7a
       name: Configure
     - working-directory: build
@@ -716,7 +720,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=OFF
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=arm64-v8a
       name: Configure
     - working-directory: build
@@ -734,7 +738,7 @@ jobs:
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
         -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019"
-        -A Win32
+        -DCMAKE_BUILD_TYPE=Release -A Win32
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -754,7 +758,7 @@ jobs:
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
         -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019"
-        -A x64
+        -DCMAKE_BUILD_TYPE=Release -A x64
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -774,7 +778,7 @@ jobs:
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
         -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019"
-        -A ARM
+        -DCMAKE_BUILD_TYPE=Release -A ARM
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -791,7 +795,7 @@ jobs:
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
         -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019"
-        -A ARM64
+        -DCMAKE_BUILD_TYPE=Release -A ARM64
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -807,7 +811,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -826,7 +830,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -845,7 +849,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release
+        -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=x86
       name: Configure
     - working-directory: build
@@ -862,7 +867,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release
+        -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=x86_64
       name: Configure
     - working-directory: build
@@ -879,7 +885,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release
+        -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=armeabi-v7a
       name: Configure
     - working-directory: build
@@ -896,7 +903,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release
+        -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=arm64-v8a
       name: Configure
     - working-directory: build
@@ -913,8 +921,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
-        Win32
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A Win32
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -933,8 +941,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
-        x64
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A x64
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -953,8 +961,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
-        ARM
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A ARM
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -970,8 +978,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
-        ARM64
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A ARM64
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -987,7 +995,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -1006,7 +1014,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -1025,7 +1033,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=x86
       name: Configure
     - working-directory: build
@@ -1042,7 +1050,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=x86_64
       name: Configure
     - working-directory: build
@@ -1059,7 +1067,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=armeabi-v7a
       name: Configure
     - working-directory: build
@@ -1076,7 +1084,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=OFF -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=arm64-v8a
       name: Configure
     - working-directory: build
@@ -1093,8 +1101,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -A
-        Win32
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A Win32
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -1113,8 +1121,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -A
-        x64
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A x64
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -1133,8 +1141,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -A
-        ARM
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A ARM
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -1150,8 +1158,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -A
-        ARM64
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A ARM64
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -1167,7 +1175,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -1186,7 +1194,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -1205,7 +1213,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=x86
       name: Configure
     - working-directory: build
@@ -1222,7 +1230,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=x86_64
       name: Configure
     - working-directory: build
@@ -1239,7 +1247,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=armeabi-v7a
       name: Configure
     - working-directory: build
@@ -1256,7 +1264,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=arm64-v8a
       name: Configure
     - working-directory: build
@@ -1273,8 +1281,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
-        Win32
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A Win32
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -1293,8 +1301,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
-        x64
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A x64
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -1313,8 +1321,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
-        ARM
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A ARM
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -1330,8 +1338,8 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -A
-        ARM64
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
+        -A ARM64
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -1347,7 +1355,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -1366,7 +1374,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
@@ -1385,7 +1393,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=x86
       name: Configure
     - working-directory: build
@@ -1402,7 +1410,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=x86_64
       name: Configure
     - working-directory: build
@@ -1419,7 +1427,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=armeabi-v7a
       name: Configure
     - working-directory: build
@@ -1436,7 +1444,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_DISABLE_INTRINSICS=ON
-        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DOPUS_FIXED_POINT=ON -DOPUS_CUSTOM_MODES=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
         -DANDROID_ABI=arm64-v8a
       name: Configure
     - working-directory: build
