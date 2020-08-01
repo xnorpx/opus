@@ -281,7 +281,13 @@ class CMakeTransformer(Transformer):
                 if self._supported_test_target(config['platform'], config['arch']):
                     d['test'] = 'ctest'
                 cmake_configs.append(d)
-        return cmake_configs
+
+        cmake_configs_shared_lib = cmake_configs.copy() 
+        for config in cmake_configs_shared_lib:
+            config['configure'] += ' -DOPUS_BUILD_SHARED_LIBRARY=ON'
+            config['name'] += '-shared'
+
+        return cmake_configs + cmake_configs_shared_lib
 
     def _generate_name(self, config):
         name = config['platform'] + '-' + config['arch']
