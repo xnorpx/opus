@@ -2,8 +2,8 @@ on:
 - push
 - pull_request
 jobs:
-  ? win-x86-enable-fixed-point-on-enable-fixed-point-debug-on-disable-float-api-on-enable-custom-modes-on-disable-intrinsics-on
-  : name: win-x86-enable-fixed-point-on-enable-fixed-point-debug-on-disable-float-api-on-enable-custom-modes-on-disable-intrinsics-on
+  ? win-x86-enable-fixed-point-on-enable-fixed-point-debug-on-enable-custom-modes-on-disable-float-api-on-disable-intrinsics-on
+  : name: win-x86-enable-fixed-point-on-enable-fixed-point-debug-on-enable-custom-modes-on-disable-float-api-on-disable-intrinsics-on
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
@@ -13,7 +13,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_ENABLE_FIXED_POINT=ON
-        -DOPUS_ENABLE_FIXED_POINT_DEBUG=ON -DOPUS_DISABLE_FLOAT_API=ON -DOPUS_ENABLE_CUSTOM_MODES=ON
+        -DOPUS_ENABLE_FIXED_POINT_DEBUG=ON -DOPUS_ENABLE_CUSTOM_MODES=ON -DOPUS_DISABLE_FLOAT_API=ON
         -DOPUS_DISABLE_INTRINSICS=ON -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
         -A Win32
       name: Configure
@@ -23,8 +23,8 @@ jobs:
     - working-directory: build
       run: ctest
       name: Test
-  ? win-x86_64-enable-fixed-point-on-enable-fixed-point-debug-on-disable-float-api-on-enable-custom-modes-on-disable-intrinsics-on
-  : name: win-x86_64-enable-fixed-point-on-enable-fixed-point-debug-on-disable-float-api-on-enable-custom-modes-on-disable-intrinsics-on
+  ? win-x86_64-enable-fixed-point-on-enable-fixed-point-debug-on-enable-custom-modes-on-disable-float-api-on-disable-intrinsics-on
+  : name: win-x86_64-enable-fixed-point-on-enable-fixed-point-debug-on-enable-custom-modes-on-disable-float-api-on-disable-intrinsics-on
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
@@ -34,7 +34,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_ENABLE_FIXED_POINT=ON
-        -DOPUS_ENABLE_FIXED_POINT_DEBUG=ON -DOPUS_DISABLE_FLOAT_API=ON -DOPUS_ENABLE_CUSTOM_MODES=ON
+        -DOPUS_ENABLE_FIXED_POINT_DEBUG=ON -DOPUS_ENABLE_CUSTOM_MODES=ON -DOPUS_DISABLE_FLOAT_API=ON
         -DOPUS_DISABLE_INTRINSICS=ON -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
         -A x64
       name: Configure
@@ -44,8 +44,8 @@ jobs:
     - working-directory: build
       run: ctest
       name: Test
-  ? win-armv7-enable-fixed-point-on-enable-fixed-point-debug-on-disable-float-api-on-enable-custom-modes-on-disable-intrinsics-on
-  : name: win-armv7-enable-fixed-point-on-enable-fixed-point-debug-on-disable-float-api-on-enable-custom-modes-on-disable-intrinsics-on
+  ? win-armv7-enable-fixed-point-on-enable-fixed-point-debug-on-enable-custom-modes-on-disable-float-api-on-disable-intrinsics-on
+  : name: win-armv7-enable-fixed-point-on-enable-fixed-point-debug-on-enable-custom-modes-on-disable-float-api-on-disable-intrinsics-on
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
@@ -55,15 +55,15 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_ENABLE_FIXED_POINT=ON
-        -DOPUS_ENABLE_FIXED_POINT_DEBUG=ON -DOPUS_DISABLE_FLOAT_API=ON -DOPUS_ENABLE_CUSTOM_MODES=ON
+        -DOPUS_ENABLE_FIXED_POINT_DEBUG=ON -DOPUS_ENABLE_CUSTOM_MODES=ON -DOPUS_DISABLE_FLOAT_API=ON
         -DOPUS_DISABLE_INTRINSICS=ON -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
         -A ARM
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
       name: Build
-  ? win-arm64-enable-fixed-point-on-enable-fixed-point-debug-on-disable-float-api-on-enable-custom-modes-on-disable-intrinsics-on
-  : name: win-arm64-enable-fixed-point-on-enable-fixed-point-debug-on-disable-float-api-on-enable-custom-modes-on-disable-intrinsics-on
+  ? win-arm64-enable-fixed-point-on-enable-fixed-point-debug-on-enable-custom-modes-on-disable-float-api-on-disable-intrinsics-on
+  : name: win-arm64-enable-fixed-point-on-enable-fixed-point-debug-on-enable-custom-modes-on-disable-float-api-on-disable-intrinsics-on
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
@@ -73,15 +73,15 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_ENABLE_FIXED_POINT=ON
-        -DOPUS_ENABLE_FIXED_POINT_DEBUG=ON -DOPUS_DISABLE_FLOAT_API=ON -DOPUS_ENABLE_CUSTOM_MODES=ON
+        -DOPUS_ENABLE_FIXED_POINT_DEBUG=ON -DOPUS_ENABLE_CUSTOM_MODES=ON -DOPUS_DISABLE_FLOAT_API=ON
         -DOPUS_DISABLE_INTRINSICS=ON -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release
         -A ARM64
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release
       name: Build
-  ? linux-x86_64-enable-fixed-point-on-enable-fixed-point-debug-on-disable-float-api-on-enable-custom-modes-on-disable-intrinsics-on
-  : name: linux-x86_64-enable-fixed-point-on-enable-fixed-point-debug-on-disable-float-api-on-enable-custom-modes-on-disable-intrinsics-on
+  ? linux-x86_64-enable-fixed-point-on-enable-fixed-point-debug-on-enable-custom-modes-on-disable-float-api-on-disable-intrinsics-on
+  : name: linux-x86_64-enable-fixed-point-on-enable-fixed-point-debug-on-enable-custom-modes-on-disable-float-api-on-disable-intrinsics-on
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -91,7 +91,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_ENABLE_FIXED_POINT=ON
-        -DOPUS_ENABLE_FIXED_POINT_DEBUG=ON -DOPUS_DISABLE_FLOAT_API=ON -DOPUS_ENABLE_CUSTOM_MODES=ON
+        -DOPUS_ENABLE_FIXED_POINT_DEBUG=ON -DOPUS_ENABLE_CUSTOM_MODES=ON -DOPUS_DISABLE_FLOAT_API=ON
         -DOPUS_DISABLE_INTRINSICS=ON -DCMAKE_BUILD_TYPE=Release
       name: Configure
     - working-directory: build
@@ -100,8 +100,8 @@ jobs:
     - working-directory: build
       run: ctest
       name: Test
-  ? mac-x86_64-enable-fixed-point-on-enable-fixed-point-debug-on-disable-float-api-on-enable-custom-modes-on-disable-intrinsics-on
-  : name: mac-x86_64-enable-fixed-point-on-enable-fixed-point-debug-on-disable-float-api-on-enable-custom-modes-on-disable-intrinsics-on
+  ? mac-x86_64-enable-fixed-point-on-enable-fixed-point-debug-on-enable-custom-modes-on-disable-float-api-on-disable-intrinsics-on
+  : name: mac-x86_64-enable-fixed-point-on-enable-fixed-point-debug-on-enable-custom-modes-on-disable-float-api-on-disable-intrinsics-on
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
@@ -111,7 +111,7 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_ENABLE_FIXED_POINT=ON
-        -DOPUS_ENABLE_FIXED_POINT_DEBUG=ON -DOPUS_DISABLE_FLOAT_API=ON -DOPUS_ENABLE_CUSTOM_MODES=ON
+        -DOPUS_ENABLE_FIXED_POINT_DEBUG=ON -DOPUS_ENABLE_CUSTOM_MODES=ON -DOPUS_DISABLE_FLOAT_API=ON
         -DOPUS_DISABLE_INTRINSICS=ON -DCMAKE_BUILD_TYPE=Release
       name: Configure
     - working-directory: build
@@ -120,8 +120,8 @@ jobs:
     - working-directory: build
       run: ctest
       name: Test
-  ? ios-arm64-enable-fixed-point-on-enable-fixed-point-debug-on-disable-float-api-on-enable-custom-modes-on-disable-intrinsics-on
-  : name: ios-arm64-enable-fixed-point-on-enable-fixed-point-debug-on-disable-float-api-on-enable-custom-modes-on-disable-intrinsics-on
+  ? ios-arm64-enable-fixed-point-on-enable-fixed-point-debug-on-enable-custom-modes-on-disable-float-api-on-disable-intrinsics-on
+  : name: ios-arm64-enable-fixed-point-on-enable-fixed-point-debug-on-enable-custom-modes-on-disable-float-api-on-disable-intrinsics-on
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
@@ -131,9 +131,63 @@ jobs:
       name: Create Work Dir
     - working-directory: build
       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_ENABLE_FIXED_POINT=ON
-        -DOPUS_ENABLE_FIXED_POINT_DEBUG=ON -DOPUS_DISABLE_FLOAT_API=ON -DOPUS_ENABLE_CUSTOM_MODES=ON
+        -DOPUS_ENABLE_FIXED_POINT_DEBUG=ON -DOPUS_ENABLE_CUSTOM_MODES=ON -DOPUS_DISABLE_FLOAT_API=ON
         -DOPUS_DISABLE_INTRINSICS=ON -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=arm64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  ? android-x86_64-enable-fixed-point-on-enable-fixed-point-debug-on-enable-custom-modes-on-disable-float-api-on-disable-intrinsics-on
+  : name: android-x86_64-enable-fixed-point-on-enable-fixed-point-debug-on-enable-custom-modes-on-disable-float-api-on-disable-intrinsics-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_ENABLE_FIXED_POINT=ON
+        -DOPUS_ENABLE_FIXED_POINT_DEBUG=ON -DOPUS_ENABLE_CUSTOM_MODES=ON -DOPUS_DISABLE_FLOAT_API=ON
+        -DOPUS_DISABLE_INTRINSICS=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=x86_64
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  ? android-armv7-enable-fixed-point-on-enable-fixed-point-debug-on-enable-custom-modes-on-disable-float-api-on-disable-intrinsics-on
+  : name: android-armv7-enable-fixed-point-on-enable-fixed-point-debug-on-enable-custom-modes-on-disable-float-api-on-disable-intrinsics-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_ENABLE_FIXED_POINT=ON
+        -DOPUS_ENABLE_FIXED_POINT_DEBUG=ON -DOPUS_ENABLE_CUSTOM_MODES=ON -DOPUS_DISABLE_FLOAT_API=ON
+        -DOPUS_DISABLE_INTRINSICS=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=armeabi-v7a
+      name: Configure
+    - working-directory: build
+      run: cmake --build . --config Release
+      name: Build
+  ? android-arm64-enable-fixed-point-on-enable-fixed-point-debug-on-enable-custom-modes-on-disable-float-api-on-disable-intrinsics-on
+  : name: android-arm64-enable-fixed-point-on-enable-fixed-point-debug-on-enable-custom-modes-on-disable-float-api-on-disable-intrinsics-on
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: mkdir build
+      name: Create Work Dir
+    - working-directory: build
+      run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON -DOPUS_ENABLE_FIXED_POINT=ON
+        -DOPUS_ENABLE_FIXED_POINT_DEBUG=ON -DOPUS_ENABLE_CUSTOM_MODES=ON -DOPUS_DISABLE_FLOAT_API=ON
+        -DOPUS_DISABLE_INTRINSICS=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake
+        -DANDROID_ABI=arm64-v8a
       name: Configure
     - working-directory: build
       run: cmake --build . --config Release

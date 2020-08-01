@@ -7,20 +7,31 @@ from ruamel.yaml import YAML  # Github actions needs yaml 1.2
 build_settings = [
     'enable-fixed-point',
     'enable-fixed-point-debug',
-    'disable-float-api',
     'enable-custom-modes',
+    'disable-float-api',
     'disable-intrinsics',
 ]
 
 # no reason for fixed point debug or to disable float api if
 # fixed point is disabled, so create special rules for this
+# enable fixed-point-debug by default in CI if fixed point is enabled
 build_settings_rules = [
+    (('enable-fixed-point', True), ('enable-fixed-point-debug', True)),
     (('enable-fixed-point', False), ('enable-fixed-point-debug', False)),
     (('enable-fixed-point', False), ('disable-float-api', False)),
 ]
 
 platforms = ['win', 'linux', 'mac', 'ios', 'android']
 archs = ['x86', 'x86_64', 'armv7', 'arm64']
+
+# Special Test config:
+#         [AS_HELP_STRING([--enable-fuzzing],[causes the encoder to make random decisions (do not use in production)
+# 792:    [AS_HELP_STRING([--enable-check-asm],
+# Missing in CMake
+#         [AS_HELP_STRING([--enable-fuzzing],[causes the encoder to make random decisions (do not use in production)
+# 792:    [AS_HELP_STRING([--enable-check-asm],
+# 768:    [AS_HELP_STRING([--enable-assertions],[enable additional software error checking])],,
+# 189:    [AS_HELP_STRING([--disable-rtcd], [Disable run-time CPU capabilities detection])],,
 
 # TODO: Add support for automake
 # TODO: Add support for custom scrips add hock scripts
@@ -207,13 +218,13 @@ class CMakeTransformer(Transformer):
                 # 'arm64': True, # TODO: Add support for arm64 mac
                 'x86_64': True
             },
-            # 'android': {
-            #     'x86_64': True,
-            #     'armv7': True,
-            #     'arm64': True
-            # },
+            'android': {
+                'x86_64': True,
+                'armv7': True,
+                'arm64': True
+            },
             'ios': {
-                # 'x86_64': True, # fixme?
+                # 'x86_64': True, # TODO: Fixme
                 'arm64': True
             }
         }
