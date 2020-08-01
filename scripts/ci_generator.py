@@ -4,15 +4,27 @@ import logging
 import itertools
 from ruamel.yaml import YAML  # Github actions needs yaml 1.2
 
-build_settings = ['disable_intrinsics', 'fixed_point', 'custom_modes']
+build_settings = [
+    'enable-fixed-point',
+    'enable-fixed-point-debug',
+    'disable-float-api',
+    'enable-custom-modes',
+    'disable-intrinsics',
+]
+
+# no reason for fixed point debug or to disable float api if
+# fixed point is disabled, so create special rules for this
+build_settings_rules = [
+    (('enable-fixed-point', False), ('enable-fixed-point-debug', False)),
+    (('enable-fixed-point', False), ('disable-float-api', False)),
+]
+
 platforms = ['win', 'linux', 'mac', 'ios', 'android']
 archs = ['x86', 'x86_64', 'armv7', 'arm64']
 
-# TODO: Add build support for ios
-# TODO: Add support for custom scrips add hock scripts
-# TODO: Add support to pick generator cmake
-# TODO: Add support for gitlab
 # TODO: Add support for automake
+# TODO: Add support for custom scrips add hock scripts
+# TODO: Add support for gitlab
 # TODO: Add build and test support for linux arm (qemu)
 # TODO: Add build and test support for mingw
 # TODO: Add support for cpp check
@@ -58,8 +70,26 @@ def main():
 def generate_configs():
     logging.info('Generate configs')
     configs = []
+
+    # generate True, False combinations
     combinations = list(itertools.product(
         [False, True], repeat=len(build_settings)))
+
+    # Generate dict based on the combinations
+    for idx in range(len(combinations)):
+        combinations[idx] = dict(zip(build_settings, combinations[idx]))
+
+    # apply the build settings rules
+    for build_settings_rule in build_settings_rules:
+        for combination in combinations:
+            if combination[build_settings_rule[0][0]] == build_settings_rule[0][1]:
+                combination[build_settings_rule[1]
+                            [0]] = build_settings_rule[1][1]
+
+    # Remove diplicate combinations after the build settings rules was applied
+    combinations = [dict(t) for t in {tuple(d.items()) for d in combinations}]
+
+    # Generate all configt based on the combinations
     for combination in combinations:
         for platform in platforms:
             for arch in archs:
@@ -78,6 +108,86 @@ class Transformer():
 
     def transform(self, item):
         assert False
+
+
+class AutoToolsTransformer(Transformer):
+    def __init__(self):
+        super(AutoToolsTransformer, self).__init__()
+        self.auto_tools_build = {
+            'linux': {
+                # 'armv7': True # TODO: Add support for arm linux
+                # 'arm64': True # TODO: Add support for arm linux
+                'x86_64': True
+            },
+            'mac': {
+                # 'arm64': True, # TODO: Add support for arm64 mac
+                'x86_64': True
+            },
+        }
+
+    def transform(self, configs):
+        auto_tools_configs = []
+        for config in configs:
+            if self._supported_build_target(config['platform'], config['arch']):
+                d = {}
+                # d['configure'] = self._add_config_step(config)
+                # d['build'] = 'cmake --build . --config Release'
+                # d['name'] = self._generate_name(config)
+                # d['host'] = config['platform']
+                # if self._supported_test_target(config['platform'], config['arch']):
+                #     d['test'] = 'ctest'
+                # cmake_configs.append(d)
+        return auto_tools_configs
+
+    # def _generate_name(self, config):
+    #     name = config['platform'] + '-' + config['arch']
+    #     for key, value in config['configurations'].items():
+    #         name = name + '-' + key + '-' + ('on' if value else 'off')
+    #     return name
+
+    def _supported_build_target(self, platform, arch):
+        try:
+            return self.auto_tools_build[platform][arch]
+        except:
+            return False
+
+    # def _supported_test_target(self, platform, arch):
+    #     try:
+    #         return self.cmake_test[platform][arch]
+    #     except:
+    #         return False
+
+    # def _platform_build_option(self, platform, arch):
+    #     platform_build_options = ''
+    #     try:
+    #         platform_build_options += ' -G ' + self.cmake_generator[platform]
+    #     except:
+    #         pass
+    #     try:
+    #         platform_build_options += " " + \
+    #             self.cmake_platform_build_options['common']
+    #     except:
+    #         pass
+    #     try:
+    #         platform_build_options += " " + \
+    #             self.cmake_platform_build_options[platform]['common']
+    #     except:
+    #         pass
+    #     try:
+    #         platform_build_options += " " + \
+    #             self.cmake_platform_build_options[platform][arch]
+    #     except:
+    #         pass
+
+    #     return platform_build_options
+
+    # def _add_config_step(self, config):
+    #     configure = 'cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON'
+    #     for key, value in config['configurations'].items():
+    #         configure += ' -DOPUS_' + key.upper() + '=' + ('ON' if value else 'OFF')
+    #     configure += self._platform_build_option(
+    #         config['platform'], config['arch'])
+    #     return configure
 
 
 class CMakeTransformer(Transformer):
@@ -136,7 +246,6 @@ class CMakeTransformer(Transformer):
                 # https://developer.android.com/ndk/guides/cmake
                 'common': '-DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake',
                 'x86_64': '-DANDROID_ABI=x86_64',
-                'x86': '-DANDROID_ABI=x86',
                 'armv7': '-DANDROID_ABI=armeabi-v7a',
                 'arm64': '-DANDROID_ABI=arm64-v8a'
             },
@@ -207,7 +316,8 @@ class CMakeTransformer(Transformer):
     def _add_config_step(self, config):
         configure = 'cmake .. -DOPUS_BUILD_PROGRAMS=ON -DOPUS_BUILD_TESTING=ON'
         for key, value in config['configurations'].items():
-            configure += ' -DOPUS_' + key.upper() + '=' + ('ON' if value else 'OFF')
+            configure += ' -DOPUS_' + key.upper().replace('-', '_') + '=' + \
+                ('ON' if value else 'OFF')
         configure += self._platform_build_option(
             config['platform'], config['arch'])
         return configure
