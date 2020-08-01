@@ -6,7 +6,7 @@ from ruamel.yaml import YAML  # Github actions needs yaml 1.2
 
 build_settings = [
     'enable-fixed-point',
-    #'enable-fixed-point-debug',
+    # 'enable-fixed-point-debug',
     'enable-custom-modes',
     'disable-float-api',
     'disable-intrinsics',
@@ -282,7 +282,8 @@ class CMakeTransformer(Transformer):
                     d['test'] = 'ctest'
                 cmake_configs.append(d)
 
-        cmake_configs_shared_lib = cmake_configs.copy() 
+        # let's make sure we generate configs for shared libs as well
+        cmake_configs_shared_lib = cmake_configs.copy()
         for config in cmake_configs_shared_lib:
             config['configure'] += ' -DOPUS_BUILD_SHARED_LIBRARY=ON'
             config['name'] += '-shared'
