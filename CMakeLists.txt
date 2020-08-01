@@ -31,9 +31,9 @@ if(OPUS_BUILD_TESTING OR BUILD_TESTING)
 endif()
 add_feature_info(OPUS_BUILD_TESTING OPUS_BUILD_TESTING ${OPUS_BUILD_TESTING_HELP_STR})
 
-set(OPUS_CUSTOM_MODES_HELP_STR "enable non-Opus modes, e.g. 44.1 kHz & 2^n frames.")
-option(OPUS_CUSTOM_MODES ${OPUS_CUSTOM_MODES_HELP_STR} OFF)
-add_feature_info(OPUS_CUSTOM_MODES OPUS_CUSTOM_MODES ${OPUS_CUSTOM_MODES_HELP_STR})
+set(OPUS_ENABLE_CUSTOM_MODES_HELP_STR "enable non-Opus modes, e.g. 44.1 kHz & 2^n frames.")
+option(OPUS_ENABLE_CUSTOM_MODES ${OPUS_ENABLE_CUSTOM_MODES_HELP_STR} OFF)
+add_feature_info(OPUS_ENABLE_CUSTOM_MODES OPUS_ENABLE_CUSTOM_MODES ${OPUS_ENABLE_CUSTOM_MODES_HELP_STR})
 
 set(OPUS_BUILD_PROGRAMS_HELP_STR "build programs.")
 option(OPUS_BUILD_PROGRAMS ${OPUS_BUILD_PROGRAMS_HELP_STR} OFF)
@@ -225,7 +225,7 @@ set(Opus_PUBLIC_HEADER
     ${CMAKE_CURRENT_SOURCE_DIR}/include/opus_projection.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/opus_types.h)
 
-if(OPUS_CUSTOM_MODES)
+if(OPUS_ENABLE_CUSTOM_MODES)
   list(APPEND Opus_PUBLIC_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/include/opus_custom.h)
 endif()
 
@@ -275,7 +275,7 @@ else()
   message(ERROR "Need to set a define for stack allocation")
 endif()
 
-if(OPUS_CUSTOM_MODES)
+if(OPUS_ENABLE_CUSTOM_MODES)
   target_compile_definitions(opus PRIVATE CUSTOM_MODES)
 endif()
 
@@ -516,7 +516,7 @@ endif()
 
 if(OPUS_BUILD_PROGRAMS)
   # demo
-  if(OPUS_CUSTOM_MODES)
+  if(OPUS_ENABLE_CUSTOM_MODES)
     add_executable(opus_custom_demo ${opus_custom_demo_sources})
     target_include_directories(opus_custom_demo
                                PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
