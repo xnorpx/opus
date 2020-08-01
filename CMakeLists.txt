@@ -51,9 +51,9 @@ set(OPUS_DISABLE_FLOAT_API_HELP_STR "compile without the floating point API (for
 option(OPUS_DISABLE_FLOAT_API ${OPUS_DISABLE_FLOAT_API_HELP_STR} OFF)
 add_feature_info(OPUS_DISABLE_FLOAT_API OPUS_DISABLE_FLOAT_API ${OPUS_DISABLE_FLOAT_API_HELP_STR})
 
-set(OPUS_FLOAT_APPROX_HELP_STR "enable floating point approximations (Ensure your platform supports IEEE 754 before enabling).")
-option(OPUS_FLOAT_APPROX ${OPUS_FLOAT_APPROX_HELP_STR} OFF)
-add_feature_info(OPUS_FLOAT_APPROX OPUS_FLOAT_APPROX ${OPUS_FLOAT_APPROX_HELP_STR})
+set(OPUS_ENABLE_FLOAT_APPROX_HELP_STR "enable floating point approximations (Ensure your platform supports IEEE 754 before enabling).")
+option(OPUS_ENABLE_FLOAT_APPROX ${OPUS_ENABLE_FLOAT_APPROX_HELP_STR} OFF)
+add_feature_info(OPUS_ENABLE_FLOAT_APPROX OPUS_ENABLE_FLOAT_APPROX ${OPUS_ENABLE_FLOAT_APPROX_HELP_STR})
 
 set(OPUS_INSTALL_PKG_CONFIG_MODULE_HELP_STR "install pkg-config module.")
 option(OPUS_INSTALL_PKG_CONFIG_MODULE ${OPUS_INSTALL_PKG_CONFIG_MODULE_HELP_STR} ON)
@@ -93,13 +93,13 @@ cmake_dependent_option(OPUS_NONTHREADSAFE_PSEUDOSTACK
                        OFF)
 add_feature_info(OPUS_NONTHREADSAFE_PSEUDOSTACK OPUS_NONTHREADSAFE_PSEUDOSTACK ${OPUS_NONTHREADSAFE_PSEUDOSTACK_HELP_STR})
 
-set(OPUS_FAST_MATH_HELP_STR "enable fast math (unsupported and discouraged use, as code is not well tested with this build option).")
-cmake_dependent_option(OPUS_FAST_MATH
-                       ${OPUS_FAST_MATH_HELP_STR}
+set(OPUS_ENABLE_FAST_MATH_HELP_STR "enable fast math (unsupported and discouraged use, as code is not well tested with this build option).")
+cmake_dependent_option(OPUS_ENABLE_FAST_MATH
+                       ${OPUS_ENABLE_FAST_MATH_HELP_STR}
                        ON
-                       "OPUS_FLOAT_APPROX; OPUS_FAST_MATH; FAST_MATH_SUPPORTED"
+                       "OPUS_ENABLE_FLOAT_APPROX; OPUS_ENABLE_FAST_MATH; FAST_MATH_SUPPORTED"
                        OFF)
-add_feature_info(OPUS_FAST_MATH OPUS_FAST_MATH ${OPUS_FAST_MATH_HELP_STR})
+add_feature_info(OPUS_ENABLE_FAST_MATH OPUS_ENABLE_FAST_MATH ${OPUS_ENABLE_FAST_MATH_HELP_STR})
 
 set(OPUS_STACK_PROTECTOR_HELP_STR "use stack protection.")
 cmake_dependent_option(OPUS_STACK_PROTECTOR
@@ -261,7 +261,7 @@ if(OPUS_FORTIFY_SOURCE AND NOT MSVC)
                              $<$<NOT:$<CONFIG:debug>>:_FORTIFY_SOURCE=2>)
 endif()
 
-if(OPUS_FLOAT_APPROX)
+if(OPUS_ENABLE_FLOAT_APPROX)
   target_compile_definitions(opus PRIVATE FLOAT_APPROX)
 endif()
 
@@ -279,7 +279,7 @@ if(OPUS_ENABLE_CUSTOM_MODES)
   target_compile_definitions(opus PRIVATE CUSTOM_MODES)
 endif()
 
-if(OPUS_FAST_MATH)
+if(OPUS_ENABLE_FAST_MATH)
   if(MSVC)
     target_compile_options(opus PRIVATE /fp:fast)
   else()
