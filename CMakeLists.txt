@@ -47,9 +47,9 @@ set(OPUS_ENABLE_FIXED_POINT_HELP_STR "compile without floating point (for machin
 option(OPUS_ENABLE_FIXED_POINT ${OPUS_ENABLE_FIXED_POINT_HELP_STR} OFF)
 add_feature_info(OPUS_ENABLE_FIXED_POINT OPUS_ENABLE_FIXED_POINT ${OPUS_ENABLE_FIXED_POINT_HELP_STR})
 
-set(OPUS_ENABLE_FLOAT_API_HELP_STR "compile with the floating point API (for machines with float library).")
-option(OPUS_ENABLE_FLOAT_API ${OPUS_ENABLE_FLOAT_API_HELP_STR} ON)
-add_feature_info(OPUS_ENABLE_FLOAT_API OPUS_ENABLE_FLOAT_API ${OPUS_ENABLE_FLOAT_API_HELP_STR})
+set(OPUS_DISABLE_FLOAT_API_HELP_STR "compile without the floating point API (for machines with no float library).")
+option(OPUS_DISABLE_FLOAT_API ${OPUS_DISABLE_FLOAT_API_HELP_STR} OFF)
+add_feature_info(OPUS_DISABLE_FLOAT_API OPUS_DISABLE_FLOAT_API ${OPUS_DISABLE_FLOAT_API_HELP_STR})
 
 set(OPUS_FLOAT_APPROX_HELP_STR "enable floating point approximations (Ensure your platform supports IEEE 754 before enabling).")
 option(OPUS_FLOAT_APPROX ${OPUS_FLOAT_APPROX_HELP_STR} OFF)
@@ -317,7 +317,7 @@ else()
   target_include_directories(opus PRIVATE silk/float)
 endif()
 
-if(NOT OPUS_ENABLE_FLOAT_API)
+if(OPUS_DISABLE_FLOAT_API)
   target_compile_definitions(opus PRIVATE DISABLE_FLOAT_API)
 endif()
 
