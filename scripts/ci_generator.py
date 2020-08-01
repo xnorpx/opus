@@ -105,8 +105,7 @@ def generate_configs():
         for platform in platforms:
             for arch in archs:
                 config = {}
-                config['configurations'] = dict(
-                    zip(build_settings, combination))
+                config['configurations'] = combination
                 config['arch'] = arch
                 config['platform'] = platform
                 configs.append(config)
