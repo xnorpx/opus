@@ -47,7 +47,7 @@ set(OPUS_ENABLE_FIXED_POINT_HELP_STR "compile as fixed-point (for machines witho
 option(OPUS_ENABLE_FIXED_POINT ${OPUS_ENABLE_FIXED_POINT_HELP_STR} OFF)
 add_feature_info(OPUS_ENABLE_FIXED_POINT OPUS_ENABLE_FIXED_POINT ${OPUS_ENABLE_FIXED_POINT_HELP_STR})
 
-set(OPUS_DISABLE_FLOAT_API_HELP_STR "compile with the floating point API (for machines with float library).")
+set(OPUS_DISABLE_FLOAT_API_HELP_STR "compile without the floating point API (for machines without float library).")
 option(OPUS_DISABLE_FLOAT_API ${OPUS_DISABLE_FLOAT_API_HELP_STR} OFF)
 add_feature_info(OPUS_DISABLE_FLOAT_API OPUS_DISABLE_FLOAT_API ${OPUS_DISABLE_FLOAT_API_HELP_STR})
 
