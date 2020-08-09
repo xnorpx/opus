@@ -37,7 +37,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #if SILK_TIC_TOC
 
-#if (defined(_WIN32) || defined(_WINCE))
+#ifdef _WIN32
 #include <windows.h>    /* timer */
 #else   /* Linux or Mac*/
 #include <sys/time.h>
