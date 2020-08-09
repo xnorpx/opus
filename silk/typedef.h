@@ -51,7 +51,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #define silk_FALSE       0
 
 /* assertions */
-#if (defined _WIN32 && !defined _WINCE && !defined(__GNUC__) && !defined(NO_ASSERTS))
+#if (defined _WIN32 && !defined(__GNUC__) && !defined(NO_ASSERTS))
 # ifndef silk_assert
 #  include <crtdbg.h>      /* ASSERTE() */
 #  define silk_assert(COND)   _ASSERTE(COND)
