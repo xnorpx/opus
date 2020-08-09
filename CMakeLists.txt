@@ -539,10 +539,18 @@ if(BUILD_TESTING)
   enable_testing()
 
   # tests
+  add_executable(test_opus_snr tests/test_opus_snr.c)
+  target_include_directories(test_opus_snr
+                             PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+  target_link_libraries(test_opus_snr PRIVATE opus)
+  add_test(opus_snr test_opus_snr)
+
+
   add_executable(test_opus_decode ${test_opus_decode_sources})
   target_include_directories(test_opus_decode
                              PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
   target_link_libraries(test_opus_decode PRIVATE opus)
+
   if(OPUS_FIXED_POINT)
     target_compile_definitions(test_opus_decode PRIVATE DISABLE_FLOAT_API)
   endif()
