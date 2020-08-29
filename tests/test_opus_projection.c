@@ -40,7 +40,6 @@
 #include "opus_projection.h"
 #include "mathops.h"
 #include "../src/mapping_matrix.h"
-#include "mathops.h"
 
 #define BUFFER_SIZE 960
 #define MAX_DATA_BYTES 32768
