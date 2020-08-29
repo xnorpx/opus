@@ -47,3 +47,5 @@ get_opus_sources(tests_test_opus_decode_SOURCES Makefile.am
                  test_opus_decode_sources)
 get_opus_sources(tests_test_opus_padding_SOURCES Makefile.am
                  test_opus_padding_sources)
+get_opus_sources(tests_test_opus_projection_SOURCES Makefile.am
+                 test_opus_projection_sources)

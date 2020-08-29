@@ -560,6 +560,7 @@ if(BUILD_TESTING)
   target_link_libraries(test_opus_padding PRIVATE opus)
   add_test(NAME test_opus_padding COMMAND $<TARGET_FILE:test_opus_padding> WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 
+
   if(NOT BUILD_SHARED_LIBS)
     # disable tests that depends on private API when building shared lib
     add_executable(test_opus_api ${test_opus_api_sources})
@@ -576,5 +577,11 @@ if(BUILD_TESTING)
                                PRIVATE ${CMAKE_CURRENT_BINARY_DIR} celt)
     target_link_libraries(test_opus_encode PRIVATE opus)
     add_test(NAME test_opus_encode COMMAND $<TARGET_FILE:test_opus_encode> WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+
+    add_executable(test_opus_projection ${test_opus_projection_sources})
+    target_include_directories(test_opus_projection
+                               PRIVATE ${CMAKE_CURRENT_BINARY_DIR} celt)
+    target_link_libraries(test_opus_projection PRIVATE opus)
+    add_test(test_opus_projection test_opus_projection)
   endif()
 endif()
