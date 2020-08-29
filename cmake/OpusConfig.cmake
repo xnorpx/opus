@@ -5,9 +5,6 @@ set(__opus_config INCLUDED)
 
 include(OpusFunctions)
 
-configure_file(cmake/config.h.cmake.in config.h @ONLY)
-add_definitions(-DHAVE_CONFIG_H)
-
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set_property(GLOBAL PROPERTY C_STANDARD 99)
 

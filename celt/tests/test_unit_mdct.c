@@ -136,7 +136,7 @@ void test1d(int nfft,int isinverse,int arch)
     window = (opus_val16*)malloc(sizeof(opus_val16)*nfft/2);
 
     for (k=0;k<nfft;++k) {
-        in[k] = (rand() % 32768) - 16384;
+        in[k] = (kiss_fft_scalar)(rand() % 32768) - 16384;
     }
 
     for (k=0;k<nfft/2;++k) {

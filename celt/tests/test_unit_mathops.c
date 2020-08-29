@@ -143,9 +143,9 @@ void testbitexactlog2tan(void)
 void testlog2(void)
 {
    float x;
-   for (x=0.001f;x<1677700.0;x+=(x/8.0))
+   for (x=0.001f;x<1677700.0;x+=(x/8.f))
    {
-      float error = fabs((1.442695040888963387*log(x))-celt_log2(x));
+      float error = (float)fabs((1.442695040888963387*log(x))-celt_log2(x));
       if (error>0.0009)
       {
          fprintf (stderr, "celt_log2 failed: fabs((1.442695040888963387*log(x))-celt_log2(x))>0.001 (x = %f, error = %f)\n", x,error);
@@ -159,7 +159,7 @@ void testexp2(void)
    float x;
    for (x=-11.0;x<24.0;x+=0.0007f)
    {
-      float error = fabs(x-(1.442695040888963387*log(celt_exp2(x))));
+      float error = (float)fabs(x-(1.442695040888963387*log(celt_exp2(x))));
       if (error>0.0002)
       {
          fprintf (stderr, "celt_exp2 failed: fabs(x-(1.442695040888963387*log(celt_exp2(x))))>0.0005 (x = %f, error = %f)\n", x,error);
@@ -173,7 +173,7 @@ void testexp2log2(void)
    float x;
    for (x=-11.0;x<24.0;x+=0.0007f)
    {
-      float error = fabs(x-(celt_log2(celt_exp2(x))));
+      float error = (float)fabs(x-(celt_log2(celt_exp2(x))));
       if (error>0.001)
       {
          fprintf (stderr, "celt_log2/celt_exp2 failed: fabs(x-(celt_log2(celt_exp2(x))))>0.001 (x = %f, error = %f)\n", x,error);

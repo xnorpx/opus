@@ -45,7 +45,7 @@
 #include "entcode.c"
 
 #ifndef M_LOG2E
-# define M_LOG2E    1.4426950408889634074
+#define M_LOG2E 1.4426950408889634074
 #endif
 #define DATA_SIZE 10000000
 #define DATA_SIZE2 10000
@@ -77,7 +77,7 @@ int main(int _argc,char **_argv){
   else if (env_seed)
     seed = atoi(env_seed);
   else
-    seed = time(NULL);
+    seed = (unsigned int)time(NULL);
   /*Testing encoding of raw bit values.*/
   ptr = (unsigned char *)malloc(DATA_SIZE);
   ec_enc_init(&enc,ptr, DATA_SIZE);

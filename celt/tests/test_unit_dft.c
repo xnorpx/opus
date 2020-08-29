@@ -107,8 +107,8 @@ void test1d(int nfft,int isinverse,int arch)
     out = (kiss_fft_cpx*)malloc(buflen);
 
     for (k=0;k<nfft;++k) {
-        in[k].r = (rand() % 32767) - 16384;
-        in[k].i = (rand() % 32767) - 16384;
+        in[k].r = (kiss_fft_scalar)((rand() % 32767) - 16384);
+        in[k].i = (kiss_fft_scalar)((rand() % 32767) - 16384);
     }
 
     for (k=0;k<nfft;++k) {
