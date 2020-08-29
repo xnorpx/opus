@@ -515,7 +515,6 @@ if(OPUS_INSTALL_CMAKE_CONFIG_MODULE)
 endif()
 
 if(OPUS_BUILD_PROGRAMS)
-  # demo
   if(OPUS_CUSTOM_MODES)
     add_executable(opus_custom_demo ${opus_custom_demo_sources})
     target_include_directories(opus_custom_demo
@@ -529,10 +528,17 @@ if(OPUS_BUILD_PROGRAMS)
   target_include_directories(opus_demo PRIVATE celt) # arch.h
   target_link_libraries(opus_demo PRIVATE opus ${OPUS_REQUIRED_LIBRARIES})
 
-  # compare
+  add_executable(repacketizer_demo ${repacketizer_demo_sources})
+  target_include_directories(repacketizer_demo PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+  target_link_libraries(repacketizer_demo PRIVATE opus ${OPUS_REQUIRED_LIBRARIES})
+
   add_executable(opus_compare ${opus_compare_sources})
   target_include_directories(opus_compare PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
   target_link_libraries(opus_compare PRIVATE opus ${OPUS_REQUIRED_LIBRARIES})
+
+  add_executable(trivial_example ${trivial_example_sources})
+  target_include_directories(trivial_example PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+  target_link_libraries(trivial_example PRIVATE opus ${OPUS_REQUIRED_LIBRARIES})
 endif()
 
 if(BUILD_TESTING)
