@@ -49,3 +49,23 @@ get_opus_sources(tests_test_opus_padding_SOURCES Makefile.am
                  test_opus_padding_sources)
 get_opus_sources(tests_test_opus_projection_SOURCES Makefile.am
                  test_opus_projection_sources)
+
+get_opus_sources(silk_tests_test_unit_LPC_inv_pred_gain_SOURCES 
+                 Makefile.am silk_test_unit_LPC_inv_pred_gain_sources)
+
+get_opus_sources(celt_tests_test_unit_cwrs32_SOURCES
+                 Makefile.am celt_test_unit_cwrs32_sources)
+get_opus_sources(celt_tests_test_unit_dft_SOURCES 
+                 Makefile.am celt_test_unit_dft_sources)
+get_opus_sources(celt_tests_test_unit_entropy_SOURCES 
+                 Makefile.am celt_test_unit_entropy_sources)
+get_opus_sources(celt_tests_test_unit_laplace_SOURCES
+                 Makefile.am celt_test_unit_laplace_sources)
+get_opus_sources(celt_tests_test_unit_mathops_SOURCES
+                 Makefile.am celt_test_unit_mathops_sources)
+get_opus_sources(celt_tests_test_unit_mdct_SOURCES
+                 Makefile.am celt_test_unit_mdct_sources)
+get_opus_sources(celt_tests_test_unit_rotation_SOURCES
+                 Makefile.am celt_test_unit_rotation_sources)
+get_opus_sources(celt_tests_test_unit_types_SOURCES
+                 Makefile.am celt_test_unit_types_sources)

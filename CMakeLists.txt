@@ -583,5 +583,80 @@ if(BUILD_TESTING)
                                PRIVATE ${CMAKE_CURRENT_BINARY_DIR} celt)
     target_link_libraries(test_opus_projection PRIVATE opus)
     add_test(test_opus_projection test_opus_projection)
+
+    add_executable(silk_test_unit_LPC_inv_pred_gain ${silk_test_unit_LPC_inv_pred_gain_sources})
+    target_include_directories(silk_test_unit_LPC_inv_pred_gain
+                               PRIVATE ${CMAKE_CURRENT_BINARY_DIR} 
+                               ${PROJECT_SOURCE_DIR} 
+                               silk celt)
+    target_link_libraries(silk_test_unit_LPC_inv_pred_gain PRIVATE opus)
+    add_test(silk_test_unit_LPC_inv_pred_gain silk_test_unit_LPC_inv_pred_gain)
+
+    add_executable(celt_test_unit_cwrs32 ${celt_test_unit_cwrs32_sources})
+    target_include_directories(celt_test_unit_cwrs32
+                               PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
+                               celt)
+    target_link_libraries(celt_test_unit_cwrs32 PRIVATE opus)
+    add_test(celt_test_unit_cwrs32 celt_test_unit_cwrs32)
+
+    add_executable(celt_test_unit_dft ${celt_test_unit_dft_sources})
+    target_include_directories(celt_test_unit_dft
+                               PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
+                               celt)
+    target_link_libraries(celt_test_unit_dft PRIVATE opus)
+    add_test(celt_test_unit_dft celt_test_unit_dft)
+
+    add_executable(celt_test_unit_entropy ${celt_test_unit_entropy_sources})
+    target_include_directories(celt_test_unit_entropy
+                               PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
+                               celt)
+    target_link_libraries(celt_test_unit_entropy PRIVATE opus)
+    add_test(celt_test_unit_entropy celt_test_unit_entropy)
+
+    add_executable(celt_test_unit_laplace ${celt_test_unit_laplace_sources})
+    target_include_directories(celt_test_unit_laplace
+                               PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
+                               celt)
+    target_link_libraries(celt_test_unit_laplace PRIVATE opus)
+    add_test(celt_test_unit_laplace celt_test_unit_laplace)
+
+    add_executable(celt_test_unit_mathops ${celt_test_unit_mathops_sources})
+    target_include_directories(celt_test_unit_mathops
+                               PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
+                               celt)
+    target_link_libraries(celt_test_unit_mathops PRIVATE opus)
+    add_test(celt_test_unit_mathops celt_test_unit_mathops)
+
+    add_executable(celt_test_unit_mdct ${celt_test_unit_mdct_sources})
+    target_include_directories(celt_test_unit_mdct
+                               PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
+                               celt)
+    target_link_libraries(celt_test_unit_mdct PRIVATE opus)
+    add_test(celt_test_unit_mdct celt_test_unit_mdct)
+
+    add_executable(celt_test_unit_rotation ${celt_test_unit_rotation_sources})
+    target_include_directories(celt_test_unit_rotation
+                               PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
+                               celt)
+    target_link_libraries(celt_test_unit_rotation PRIVATE opus)
+    add_test(celt_test_unit_mdct celt_test_unit_rotation)
+
+    add_executable(celt_test_unit_types ${celt_test_unit_types_sources})
+    target_include_directories(celt_test_unit_types
+                               PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
+                               celt)
+    target_link_libraries(celt_test_unit_types PRIVATE opus)
+    add_test(celt_test_unit_types celt_test_unit_types)
+
+    if(OPUS_VAR_ARRAYS)
+      add_definitions(-DVAR_ARRAYS)
+    elseif(OPUS_USE_ALLOCA)
+      add_definitions(-DUSE_ALLOCA)
+    elseif(OPUS_NONTHREADSAFE_PSEUDOSTACK)
+      add_definitions(-DNONTHREADSAFE_PSEUDOSTACK)
+    else()
+      message(ERROR "Need to set a define for stack allocation")
+    endif()
+
   endif()
 endif()
