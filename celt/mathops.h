@@ -36,6 +36,7 @@
 
 #include "arch.h"
 #include "entcode.h"
+#include "float_cast.h"
 #include "os_support.h"
 
 #define PI 3.141592653f
@@ -153,7 +154,7 @@ static OPUS_INLINE float celt_exp2(float x)
       float f;
       opus_uint32 i;
    } res;
-   integer = floor(x);
+   integer = float2int(floorf(x));
    if (integer < -50)
       return 0;
    frac = x-integer;
