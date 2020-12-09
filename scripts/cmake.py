@@ -25,9 +25,9 @@ class CMakeTransformer():
                 'x86_64': True
             },
             'android': {
-                'x86_64': False,
-                'armv7': False,
-                'arm64': False
+                'x86_64': True,
+                'armv7': True,
+                'arm64': True
             },
             'ios': {
                 'x86_64': False,
