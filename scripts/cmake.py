@@ -12,22 +12,22 @@ class CMakeTransformer():
         self.cmake_build = {
             'win': {
                 'x86_64': True,
-                'x86': True,
+                'x86': False,
                 'armv7': False,
                 'arm64': False
             },
             'linux': {
-                'x86_64': True,
+                'x86_64': False,
                 'armv7': False,
                 'arm64': False
             },
             'mac': {
-                'x86_64': True
+                'x86_64': False
             },
             'android': {
-                'x86_64': True,
-                'armv7': True,
-                'arm64': True
+                'x86_64': False,
+                'armv7': False,
+                'arm64': False
             },
             'ios': {
                 'x86_64': False,
@@ -46,12 +46,8 @@ class CMakeTransformer():
                 'x86_64': True
             }
         }
-        self.cmake_generator = {
-            'win': '"Visual Studio 16 2019"',
-            'ios': '"Unix Makefiles"'
-        }
         self.cmake_platform_build_options = {
-            'common': '-DCMAKE_BUILD_TYPE=Release',
+            'common': '-DCMAKE_BUILD_TYPE=Release -G Ninja',
             # https://cmake.org/cmake/help/latest/generator/Visual%20Studio%2016%202019.html
             'win': {
                 'x86_64': '-A x64',
@@ -89,11 +85,11 @@ class CMakeTransformer():
                 cmake_configs.append(config_dict)
 
         # let's make sure we generate configs for shared libs as well
-        cmake_configs_shared_lib = cmake_configs.copy()
-        for config in cmake_configs_shared_lib:
-            config['configure'] += ' -DOPUS_BUILD_SHARED_LIBRARY=ON'
-            config['name'] += '-shared'
-        cmake_configs += cmake_configs_shared_lib
+        # cmake_configs_shared_lib = cmake_configs.copy()
+        # for config in cmake_configs_shared_lib:
+        #     config['configure'] += ' -DOPUS_BUILD_SHARED_LIBRARY=ON'
+        #     config['name'] += '-shared'
+        # cmake_configs += cmake_configs_shared_lib
 
         return sorted(cmake_configs, key=lambda i: i['name'])
 
@@ -117,10 +113,6 @@ class CMakeTransformer():
 
     def _platform_build_option(self, platform, arch):
         platform_build_options = ''
-        try:
-            platform_build_options += ' -G ' + self.cmake_generator[platform]
-        except:
-            pass
         try:
             platform_build_options += ' ' + \
                 self.cmake_platform_build_options['common']
