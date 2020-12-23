@@ -265,7 +265,7 @@ jobs:
         #   }
         - {
             name: "Android/Lib/X64/Release",
-            os: macos-11.0,
+            os: macos-latest,
             config: Release,
             args: "-DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake -DANDROID_ABI=x86_64"
           }
