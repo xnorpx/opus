@@ -273,8 +273,13 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: test
-        run: "avdmanager create avd --force -n somename --abi default/x86_64 --package system-images;android-30;default;x86_64"
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 30
+          arch: x86_64
+          target: default 
+
+        #run: "which avdmanager create avd --force -n somename --abi default/x86_64 --package system-images;android-30;default;x86_64"
         # Now we need at least CMake 3.15 to use the cmake --install command
         # Current linux build nodes only have 3.12
       # - name: Install CMake 3.16 on Linux
