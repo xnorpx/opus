@@ -278,7 +278,8 @@ jobs:
       - name: Install Android Test Image
         run: $ANDROID_HOME/tools/bin/sdkmanager "system-images;android-29;default;x86_64"
       - name: create avd
-        run: /bin/sh -c \echo no | $ANDROID_HOME/tools/bin/avdmanager create avd --force -n test --abi 'default/x86_64' --package 'system-images;android-29;default;x86_64'
+        #run: /bin/sh -c \echo no | $ANDROID_HOME/tools/bin/avdmanager create avd --force -n test --abi 'default/x86_64' --package 'system-images;android-29;default;x86_64'
+        run: echo "no" | $ANDROID_HOME/tools/bin/avdmanager --verbose create avd --force --name "generic_10" --package "system-images;android-29;default;x86_64" --tag "default" --abi "x86_64"
 
         #run: "which avdmanager create avd --force -n somename --abi default/x86_64 --package system-images;android-30;default;x86_64"
         # Now we need at least CMake 3.15 to use the cmake --install command
