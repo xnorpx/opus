@@ -275,51 +275,51 @@ jobs:
           fetch-depth: 0
       - name: Test
         run: $ANDROID_HOME/tools/bin/sdkmanager --list --verbose
-      # - name: Install Android Test Image
-      #   #run: $ANDROID_HOME/tools/bin/sdkmanager "system-images;android-29;default;x86_64"
-      #   run: $ANDROID_HOME/tools/bin/sdkmanager "system-images;android-29;default;arm64-v8a"
-      # - name: create avd
-      #   #run: /bin/sh -c \echo no | $ANDROID_HOME/tools/bin/avdmanager create avd --force -n test --abi 'default/x86_64' --package 'system-images;android-29;default;x86_64'
-      #   run: echo "no" | $ANDROID_HOME/tools/bin/avdmanager --verbose create avd --force --name "generic_10" --package "system-images;android-29;default;arm64-v8a" --tag "default" --abi "arm64-v8a"
-      #   #run: echo "no" | $ANDROID_HOME/tools/bin/avdmanager --verbose create avd --force --name "generic_10" --package "system-images;android-29;default;x86_64" --tag "default" --abi "x86_64"
-      # - name: create avd
-      #   run: $ANDROID_HOME/tools/bin/avdmanager list avd
-      # - name: start
-      #   run: $ANDROID_HOME/emulator/emulator -avd "generic_10" -no-window -no-snapshot &
-      # - name: Ensure emulator is started
-      #   run: while [ "`adb shell getprop sys.boot_completed | tr -d '\r' `" != "1" ] ; do sleep 1; done
-      # - name: some settings
-      #   run: adb shell settings put global window_animation_scale 0.0
-      # - name: some settings1
-      #   run: adb shell settings put global transition_animation_scale 0.0
-      # - name: some settings2
-      #   run: adb shell settings put global animator_duration_scale 0.0
+      - name: Install Android Test Image
+        #run: $ANDROID_HOME/tools/bin/sdkmanager "system-images;android-29;default;x86_64"
+        run: $ANDROID_HOME/tools/bin/sdkmanager "system-images;android-25;google_apis;arm64-v8a"
+      - name: create avd
+        #run: /bin/sh -c \echo no | $ANDROID_HOME/tools/bin/avdmanager create avd --force -n test --abi 'default/x86_64' --package 'system-images;android-29;default;x86_64'
+        run: echo "no" | $ANDROID_HOME/tools/bin/avdmanager --verbose create avd --force --name "generic_10" --package "system-images;android-25;google_apis;arm64-v8a" --tag "google_apis" --abi "arm64-v8a"
+        #run: echo "no" | $ANDROID_HOME/tools/bin/avdmanager --verbose create avd --force --name "generic_10" --package "system-images;android-29;default;x86_64" --tag "default" --abi "x86_64"
+      - name: create avd
+        run: $ANDROID_HOME/tools/bin/avdmanager list avd
+      - name: start
+        run: $ANDROID_HOME/emulator/emulator -avd "generic_10" -no-window -no-snapshot &
+      - name: Ensure emulator is started
+        run: while [ "`adb shell getprop sys.boot_completed | tr -d '\r' `" != "1" ] ; do sleep 1; done
+      - name: some settings
+        run: adb shell settings put global window_animation_scale 0.0
+      - name: some settings1
+        run: adb shell settings put global transition_animation_scale 0.0
+      - name: some settings2
+        run: adb shell settings put global animator_duration_scale 0.0
 
 
-      #   #run: "which avdmanager create avd --force -n somename --abi default/x86_64 --package system-images;android-30;default;x86_64"
-      #   # Now we need at least CMake 3.15 to use the cmake --install command
-      #   # Current linux build nodes only have 3.12
-      # # - name: Install CMake 3.16 on Linux
-      # #   if: matrix.config.os == 'ubuntu-latest'
-      # #   run: |
-      # #     curl -sL https://github.com/Kitware/CMake/releases/download/v3.16.2/cmake-3.16.2-Linux-x86_64.sh -o cmakeinstall.sh
-      # #     chmod +x cmakeinstall.sh
-      # #     sudo ./cmakeinstall.sh --prefix=/usr/local --exclude-subdir
-      # #     rm cmakeinstall.sh
-      # - name: Create Work Dir
-      #   run: mkdir build
-      # - name: Configure
-      #   working-directory: ./build
-      #   run: cmake .. ${{ matrix.config.args }} -DCMAKE_BUILD_TYPE=${{ matrix.config.config }} -DOPUS_BUILD_PROGRAMS=ON -DBUILD_TESTING=ON
-      # - name: Build
-      #   working-directory: ./build
-      #   run: cmake --build . -j 2 --config ${{ matrix.config.config }} --target package
-      # - name: Test
-      #   # if: contains(matrix.config.name, 'Windows') && !contains(matrix.config.name, 'ARM') ||
-      #   #     contains(matrix.config.name, 'MacOSX') && !contains(matrix.config.name, 'ARM') ||
-      #   #     contains(matrix.config.name, 'Linux') && !contains(matrix.config.name, 'ARM')
-      #   working-directory: ./build
-      #   run: ctest -j 2 -C ${{ matrix.config.config }}
+        #run: "which avdmanager create avd --force -n somename --abi default/x86_64 --package system-images;android-30;default;x86_64"
+        # Now we need at least CMake 3.15 to use the cmake --install command
+        # Current linux build nodes only have 3.12
+      # - name: Install CMake 3.16 on Linux
+      #   if: matrix.config.os == 'ubuntu-latest'
+      #   run: |
+      #     curl -sL https://github.com/Kitware/CMake/releases/download/v3.16.2/cmake-3.16.2-Linux-x86_64.sh -o cmakeinstall.sh
+      #     chmod +x cmakeinstall.sh
+      #     sudo ./cmakeinstall.sh --prefix=/usr/local --exclude-subdir
+      #     rm cmakeinstall.sh
+      - name: Create Work Dir
+        run: mkdir build
+      - name: Configure
+        working-directory: ./build
+        run: cmake .. ${{ matrix.config.args }} -DCMAKE_BUILD_TYPE=${{ matrix.config.config }} -DOPUS_BUILD_PROGRAMS=ON -DBUILD_TESTING=ON
+      - name: Build
+        working-directory: ./build
+        run: cmake --build . -j 2 --config ${{ matrix.config.config }} --target package
+      - name: Test
+        # if: contains(matrix.config.name, 'Windows') && !contains(matrix.config.name, 'ARM') ||
+        #     contains(matrix.config.name, 'MacOSX') && !contains(matrix.config.name, 'ARM') ||
+        #     contains(matrix.config.name, 'Linux') && !contains(matrix.config.name, 'ARM')
+        working-directory: ./build
+        run: ctest -j 2 -C ${{ matrix.config.config }}
 
   # AutoMakeBuild:
   #   name: AutoMake/${{ matrix.config.name }}
