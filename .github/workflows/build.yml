@@ -277,7 +277,7 @@ jobs:
         run: find $ANDROID_HOME/tools/bin/ -name avdmanager*
       - name: Install Android Test Image
         #run: $ANDROID_HOME/tools/bin/sdkmanager "system-images;android-29;default;x86_64"
-        run: $ANDROID_HOME/tools/bin/sdkmanager "system-images;android-29;default;xarm64-v8a"
+        run: $ANDROID_HOME/tools/bin/sdkmanager "system-images;android-29;default;arm64-v8a"
       - name: create avd
         #run: /bin/sh -c \echo no | $ANDROID_HOME/tools/bin/avdmanager create avd --force -n test --abi 'default/x86_64' --package 'system-images;android-29;default;x86_64'
         run: echo "no" | $ANDROID_HOME/tools/bin/avdmanager --verbose create avd --force --name "generic_10" --package "system-images;android-29;default;arm64-v8a" --tag "default" --abi "arm64-v8a"
