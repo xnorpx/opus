@@ -281,9 +281,9 @@ jobs:
         #run: /bin/sh -c \echo no | $ANDROID_HOME/tools/bin/avdmanager create avd --force -n test --abi 'default/x86_64' --package 'system-images;android-29;default;x86_64'
         run: echo "no" | $ANDROID_HOME/tools/bin/avdmanager --verbose create avd --force --name "generic_10" --package "system-images;android-29;default;x86_64" --tag "default" --abi "x86_64"
       - name: create avd
-        run: echo "no" | $ANDROID_HOME/tools/bin/avdmanager list avd
+        run: $ANDROID_HOME/tools/bin/avdmanager list avd
       - name: start
-        run: emulator/emulator -avd "generic_10" -no-window -no-snapshot &
+        run: $ANDROID_HOME/emulator/emulator -avd "generic_10" -no-window -no-snapshot &
       - name: some settings
         run: adb shell settings put global window_animation_scale 0.0
       - name: some settings1
