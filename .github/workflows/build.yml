@@ -274,9 +274,11 @@ jobs:
         with:
           fetch-depth: 0
       - name: Test
+        run: ls $ANDROID_HOME/emulator
+      - name: Test
         run: ls $ANDROID_HOME/tools/bin/
-      - name: Test1
-        run: $ANDROID_HOME/tools/bin/sdkmanager "system-images;android-29;default;x86_64"
+      # - name: Install Android Test Image
+      #   run: $ANDROID_HOME/tools/bin/sdkmanager "system-images;android-30;default;x86_64"
         #run: /bin/sh -c \echo no | avdmanager create avd --force -n test --abi 'default/x86_64' --package 'system-images;android-29;default;x86_64'
 
         #run: "which avdmanager create avd --force -n somename --abi default/x86_64 --package system-images;android-30;default;x86_64"
