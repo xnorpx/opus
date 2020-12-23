@@ -273,29 +273,31 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: test
+        run: adb devices -l
         # Now we need at least CMake 3.15 to use the cmake --install command
         # Current linux build nodes only have 3.12
-      - name: Install CMake 3.16 on Linux
-        if: matrix.config.os == 'ubuntu-latest'
-        run: |
-          curl -sL https://github.com/Kitware/CMake/releases/download/v3.16.2/cmake-3.16.2-Linux-x86_64.sh -o cmakeinstall.sh
-          chmod +x cmakeinstall.sh
-          sudo ./cmakeinstall.sh --prefix=/usr/local --exclude-subdir
-          rm cmakeinstall.sh
-      - name: Create Work Dir
-        run: mkdir build
-      - name: Configure
-        working-directory: ./build
-        run: cmake .. ${{ matrix.config.args }} -DCMAKE_BUILD_TYPE=${{ matrix.config.config }} -DOPUS_BUILD_PROGRAMS=ON -DBUILD_TESTING=ON
-      - name: Build
-        working-directory: ./build
-        run: cmake --build . -j 2 --config ${{ matrix.config.config }} --target package
-      - name: Test
-        if: contains(matrix.config.name, 'Windows') && !contains(matrix.config.name, 'ARM') ||
-            contains(matrix.config.name, 'MacOSX') && !contains(matrix.config.name, 'ARM') ||
-            contains(matrix.config.name, 'Linux') && !contains(matrix.config.name, 'ARM')
-        working-directory: ./build
-        run: ctest -j 2 -C ${{ matrix.config.config }}
+      # - name: Install CMake 3.16 on Linux
+      #   if: matrix.config.os == 'ubuntu-latest'
+      #   run: |
+      #     curl -sL https://github.com/Kitware/CMake/releases/download/v3.16.2/cmake-3.16.2-Linux-x86_64.sh -o cmakeinstall.sh
+      #     chmod +x cmakeinstall.sh
+      #     sudo ./cmakeinstall.sh --prefix=/usr/local --exclude-subdir
+      #     rm cmakeinstall.sh
+      # - name: Create Work Dir
+      #   run: mkdir build
+      # - name: Configure
+      #   working-directory: ./build
+      #   run: cmake .. ${{ matrix.config.args }} -DCMAKE_BUILD_TYPE=${{ matrix.config.config }} -DOPUS_BUILD_PROGRAMS=ON -DBUILD_TESTING=ON
+      # - name: Build
+      #   working-directory: ./build
+      #   run: cmake --build . -j 2 --config ${{ matrix.config.config }} --target package
+      # - name: Test
+      #   if: contains(matrix.config.name, 'Windows') && !contains(matrix.config.name, 'ARM') ||
+      #       contains(matrix.config.name, 'MacOSX') && !contains(matrix.config.name, 'ARM') ||
+      #       contains(matrix.config.name, 'Linux') && !contains(matrix.config.name, 'ARM')
+      #   working-directory: ./build
+      #   run: ctest -j 2 -C ${{ matrix.config.config }}
 
   # AutoMakeBuild:
   #   name: AutoMake/${{ matrix.config.name }}
