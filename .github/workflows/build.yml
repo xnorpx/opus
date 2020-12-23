@@ -267,7 +267,7 @@ jobs:
             name: "Android/Lib/X64/Release",
             os: macos-latest,
             config: Release,
-            args: "-DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake -DANDROID_ABI=armv7a"
+            args: "-DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake -DANDROID_ABI=armeabi-v7a"
           }
     steps:
       - uses: actions/checkout@v2
