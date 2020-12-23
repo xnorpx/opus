@@ -277,11 +277,12 @@ jobs:
         run: $ANDROID_HOME/tools/bin/sdkmanager --list --verbose
       - name: Install Android Test Image
         #run: $ANDROID_HOME/tools/bin/sdkmanager "system-images;android-29;default;x86_64"
-        run: $ANDROID_HOME/tools/bin/sdkmanager "system-images;android-25;google_apis;arm64-v8a"
+        #run: $ANDROID_HOME/tools/bin/sdkmanager "system-images;android-25;google_apis;arm64-v8a"
+        run: $ANDROID_HOME/tools/bin/sdkmanager "system-images;android-30;google_apis;x86_64"
       - name: create avd
         #run: /bin/sh -c \echo no | $ANDROID_HOME/tools/bin/avdmanager create avd --force -n test --abi 'default/x86_64' --package 'system-images;android-29;default;x86_64'
-        run: echo "no" | $ANDROID_HOME/tools/bin/avdmanager --verbose create avd --force --name "generic_10" --package "system-images;android-25;google_apis;arm64-v8a" --tag "google_apis" --abi "arm64-v8a"
-        #run: echo "no" | $ANDROID_HOME/tools/bin/avdmanager --verbose create avd --force --name "generic_10" --package "system-images;android-29;default;x86_64" --tag "default" --abi "x86_64"
+        #run: echo "no" | $ANDROID_HOME/tools/bin/avdmanager --verbose create avd --force --name "generic_10" --package "system-images;android-25;google_apis;arm64-v8a" --tag "google_apis" --abi "arm64-v8a"
+        run: echo "no" | $ANDROID_HOME/tools/bin/avdmanager --verbose create avd --force --name "generic_10" --package "system-images;android-30;google_apis;x86_64" --tag "google_apis" --abi "x86_64"
       - name: create avd
         run: $ANDROID_HOME/tools/bin/avdmanager list avd
       - name: start
