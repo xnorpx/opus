@@ -44,7 +44,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif
 
 #ifdef _WIN32
-unsigned long silk_GetHighResolutionTime(void) /* O  time in usec*/
+unsigned long GetHighResolutionTime(void) /* O  time in usec*/
 {
     /* Returns a time counter in microsec   */
     /* the resolution is platform dependent */

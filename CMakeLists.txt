@@ -577,6 +577,11 @@ if(OPUS_BUILD_PROGRAMS)
   add_executable(opus_compare ${opus_compare_sources})
   target_include_directories(opus_compare PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
   target_link_libraries(opus_compare PRIVATE opus ${OPUS_REQUIRED_LIBRARIES})
+
+  # benchmark
+  add_executable(opus_benchmark tests/opus_benchmark.c)
+  target_include_directories(opus_benchmark PRIVATE ${CMAKE_CURRENT_BINARY_DIR} silk celt)
+  target_link_libraries(opus_benchmark PRIVATE opus ${OPUS_REQUIRED_LIBRARIES})
 endif()
 
 if(BUILD_TESTING AND NOT BUILD_SHARED_LIBS)

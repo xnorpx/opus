@@ -34,7 +34,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #define SILK_DEBUG 0
 
 /* Flag for using timers */
-#define SILK_TIC_TOC 0
+// #define SILK_TIC_TOC 1
 
 #if SILK_DEBUG || SILK_TIC_TOC
 #include "typedef.h"
