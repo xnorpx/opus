@@ -109,7 +109,7 @@ int main(void) {
         for( order = 2; order <= SILK_MAX_ORDER_LPC; order += 2 ) { /* order must be even. */
             for( shift = 0; shift < 16; shift++ ) { /* Different dynamic range. */
                 for( i = 0; i < SILK_MAX_ORDER_LPC; i++ ) {
-                    A_Q12[i] = ((opus_int16)rand()) >> shift;
+                    A_Q12[i] = (opus_int16)(rand() >> shift);
                 }
                 gain = silk_LPC_inverse_pred_gain(A_Q12, order, arch);
                 /* Look for filters that silk_LPC_inverse_pred_gain() thinks are
