@@ -580,7 +580,7 @@ if(OPUS_BUILD_PROGRAMS)
 
   # benchmark
   add_executable(opus_benchmark tests/opus_benchmark.c)
-  target_include_directories(opus_benchmark PRIVATE ${CMAKE_CURRENT_BINARY_DIR} silk celt)
+  target_include_directories(opus_benchmark PRIVATE ${CMAKE_CURRENT_BINARY_DIR} silk celt silk/float)
   target_link_libraries(opus_benchmark PRIVATE opus ${OPUS_REQUIRED_LIBRARIES})
 endif()
 

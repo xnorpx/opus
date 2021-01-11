@@ -21,6 +21,7 @@ silk/resampler_private.h \
 silk/resampler_rom.h \
 silk/resampler_structs.h \
 silk/SigProc_FIX.h \
+silk/x86/SigProc_FLP_sse.h \
 silk/x86/SigProc_FIX_sse.h \
 silk/arm/biquad_alt_arm.h \
 silk/arm/LPC_inv_pred_gain_arm.h \

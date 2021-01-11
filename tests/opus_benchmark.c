@@ -1,8 +1,12 @@
+#include "SigProc_Flp.h"
+#include "SigProc_FIX.h"
 #include <assert.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "test_opus_common.h"
 
 #ifdef _WIN32
 #define NOMINMAX
@@ -52,13 +56,16 @@ void PrintTimingsSummary(const char* timing_name, BenchmarkTimings timings)
             fprintf(stdout, "-");
         }
         fprintf(stdout, "\n");
-        fprintf(stdout, "Benchmark\t\t\t\tAverage Time [us]\tMin Time [us]\tMax Time [us]\tCount [us]\t");
+        fprintf(stdout, "| Opus Benchmark                      | Avg [us] | Min [us] | Max [us] | Count |\n");
         for (int i = 0; i < 80; i++) {
             fprintf(stdout, "-");
         }
         fprintf(stdout, "\n");
+        gPrintHeadline = 1;
     }
-    fprintf(stdout, "%s\t\t\t\t%u\t%u\t%u\t%u\n", timing_name, (uint32_t)CalculateAverage(timings.total_time, timings.count_time), (uint32_t)timings.min, (uint32_t)timings.max, (uint32_t)timings.count_time);
+    fprintf(stdout, "| %-36.36s| %-9u| %-9u| %-9u| %-6u|\n", timing_name,
+            (uint32_t)CalculateAverage(timings.total_time, timings.count_time), (uint32_t)timings.min,
+            (uint32_t)timings.max, (uint32_t)timings.count_time);
 }
 
 const BenchmarkTimings kInitTimings = { UINT64_MAX, 0, 0, 0 };
@@ -78,122 +85,118 @@ const BenchmarkTimings kInitTimings = { UINT64_MAX, 0, 0, 0 };
         timings.count_time++;                            \
     } while (0)
 
-#if 0
-// Generates random float numbers between min and max.
-// Split [min, max] interval into 1/step values.
-static inline float randf(float min, float max, float step)
+#if defined(_MSC_VER)
+void DoNotOptimize(void* value)
 {
-    long range = (max - min) / step;
-    long rint = rand() % (range + 1);
-
-    return min + rint * step;
+    (char const volatile*)value;
+    _ReadWriteBarrier();
 }
-
-// Typedef and struct for handling individual tests.
-typedef int (*test_fn)(const int, const float, const float, const float, double*, double*);
-struct benchmark_test {
-    const char* name;
-    test_fn function;
-};
-
-void print_usage(const char* program)
+#else
+void DoNotOptimize(void* value)
 {
-    int i;
-    //int test_nr = sizeof(benchmark_tests) / sizeof(pitch_tests[0]);
-    int test_nr = 0;
-
-    printf(
-        "Usage:\n\t%s <test_function> -i <iterations(optional)> "
-        "-s <data_size(optional)> -e <error(optional)>\n",
-        program);
-    printf("Available tests:\n");
-
-    for (i = 0; i < test_nr; i++) {
-        printf("\t%s\n", pitch_tests[i].name);
-    }
-
-    printf("\n");
+#if defined(__clang__)
+    asm volatile("" : "+r,m"(value) : : "memory");
+#else
+    asm volatile("" : "+m,r"(value) : : "memory");
+#endif
 }
 #endif
 
-void print_usage(char* _argv[])
+inline float randf(float max)
 {
-    fprintf(stdout, "lol\n");
+    return ((float)rand() / (float)(RAND_MAX)) * max;
 }
 
-void benchmark_something()
+void float2short_array(opus_int16* out, const silk_float* in, opus_int32 length)
 {
-    BenchmarkTimings something = kInitTimings;
+    silk_float2short_array(out, in, length);
+}
 
-    for (int i = 0; i < 100; i++) {
-        TIME_FUNCTION(printf(""), something);
+#include <immintrin.h>
+void float2short_array_avx(opus_int16* out, const silk_float* in, opus_int32 length)
+{
+    __m256i tmp1;
+    __m256i tmp2;
+    int i = 0;
+
+    for (; i < length - 16 + 1; i += 16) {
+        tmp1 = _mm256_cvtps_epi32(_mm256_loadu_ps(&in[i]));
+        tmp2 = _mm256_cvtps_epi32(_mm256_loadu_ps(&in[i + 8]));
+        tmp1 = _mm256_packs_epi32(tmp1, tmp2);
+        tmp1 = _mm256_permute4x64_epi64(tmp1, 0xD8);
+        _mm256_storeu_si256((__m256i*)&out[i], tmp1);
     }
-    PrintTimingsSummary("Something", something);
+
+    for (; i < length - 8  + 1; i += 8) {
+        tmp1 = _mm256_cvtps_epi32(_mm256_loadu_ps(&in[i]));
+        tmp1 = _mm256_packs_epi32(tmp1, _mm256_setzero_si256());
+        tmp1 = _mm256_permute4x64_epi64(tmp1, 0xD8);
+        _mm256_storeu_si256((__m256i*)&out[i], tmp1);
+    }
+
+    for (; i < length - 4 + 1; i += 4) {
+        __m128i tmp3 = _mm_cvtps_epi32(_mm_loadu_ps(&in[i]));
+        tmp3 = _mm_packs_epi32(tmp3, _mm_setzero_si128());
+
+    }
+
+}
+
+void benchmark_float2short_array()
+{
+    //#define FRAME_SIZE 1920
+    #define FRAME_SIZE 1929
+    float f[FRAME_SIZE] = { 0 };
+    short s[FRAME_SIZE] = { 0 };
+    short s_avx[FRAME_SIZE] = { 0 };
+
+    DoNotOptimize(f);
+    DoNotOptimize(s);
+    DoNotOptimize(s_avx);
+
+    BenchmarkTimings float2short_array_timings = kInitTimings;
+
+    for (int i = 0; i < FRAME_SIZE; i++) {
+        f[i] = randf((float)(INT16_MAX)-1.f);
+    }
+
+    // check saturation
+    f[0] = INT16_MAX + 100;
+    f[1] = INT16_MIN - 100;
+
+    for (int i = 0; i < 1000; i++) {
+        TIME_FUNCTION(float2short_array(&s, &f, FRAME_SIZE), float2short_array_timings);
+        for (int j = 0; j < FRAME_SIZE; j++) {
+            int16_t st = silk_SAT16((int32_t)f[j]);
+            if (!(st == s[j] || st + 1 == s[j] || st - 1 == s[j])) {
+                test_failed();
+            }
+        }
+    }
+    PrintTimingsSummary("float2short_array", float2short_array_timings);
+
+    BenchmarkTimings float2short_avx_array_timings = kInitTimings;
+
+    for (int i = 0; i < 1000; i++) {
+        //TIME_FUNCTION(float2short_array_avx(&s_avx, &f, FRAME_SIZE), float2short_avx_array_timings);
+        TIME_FUNCTION(float2short_array_avx(&s_avx, &f, 1), float2short_avx_array_timings);
+        for (int j = 0; j < FRAME_SIZE; j++) {
+            int16_t st = silk_SAT16((int32_t)f[j]);
+            if (!(st == s_avx[j] || st + 1 == s_avx[j] || st - 1 == s_avx[j])) {
+                test_failed();
+            }
+        }
+    }
+    PrintTimingsSummary("float2short_array_avx", float2short_avx_array_timings);
+
+    for (int i = 0; i < FRAME_SIZE; i++) {
+        if (s[i] != s_avx[i]) {
+            test_failed();
+        }
+    }
 }
 
 int main(int argc, const char** argv)
 {
-    fprintf(stdout, "Opus Benchmark\n");
-    benchmark_something();
-
-#if 0
-    int data_size = 1024;
-    int iterations = 1;
-    double time_c = 0.0, time_simd = 0.0;
-    int i;
-    int pass = 0;
-    float step = 0.0001;
-
-    const float min_range = -1, max_range = 1;
-    const char* test_name = NULL;
-    test_fn test = NULL;
-
-    srand(0);
-
-    if (argc < 2) {
-        print_usage(argv[0]);
-        // Running all tests with default values for "make check".
-        int test_nr = sizeof(pitch_tests) / sizeof(pitch_tests[0]);
-        for (i = 0; i < test_nr; i++) {
-            pass += pitch_tests[i].function(data_size, min_range, max_range, step, &time_c, &time_simd);
-        }
-        return test_nr - pass;
-    } else {
-        test_name = argv[1];
-        test = (test_fn)load_symbol(test_name);
-        if (test == NULL) {
-            fprintf(stdout, "Unable to find symbol: %s, exiting\n\n", test_name);
-            print_usage(argv[0]);
-            return 0;
-        }
-    }
-
-    argv++;
-    argc--;
-
-    while (argc > 1) {
-        if (strcmp(argv[1], "-i") == 0) {
-            iterations = atoi(argv[2]);
-        } else if (strcmp(argv[1], "-s") == 0) {
-            data_size = atoi(argv[2]);
-        } else if (strcmp(argv[1], "-e") == 0) {
-            step = atof(argv[2]);
-        }
-        (--argc, ++argv);
-    }
-
-    for (i = 0; i < iterations; i++) {
-        pass += test(data_size, min_range, max_range, step, &time_c, &time_simd);
-    }
-
-    // Print summary.
-    printf("Results for %s, with %d iterations and %d data size:\n", test_name, iterations, data_size);
-    printf("%.6lf seconds (avg: %.7lf)\tC time\n", time_c, time_c / iterations);
-    printf("%.6lf seconds (avg: %.7lf)\t%s time\n", time_simd, time_simd / iterations, SIMD_TYPE);
-    printf("%.6lf x\tSpeedup\n", time_c / time_simd);
-    printf("%d/%d passed\n\n", pass, iterations);
-
-    return iterations - pass;
-#endif
-    return 0;
+    benchmark_float2short_array();
 }
