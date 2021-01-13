@@ -35,7 +35,7 @@ POSSIBILITY OF SUCH DAMAGE.
 /* Compute autocorrelation */
 void
 silk_autocorr(opus_int32* results, /* O    Result (length correlationCount) */
-              opus_int* scale,     /* O    Scaling of the correlation vector     */
+              opus_int* scale, /* O    Scaling of the correlation vector     */
               const opus_int16* inputData,  /* I    Input data to correlate  */
               const opus_int inputDataSize, /* I    Length of input */
               const opus_int correlationCount, /* I    Number of correlation

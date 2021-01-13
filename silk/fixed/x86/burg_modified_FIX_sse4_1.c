@@ -58,9 +58,9 @@ silk_burg_modified_sse4_1(
   const opus_int32 minInvGain_Q30, /* I    Inverse of max prediction gain */
   const opus_int subfr_length,     /* I    Input signal subframe length (incl. D
                                       preceding samples)    */
-  const opus_int nb_subfr,         /* I    Number of subframes stacked in x         */
-  const opus_int D,                /* I    Order                */
-  int arch                         /* I    Run-time architecture                         */
+  const opus_int nb_subfr, /* I    Number of subframes stacked in x         */
+  const opus_int D,        /* I    Order                */
+  int arch /* I    Run-time architecture                         */
 )
 {
     opus_int k, n, s, lz, rshifts, rshifts_extra, reached_max_gain;

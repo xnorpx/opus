@@ -141,8 +141,8 @@ extern "C"
 
     /* Chirp (bandwidth expand) LP AR filter */
     void silk_bwexpander_32(
-      opus_int32* ar,   /* I/O  AR filter to be expanded (without leading 1)   */
-      const opus_int d, /* I    Length of ar    */
+      opus_int32* ar, /* I/O  AR filter to be expanded (without leading 1)   */
+      const opus_int d,    /* I    Length of ar    */
       opus_int32 chirp_Q16 /* I    Chirp factor in Q16 */
     );
 
@@ -200,7 +200,7 @@ extern "C"
     /* of int16s to make it fit in an int32 */
     void silk_sum_sqr_shift(
       opus_int32* energy, /* O   Energy of x, after shifting to the right  */
-      opus_int* shift,    /* O   Number of bits right shift applied to energy    */
+      opus_int* shift, /* O   Number of bits right shift applied to energy    */
       const opus_int16* x, /* I   Input vector */
       opus_int len         /* I   Length of input vector         */
     );

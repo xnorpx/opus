@@ -62,7 +62,7 @@ void
 silk_encode_pulses(ec_enc* psRangeEnc, /* I/O  compressor data structure */
                    const opus_int signalType,      /* I    Signal type      */
                    const opus_int quantOffsetType, /* I    quantOffsetType */
-                   opus_int8 pulses[],         /* I    quantization indices         */
+                   opus_int8 pulses[], /* I    quantization indices         */
                    const opus_int frame_length /* I    Frame length */
 )
 {

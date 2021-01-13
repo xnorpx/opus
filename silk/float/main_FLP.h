@@ -202,8 +202,8 @@ extern "C"
         XX[MAX_NB_SUBFR * LTP_ORDER * LTP_ORDER], /* I    Correlation matrix */
       const silk_float
         xX[MAX_NB_SUBFR * LTP_ORDER], /* I    Correlation vector */
-      const opus_int subfr_len,       /* I    Number of samples per subframe       */
-      const opus_int nb_subfr,        /* I    Number of subframes          */
+      const opus_int subfr_len, /* I    Number of samples per subframe       */
+      const opus_int nb_subfr,  /* I    Number of subframes          */
       int arch /* I    Run-time architecture                       */
     );
 
