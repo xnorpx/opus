@@ -35,28 +35,29 @@ POSSIBILITY OF SUCH DAMAGE.
 /* Window types:                        */
 /*  1 -> sine window from 0 to pi/2     */
 /*  2 -> sine window from pi/2 to pi    */
-void silk_apply_sine_window_FLP(
-    silk_float                      px_win[],                           /* O    Pointer to windowed signal                  */
-    const silk_float                px[],                               /* I    Pointer to input signal                     */
-    const opus_int                  win_type,                           /* I    Selects a window type                       */
-    const opus_int                  length                              /* I    Window length, multiple of 4                */
+void
+silk_apply_sine_window_FLP(
+  silk_float px_win[],   /* O    Pointer to windowed signal                  */
+  const silk_float px[], /* I    Pointer to input signal   */
+  const opus_int win_type, /* I    Selects a window type */
+  const opus_int length /* I    Window length, multiple of 4                */
 )
 {
-    opus_int   k;
+    opus_int k;
     silk_float freq, c, S0, S1;
 
-    celt_assert( win_type == 1 || win_type == 2 );
+    celt_assert(win_type == 1 || win_type == 2);
 
     /* Length must be multiple of 4 */
-    celt_assert( ( length & 3 ) == 0 );
+    celt_assert((length & 3) == 0);
 
-    freq = PI / ( length + 1 );
+    freq = PI / (length + 1);
 
     /* Approximation of 2 * cos(f) */
     c = 2.0f - freq * freq;
 
     /* Initialize state */
-    if( win_type < 2 ) {
+    if (win_type < 2) {
         /* Start from 0 */
         S0 = 0.0f;
         /* Approximation of sin(f) */
@@ -68,14 +69,15 @@ void silk_apply_sine_window_FLP(
         S1 = 0.5f * c;
     }
 
-    /* Uses the recursive equation:   sin(n*f) = 2 * cos(f) * sin((n-1)*f) - sin((n-2)*f)   */
+    /* Uses the recursive equation:   sin(n*f) = 2 * cos(f) * sin((n-1)*f) -
+     * sin((n-2)*f)   */
     /* 4 samples at a time */
-    for( k = 0; k < length; k += 4 ) {
-        px_win[ k + 0 ] = px[ k + 0 ] * 0.5f * ( S0 + S1 );
-        px_win[ k + 1 ] = px[ k + 1 ] * S1;
+    for (k = 0; k < length; k += 4) {
+        px_win[k + 0] = px[k + 0] * 0.5f * (S0 + S1);
+        px_win[k + 1] = px[k + 1] * S1;
         S0 = c * S1 - S0;
-        px_win[ k + 2 ] = px[ k + 2 ] * 0.5f * ( S1 + S0 );
-        px_win[ k + 3 ] = px[ k + 3 ] * S0;
+        px_win[k + 2] = px[k + 2] * 0.5f * (S1 + S0);
+        px_win[k + 3] = px[k + 3] * S0;
         S1 = c * S0 - S1;
     }
 }

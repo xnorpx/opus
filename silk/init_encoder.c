@@ -33,32 +33,35 @@ POSSIBILITY OF SUCH DAMAGE.
 #else
 #include "main_FLP.h"
 #endif
-#include "tuning_parameters.h"
 #include "cpu_support.h"
+#include "tuning_parameters.h"
 
 /*********************************/
 /* Initialize Silk Encoder state */
 /*********************************/
-opus_int silk_init_encoder(
-    silk_encoder_state_Fxx          *psEnc,                                 /* I/O  Pointer to Silk FIX encoder state                                           */
-    int                              arch                                   /* I    Run-time architecture                                                       */
+opus_int
+silk_init_encoder(
+  silk_encoder_state_Fxx* psEnc, /* I/O  Pointer to Silk FIX encoder state */
+  int arch                       /* I    Run-time architecture    */
 )
 {
     opus_int ret = 0;
 
     /* Clear the entire encoder state */
-    silk_memset( psEnc, 0, sizeof( silk_encoder_state_Fxx ) );
+    silk_memset(psEnc, 0, sizeof(silk_encoder_state_Fxx));
 
     psEnc->sCmn.arch = arch;
 
-    psEnc->sCmn.variable_HP_smth1_Q15 = silk_LSHIFT( silk_lin2log( SILK_FIX_CONST( VARIABLE_HP_MIN_CUTOFF_HZ, 16 ) ) - ( 16 << 7 ), 8 );
+    psEnc->sCmn.variable_HP_smth1_Q15 = silk_LSHIFT(
+      silk_lin2log(SILK_FIX_CONST(VARIABLE_HP_MIN_CUTOFF_HZ, 16)) - (16 << 7),
+      8);
     psEnc->sCmn.variable_HP_smth2_Q15 = psEnc->sCmn.variable_HP_smth1_Q15;
 
     /* Used to deactivate LSF interpolation, pitch prediction */
     psEnc->sCmn.first_frame_after_reset = 1;
 
     /* Initialize Silk VAD */
-    ret += silk_VAD_Init( &psEnc->sCmn.sVAD );
+    ret += silk_VAD_Init(&psEnc->sCmn.sVAD);
 
-    return  ret;
+    return ret;
 }

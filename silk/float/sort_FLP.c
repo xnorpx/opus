@@ -33,51 +33,52 @@ POSSIBILITY OF SUCH DAMAGE.
 /* Best case:  O(n)   for an already sorted array           */
 /* Worst case: O(n^2) for an inversely sorted array         */
 
-#include "typedef.h"
 #include "SigProc_FLP.h"
+#include "typedef.h"
 
-void silk_insertion_sort_decreasing_FLP(
-    silk_float          *a,                 /* I/O  Unsorted / Sorted vector                                    */
-    opus_int            *idx,               /* O    Index vector for the sorted elements                        */
-    const opus_int      L,                  /* I    Vector length                                               */
-    const opus_int      K                   /* I    Number of correctly sorted positions                        */
+void
+silk_insertion_sort_decreasing_FLP(
+  silk_float* a,    /* I/O  Unsorted / Sorted vector    */
+  opus_int* idx,    /* O    Index vector for the sorted elements    */
+  const opus_int L, /* I    Vector length */
+  const opus_int K  /* I    Number of correctly sorted positions  */
 )
 {
     silk_float value;
-    opus_int   i, j;
+    opus_int i, j;
 
     /* Safety checks */
-    celt_assert( K >  0 );
-    celt_assert( L >  0 );
-    celt_assert( L >= K );
+    celt_assert(K > 0);
+    celt_assert(L > 0);
+    celt_assert(L >= K);
 
     /* Write start indices in index vector */
-    for( i = 0; i < K; i++ ) {
-        idx[ i ] = i;
+    for (i = 0; i < K; i++) {
+        idx[i] = i;
     }
 
     /* Sort vector elements by value, decreasing order */
-    for( i = 1; i < K; i++ ) {
-        value = a[ i ];
-        for( j = i - 1; ( j >= 0 ) && ( value > a[ j ] ); j-- ) {
-            a[ j + 1 ]   = a[ j ];      /* Shift value */
-            idx[ j + 1 ] = idx[ j ];    /* Shift index */
+    for (i = 1; i < K; i++) {
+        value = a[i];
+        for (j = i - 1; (j >= 0) && (value > a[j]); j--) {
+            a[j + 1] = a[j];     /* Shift value */
+            idx[j + 1] = idx[j]; /* Shift index */
         }
-        a[ j + 1 ]   = value;   /* Write value */
-        idx[ j + 1 ] = i;       /* Write index */
+        a[j + 1] = value; /* Write value */
+        idx[j + 1] = i;   /* Write index */
     }
 
     /* If less than L values are asked check the remaining values,      */
     /* but only spend CPU to ensure that the K first values are correct */
-    for( i = K; i < L; i++ ) {
-        value = a[ i ];
-        if( value > a[ K - 1 ] ) {
-            for( j = K - 2; ( j >= 0 ) && ( value > a[ j ] ); j-- ) {
-                a[ j + 1 ]   = a[ j ];      /* Shift value */
-                idx[ j + 1 ] = idx[ j ];    /* Shift index */
+    for (i = K; i < L; i++) {
+        value = a[i];
+        if (value > a[K - 1]) {
+            for (j = K - 2; (j >= 0) && (value > a[j]); j--) {
+                a[j + 1] = a[j];     /* Shift value */
+                idx[j + 1] = idx[j]; /* Shift index */
             }
-            a[ j + 1 ]   = value;   /* Write value */
-            idx[ j + 1 ] = i;       /* Write index */
+            a[j + 1] = value; /* Write value */
+            idx[j + 1] = i;   /* Write index */
         }
     }
 }

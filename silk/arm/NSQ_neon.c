@@ -28,14 +28,17 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "config.h"
 #endif
 
-#include <arm_neon.h>
+#include "NSQ.h"
+#include "celt/arm/armcpu.h"
+#include "celt/cpu_support.h"
 #include "main.h"
 #include "stack_alloc.h"
-#include "NSQ.h"
-#include "celt/cpu_support.h"
-#include "celt/arm/armcpu.h"
+#include <arm_neon.h>
 
-opus_int32 silk_noise_shape_quantizer_short_prediction_neon(const opus_int32 *buf32, const opus_int32 *coef32, opus_int order)
+opus_int32
+silk_noise_shape_quantizer_short_prediction_neon(const opus_int32* buf32,
+                                                 const opus_int32* coef32,
+                                                 opus_int order)
 {
     int32x4_t coef0 = vld1q_s32(coef32);
     int32x4_t coef1 = vld1q_s32(coef32 + 4);
@@ -63,22 +66,24 @@ opus_int32 silk_noise_shape_quantizer_short_prediction_neon(const opus_int32 *bu
 
     opus_int32 out = vget_lane_s32(vreinterpret_s32_s64(f), 0);
 
-    out += silk_RSHIFT( order, 1 );
+    out += silk_RSHIFT(order, 1);
 
     return out;
 }
 
-
-opus_int32 silk_NSQ_noise_shape_feedback_loop_neon(const opus_int32 *data0, opus_int32 *data1, const opus_int16 *coef, opus_int order)
+opus_int32
+silk_NSQ_noise_shape_feedback_loop_neon(const opus_int32* data0,
+                                        opus_int32* data1,
+                                        const opus_int16* coef,
+                                        opus_int order)
 {
     opus_int32 out;
-    if (order == 8)
-    {
+    if (order == 8) {
         int32x4_t a00 = vdupq_n_s32(data0[0]);
-        int32x4_t a01 = vld1q_s32(data1);  /* data1[0] ... [3] */
+        int32x4_t a01 = vld1q_s32(data1); /* data1[0] ... [3] */
 
-        int32x4_t a0 = vextq_s32 (a00, a01, 3); /* data0[0] data1[0] ...[2] */
-        int32x4_t a1 = vld1q_s32(data1 + 3);  /* data1[3] ... [6] */
+        int32x4_t a0 = vextq_s32(a00, a01, 3); /* data0[0] data1[0] ...[2] */
+        int32x4_t a1 = vld1q_s32(data1 + 3);   /* data1[3] ... [6] */
 
         /*TODO: Convert these once in advance instead of once per sample, like
           silk_noise_shape_quantizer_short_prediction_neon() does.*/

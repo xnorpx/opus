@@ -32,26 +32,25 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "SigProc_FLP.h"
 
 /* copy and multiply a vector by a constant */
-void silk_scale_copy_vector_FLP(
-    silk_float          *data_out,
-    const silk_float    *data_in,
-    silk_float          gain,
-    opus_int            dataSize
-)
+void
+silk_scale_copy_vector_FLP(silk_float* data_out,
+                           const silk_float* data_in,
+                           silk_float gain,
+                           opus_int dataSize)
 {
-    opus_int  i, dataSize4;
+    opus_int i, dataSize4;
 
     /* 4x unrolled loop */
     dataSize4 = dataSize & 0xFFFC;
-    for( i = 0; i < dataSize4; i += 4 ) {
-        data_out[ i + 0 ] = gain * data_in[ i + 0 ];
-        data_out[ i + 1 ] = gain * data_in[ i + 1 ];
-        data_out[ i + 2 ] = gain * data_in[ i + 2 ];
-        data_out[ i + 3 ] = gain * data_in[ i + 3 ];
+    for (i = 0; i < dataSize4; i += 4) {
+        data_out[i + 0] = gain * data_in[i + 0];
+        data_out[i + 1] = gain * data_in[i + 1];
+        data_out[i + 2] = gain * data_in[i + 2];
+        data_out[i + 3] = gain * data_in[i + 3];
     }
 
     /* any remaining elements */
-    for( ; i < dataSize; i++ ) {
-        data_out[ i ] = gain * data_in[ i ];
+    for (; i < dataSize; i++) {
+        data_out[i] = gain * data_in[i];
     }
 }

@@ -32,39 +32,47 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #undef silk_short_prediction_create_arch_coef
 
-static OPUS_INLINE opus_int32 silk_noise_shape_quantizer_short_prediction_c(const opus_int32 *buf32, const opus_int16 *coef16, opus_int order)
+static OPUS_INLINE opus_int32
+silk_noise_shape_quantizer_short_prediction_c(const opus_int32* buf32,
+                                              const opus_int16* coef16,
+                                              opus_int order)
 {
     opus_int32 out;
-    silk_assert( order == 10 || order == 16 );
+    silk_assert(order == 10 || order == 16);
 
     /* Avoids introducing a bias because silk_SMLAWB() always rounds to -inf */
-    out = silk_RSHIFT( order, 1 );
-    out = silk_SMLAWB( out, buf32[  0 ], coef16[ 0 ] );
-    out = silk_SMLAWB( out, buf32[ -1 ], coef16[ 1 ] );
-    out = silk_SMLAWB( out, buf32[ -2 ], coef16[ 2 ] );
-    out = silk_SMLAWB( out, buf32[ -3 ], coef16[ 3 ] );
-    out = silk_SMLAWB( out, buf32[ -4 ], coef16[ 4 ] );
-    out = silk_SMLAWB( out, buf32[ -5 ], coef16[ 5 ] );
-    out = silk_SMLAWB( out, buf32[ -6 ], coef16[ 6 ] );
-    out = silk_SMLAWB( out, buf32[ -7 ], coef16[ 7 ] );
-    out = silk_SMLAWB( out, buf32[ -8 ], coef16[ 8 ] );
-    out = silk_SMLAWB( out, buf32[ -9 ], coef16[ 9 ] );
+    out = silk_RSHIFT(order, 1);
+    out = silk_SMLAWB(out, buf32[0], coef16[0]);
+    out = silk_SMLAWB(out, buf32[-1], coef16[1]);
+    out = silk_SMLAWB(out, buf32[-2], coef16[2]);
+    out = silk_SMLAWB(out, buf32[-3], coef16[3]);
+    out = silk_SMLAWB(out, buf32[-4], coef16[4]);
+    out = silk_SMLAWB(out, buf32[-5], coef16[5]);
+    out = silk_SMLAWB(out, buf32[-6], coef16[6]);
+    out = silk_SMLAWB(out, buf32[-7], coef16[7]);
+    out = silk_SMLAWB(out, buf32[-8], coef16[8]);
+    out = silk_SMLAWB(out, buf32[-9], coef16[9]);
 
-    if( order == 16 )
-    {
-        out = silk_SMLAWB( out, buf32[ -10 ], coef16[ 10 ] );
-        out = silk_SMLAWB( out, buf32[ -11 ], coef16[ 11 ] );
-        out = silk_SMLAWB( out, buf32[ -12 ], coef16[ 12 ] );
-        out = silk_SMLAWB( out, buf32[ -13 ], coef16[ 13 ] );
-        out = silk_SMLAWB( out, buf32[ -14 ], coef16[ 14 ] );
-        out = silk_SMLAWB( out, buf32[ -15 ], coef16[ 15 ] );
+    if (order == 16) {
+        out = silk_SMLAWB(out, buf32[-10], coef16[10]);
+        out = silk_SMLAWB(out, buf32[-11], coef16[11]);
+        out = silk_SMLAWB(out, buf32[-12], coef16[12]);
+        out = silk_SMLAWB(out, buf32[-13], coef16[13]);
+        out = silk_SMLAWB(out, buf32[-14], coef16[14]);
+        out = silk_SMLAWB(out, buf32[-15], coef16[15]);
     }
     return out;
 }
 
-#define silk_noise_shape_quantizer_short_prediction(in, coef, coefRev, order, arch)  ((void)arch,silk_noise_shape_quantizer_short_prediction_c(in, coef, order))
+#define silk_noise_shape_quantizer_short_prediction(                           \
+  in, coef, coefRev, order, arch)                                              \
+    ((void)arch, silk_noise_shape_quantizer_short_prediction_c(in, coef, order))
 
-static OPUS_INLINE opus_int32 silk_NSQ_noise_shape_feedback_loop_c(const opus_int32 *data0, opus_int32 *data1, const opus_int16 *coef, opus_int order)
+static OPUS_INLINE opus_int32
+silk_NSQ_noise_shape_feedback_loop_c(const opus_int32* data0,
+                                     opus_int32* data1,
+                                     const opus_int16* coef,
+                                     opus_int order)
 {
     opus_int32 out;
     opus_int32 tmp1, tmp2;
@@ -88,11 +96,13 @@ static OPUS_INLINE opus_int32 silk_NSQ_noise_shape_feedback_loop_c(const opus_in
     data1[order - 1] = tmp1;
     out = silk_SMLAWB(out, tmp1, coef[order - 1]);
     /* Q11 -> Q12 */
-    out = silk_LSHIFT32( out, 1 );
+    out = silk_LSHIFT32(out, 1);
     return out;
 }
 
-#define silk_NSQ_noise_shape_feedback_loop(data0, data1, coef, order, arch)  ((void)arch,silk_NSQ_noise_shape_feedback_loop_c(data0, data1, coef, order))
+#define silk_NSQ_noise_shape_feedback_loop(data0, data1, coef, order, arch)    \
+    ((void)arch,                                                               \
+     silk_NSQ_noise_shape_feedback_loop_c(data0, data1, coef, order))
 
 #if defined(OPUS_ARM_MAY_HAVE_NEON_INTR)
 #include "arm/NSQ_neon.h"

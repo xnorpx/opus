@@ -31,24 +31,25 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include "SigProc_FLP.h"
 
-/* step up function, converts reflection coefficients to prediction coefficients */
-void silk_k2a_FLP(
-    silk_float          *A,                 /* O     prediction coefficients [order]                            */
-    const silk_float    *rc,                /* I     reflection coefficients [order]                            */
-    opus_int32          order               /* I     prediction order                                           */
+/* step up function, converts reflection coefficients to prediction coefficients
+ */
+void
+silk_k2a_FLP(silk_float* A, /* O     prediction coefficients [order]        */
+             const silk_float* rc, /* I     reflection coefficients [order] */
+             opus_int32 order      /* I     prediction order      */
 )
 {
-    opus_int   k, n;
+    opus_int k, n;
     silk_float rck, tmp1, tmp2;
 
-    for( k = 0; k < order; k++ ) {
-        rck = rc[ k ];
-        for( n = 0; n < (k + 1) >> 1; n++ ) {
-            tmp1 = A[ n ];
-            tmp2 = A[ k - n - 1 ];
-            A[ n ]         = tmp1 + tmp2 * rck;
-            A[ k - n - 1 ] = tmp2 + tmp1 * rck;
+    for (k = 0; k < order; k++) {
+        rck = rc[k];
+        for (n = 0; n < (k + 1) >> 1; n++) {
+            tmp1 = A[n];
+            tmp2 = A[k - n - 1];
+            A[n] = tmp1 + tmp2 * rck;
+            A[k - n - 1] = tmp2 + tmp1 * rck;
         }
-        A[ k ] = -rck;
+        A[k] = -rck;
     }
 }

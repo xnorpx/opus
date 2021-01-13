@@ -1,4 +1,6 @@
-int main() {
+int
+main()
+{
     static int x;
     char a[++x];
     a[sizeof a - 1] = 0;

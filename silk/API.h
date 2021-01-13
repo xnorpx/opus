@@ -29,92 +29,109 @@ POSSIBILITY OF SUCH DAMAGE.
 #define SILK_API_H
 
 #include "control.h"
-#include "typedef.h"
-#include "errors.h"
-#include "entenc.h"
 #include "entdec.h"
+#include "entenc.h"
+#include "errors.h"
+#include "typedef.h"
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-#define SILK_MAX_FRAMES_PER_PACKET  3
+#define SILK_MAX_FRAMES_PER_PACKET 3
 
-/* Struct for TOC (Table of Contents) */
-typedef struct {
-    opus_int    VADFlag;                                /* Voice activity for packet                            */
-    opus_int    VADFlags[ SILK_MAX_FRAMES_PER_PACKET ]; /* Voice activity for each frame in packet              */
-    opus_int    inbandFECFlag;                          /* Flag indicating if packet contains in-band FEC       */
-} silk_TOC_struct;
+    /* Struct for TOC (Table of Contents) */
+    typedef struct
+    {
+        opus_int VADFlag; /* Voice activity for packet */
+        opus_int
+          VADFlags[SILK_MAX_FRAMES_PER_PACKET]; /* Voice activity for each
+                                                   frame in packet */
+        opus_int
+          inbandFECFlag; /* Flag indicating if packet contains in-band FEC */
+    } silk_TOC_struct;
 
-/****************************************/
-/* Encoder functions                    */
-/****************************************/
+    /****************************************/
+    /* Encoder functions                    */
+    /****************************************/
 
-/***********************************************/
-/* Get size in bytes of the Silk encoder state */
-/***********************************************/
-opus_int silk_Get_Encoder_Size(                         /* O    Returns error code                              */
-    opus_int                        *encSizeBytes       /* O    Number of bytes in SILK encoder state           */
-);
+    /***********************************************/
+    /* Get size in bytes of the Silk encoder state */
+    /***********************************************/
+    opus_int
+    silk_Get_Encoder_Size(                       /* O    Returns error code */
+                          opus_int* encSizeBytes /* O    Number of bytes in
+                                                    SILK encoder state */
+    );
 
-/*************************/
-/* Init or reset encoder */
-/*************************/
-opus_int silk_InitEncoder(                              /* O    Returns error code                              */
-    void                            *encState,          /* I/O  State                                           */
-    int                              arch,              /* I    Run-time architecture                           */
-    silk_EncControlStruct           *encStatus          /* O    Encoder Status                                  */
-);
+    /*************************/
+    /* Init or reset encoder */
+    /*************************/
+    opus_int
+    silk_InitEncoder(/* O    Returns error code                              */
+                     void* encState, /* I/O  State */
+                     int arch,       /* I    Run-time architecture       */
+                     silk_EncControlStruct* encStatus /* O    Encoder Status */
+    );
 
-/**************************/
-/* Encode frame with Silk */
-/**************************/
-/* Note: if prefillFlag is set, the input must contain 10 ms of audio, irrespective of what                     */
-/* encControl->payloadSize_ms is set to                                                                         */
-opus_int silk_Encode(                                   /* O    Returns error code                              */
-    void                            *encState,          /* I/O  State                                           */
-    silk_EncControlStruct           *encControl,        /* I    Control status                                  */
-    const opus_int16                *samplesIn,         /* I    Speech sample input vector                      */
-    opus_int                        nSamplesIn,         /* I    Number of samples in input vector               */
-    ec_enc                          *psRangeEnc,        /* I/O  Compressor data structure                       */
-    opus_int32                      *nBytesOut,         /* I/O  Number of bytes in payload (input: Max bytes)   */
-    const opus_int                  prefillFlag,        /* I    Flag to indicate prefilling buffers no coding   */
-    int                             activity            /* I    Decision of Opus voice activity detector        */
-);
+    /**************************/
+    /* Encode frame with Silk */
+    /**************************/
+    /* Note: if prefillFlag is set, the input must contain 10 ms of audio,
+     * irrespective of what                     */
+    /* encControl->payloadSize_ms is set to */
+    opus_int
+    silk_Encode(/* O    Returns error code                              */
+                void* encState, /* I/O  State                    */
+                silk_EncControlStruct* encControl, /* I    Control status */
+                const opus_int16*
+                  samplesIn, /* I    Speech sample input vector */
+                opus_int
+                  nSamplesIn, /* I    Number of samples in input vector   */
+                ec_enc* psRangeEnc,    /* I/O  Compressor data structure    */
+                opus_int32* nBytesOut, /* I/O  Number of bytes in payload
+                                          (input: Max bytes)   */
+                const opus_int prefillFlag, /* I    Flag to indicate prefilling
+                                               buffers no coding   */
+                int activity /* I    Decision of Opus voice activity detector */
+    );
 
-/****************************************/
-/* Decoder functions                    */
-/****************************************/
+    /****************************************/
+    /* Decoder functions                    */
+    /****************************************/
 
-/***********************************************/
-/* Get size in bytes of the Silk decoder state */
-/***********************************************/
-opus_int silk_Get_Decoder_Size(                         /* O    Returns error code                              */
-    opus_int                        *decSizeBytes       /* O    Number of bytes in SILK decoder state           */
-);
+    /***********************************************/
+    /* Get size in bytes of the Silk decoder state */
+    /***********************************************/
+    opus_int
+    silk_Get_Decoder_Size(                       /* O    Returns error code */
+                          opus_int* decSizeBytes /* O    Number of bytes in
+                                                    SILK decoder state */
+    );
 
-/*************************/
-/* Init or Reset decoder */
-/*************************/
-opus_int silk_InitDecoder(                              /* O    Returns error code                              */
-    void                            *decState           /* I/O  State                                           */
-);
+    /*************************/
+    /* Init or Reset decoder */
+    /*************************/
+    opus_int silk_InitDecoder(/* O    Returns error code                */
+                              void* decState /* I/O  State */
+    );
 
-/******************/
-/* Decode a frame */
-/******************/
-opus_int silk_Decode(                                   /* O    Returns error code                              */
-    void*                           decState,           /* I/O  State                                           */
-    silk_DecControlStruct*          decControl,         /* I/O  Control Structure                               */
-    opus_int                        lostFlag,           /* I    0: no loss, 1 loss, 2 decode fec                */
-    opus_int                        newPacketFlag,      /* I    Indicates first decoder call for this packet    */
-    ec_dec                          *psRangeDec,        /* I/O  Compressor data structure                       */
-    opus_int16                      *samplesOut,        /* O    Decoded output speech vector                    */
-    opus_int32                      *nSamplesOut,       /* O    Number of samples decoded                       */
-    int                             arch                /* I    Run-time architecture                           */
-);
+    /******************/
+    /* Decode a frame */
+    /******************/
+    opus_int
+    silk_Decode(/* O    Returns error code                              */
+                void* decState, /* I/O  State                    */
+                silk_DecControlStruct* decControl, /* I/O  Control Structure */
+                opus_int lostFlag, /* I    0: no loss, 1 loss, 2 decode fec */
+                opus_int newPacketFlag, /* I    Indicates first decoder call for
+                                           this packet    */
+                ec_dec* psRangeDec, /* I/O  Compressor data structure      */
+                opus_int16* samplesOut, /* O    Decoded output speech vector  */
+                opus_int32* nSamplesOut, /* O    Number of samples decoded */
+                int arch                 /* I    Run-time architecture                 */
+    );
 
 #if 0
 /**************************************/
