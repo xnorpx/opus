@@ -31,41 +31,38 @@ POSSIBILITY OF SUCH DAMAGE.
 /* This macro only avoids the undefined behaviour from a left shift of
    a negative value. It should only be used in macros that can't include
    SigProc_FIX.h. In other cases, use silk_LSHIFT32(). */
-#define SAFE_SHL(a,b) ((opus_int32)((opus_uint32)(a) << (b)))
+#define SAFE_SHL(a, b) ((opus_int32)((opus_uint32)(a) << (b)))
 
 /* (a32 * (opus_int32)((opus_int16)(b32))) >> 16 output have to be 32bit int */
 #undef silk_SMULWB
-static OPUS_INLINE opus_int32 silk_SMULWB_armv4(opus_int32 a, opus_int16 b)
-{
-  unsigned rd_lo;
-  int rd_hi;
-  __asm__(
-      "#silk_SMULWB\n\t"
-      "smull %0, %1, %2, %3\n\t"
-      : "=&r"(rd_lo), "=&r"(rd_hi)
-      : "%r"(a), "r"(SAFE_SHL(b,16))
-  );
-  return rd_hi;
+static OPUS_INLINE opus_int32 silk_SMULWB_armv4(opus_int32 a, opus_int16 b) {
+    unsigned rd_lo;
+    int rd_hi;
+    __asm__(
+        "#silk_SMULWB\n\t"
+        "smull %0, %1, %2, %3\n\t"
+        : "=&r"(rd_lo), "=&r"(rd_hi)
+        : "%r"(a), "r"(SAFE_SHL(b, 16)));
+    return rd_hi;
 }
 #define silk_SMULWB(a, b) (silk_SMULWB_armv4(a, b))
 
-/* a32 + (b32 * (opus_int32)((opus_int16)(c32))) >> 16 output have to be 32bit int */
+/* a32 + (b32 * (opus_int32)((opus_int16)(c32))) >> 16 output have to be 32bit
+ * int */
 #undef silk_SMLAWB
 #define silk_SMLAWB(a, b, c) ((a) + silk_SMULWB(b, c))
 
 /* (a32 * (b32 >> 16)) >> 16 */
 #undef silk_SMULWT
-static OPUS_INLINE opus_int32 silk_SMULWT_armv4(opus_int32 a, opus_int32 b)
-{
-  unsigned rd_lo;
-  int rd_hi;
-  __asm__(
-      "#silk_SMULWT\n\t"
-      "smull %0, %1, %2, %3\n\t"
-      : "=&r"(rd_lo), "=&r"(rd_hi)
-      : "%r"(a), "r"(b&~0xFFFF)
-  );
-  return rd_hi;
+static OPUS_INLINE opus_int32 silk_SMULWT_armv4(opus_int32 a, opus_int32 b) {
+    unsigned rd_lo;
+    int rd_hi;
+    __asm__(
+        "#silk_SMULWT\n\t"
+        "smull %0, %1, %2, %3\n\t"
+        : "=&r"(rd_lo), "=&r"(rd_hi)
+        : "%r"(a), "r"(b & ~0xFFFF));
+    return rd_hi;
 }
 #define silk_SMULWT(a, b) (silk_SMULWT_armv4(a, b))
 
@@ -75,33 +72,28 @@ static OPUS_INLINE opus_int32 silk_SMULWT_armv4(opus_int32 a, opus_int32 b)
 
 /* (a32 * b32) >> 16 */
 #undef silk_SMULWW
-static OPUS_INLINE opus_int32 silk_SMULWW_armv4(opus_int32 a, opus_int32 b)
-{
-  unsigned rd_lo;
-  int rd_hi;
-  __asm__(
-    "#silk_SMULWW\n\t"
-    "smull %0, %1, %2, %3\n\t"
-    : "=&r"(rd_lo), "=&r"(rd_hi)
-    : "%r"(a), "r"(b)
-  );
-  return SAFE_SHL(rd_hi,16)+(rd_lo>>16);
+static OPUS_INLINE opus_int32 silk_SMULWW_armv4(opus_int32 a, opus_int32 b) {
+    unsigned rd_lo;
+    int rd_hi;
+    __asm__(
+        "#silk_SMULWW\n\t"
+        "smull %0, %1, %2, %3\n\t"
+        : "=&r"(rd_lo), "=&r"(rd_hi)
+        : "%r"(a), "r"(b));
+    return SAFE_SHL(rd_hi, 16) + (rd_lo >> 16);
 }
 #define silk_SMULWW(a, b) (silk_SMULWW_armv4(a, b))
 
 #undef silk_SMLAWW
-static OPUS_INLINE opus_int32 silk_SMLAWW_armv4(opus_int32 a, opus_int32 b,
- opus_int32 c)
-{
-  unsigned rd_lo;
-  int rd_hi;
-  __asm__(
-    "#silk_SMLAWW\n\t"
-    "smull %0, %1, %2, %3\n\t"
-    : "=&r"(rd_lo), "=&r"(rd_hi)
-    : "%r"(b), "r"(c)
-  );
-  return a+SAFE_SHL(rd_hi,16)+(rd_lo>>16);
+static OPUS_INLINE opus_int32 silk_SMLAWW_armv4(opus_int32 a, opus_int32 b, opus_int32 c) {
+    unsigned rd_lo;
+    int rd_hi;
+    __asm__(
+        "#silk_SMLAWW\n\t"
+        "smull %0, %1, %2, %3\n\t"
+        : "=&r"(rd_lo), "=&r"(rd_hi)
+        : "%r"(b), "r"(c));
+    return a + SAFE_SHL(rd_hi, 16) + (rd_lo >> 16);
 }
 #define silk_SMLAWW(a, b, c) (silk_SMLAWW_armv4(a, b, c))
 

@@ -32,17 +32,15 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "main_FLP.h"
 
 /* Add noise to matrix diagonal */
-void silk_regularize_correlations_FLP(
-    silk_float                      *XX,                                /* I/O  Correlation matrices                        */
-    silk_float                      *xx,                                /* I/O  Correlation values                          */
-    const silk_float                noise,                              /* I    Noise energy to add                         */
-    const opus_int                  D                                   /* I    Dimension of XX                             */
-)
-{
+void silk_regularize_correlations_FLP(silk_float* XX,         /* I/O  Correlation matrices                        */
+                                      silk_float* xx,         /* I/O  Correlation values                          */
+                                      const silk_float noise, /* I    Noise energy to add                         */
+                                      const opus_int D        /* I    Dimension of XX                             */
+) {
     opus_int i;
 
-    for( i = 0; i < D; i++ ) {
-        matrix_ptr( &XX[ 0 ], i, i, D ) += noise;
+    for (i = 0; i < D; i++) {
+        matrix_ptr(&XX[0], i, i, D) += noise;
     }
-    xx[ 0 ] += noise;
+    xx[0] += noise;
 }

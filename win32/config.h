@@ -28,12 +28,12 @@ POSSIBILITY OF SUCH DAMAGE.
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define USE_ALLOCA            1
+#define USE_ALLOCA 1
 
 /* Comment out the next line for floating-point code */
 /*#define FIXED_POINT           1 */
 
-#define OPUS_BUILD            1
+#define OPUS_BUILD 1
 
 #if defined(_M_IX86) || defined(_M_X64)
 /* Can always compile SSE intrinsics (no special compiler flags necessary) */
@@ -41,8 +41,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #define OPUS_X86_MAY_HAVE_SSE2
 #define OPUS_X86_MAY_HAVE_SSE4_1
 
-/* Presume SSE functions, if compiled to use SSE/SSE2/AVX (note that AMD64 implies SSE2, and AVX
-   implies SSE4.1) */
+/* Presume SSE functions, if compiled to use SSE/SSE2/AVX (note that AMD64
+   implies SSE2, and AVX implies SSE4.1) */
 #if defined(_M_X64) || (defined(_M_IX86_FP) && (_M_IX86_FP >= 1)) || defined(__AVX__)
 #define OPUS_X86_PRESUME_SSE 1
 #endif

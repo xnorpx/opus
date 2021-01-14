@@ -32,22 +32,20 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "main_FIX.h"
 
 /* Calculation of LTP state scaling */
-void silk_LTP_scale_ctrl_FIX(
-    silk_encoder_state_FIX          *psEnc,                                 /* I/O  encoder state                                                               */
-    silk_encoder_control_FIX        *psEncCtrl,                             /* I/O  encoder control                                                             */
-    opus_int                        condCoding                              /* I    The type of conditional coding to use                                       */
-)
-{
+void silk_LTP_scale_ctrl_FIX(silk_encoder_state_FIX* psEnc,       /* I/O  encoder state       */
+                             silk_encoder_control_FIX* psEncCtrl, /* I/O  encoder control */
+                             opus_int condCoding                  /* I    The type of conditional coding to use */
+) {
     opus_int round_loss;
 
-    if( condCoding == CODE_INDEPENDENTLY ) {
+    if (condCoding == CODE_INDEPENDENTLY) {
         /* Only scale if first frame in packet */
         round_loss = psEnc->sCmn.PacketLoss_perc + psEnc->sCmn.nFramesPerPacket;
         psEnc->sCmn.indices.LTP_scaleIndex = (opus_int8)silk_LIMIT(
-            silk_SMULWB( silk_SMULBB( round_loss, psEncCtrl->LTPredCodGain_Q7 ), SILK_FIX_CONST( 0.1, 9 ) ), 0, 2 );
+            silk_SMULWB(silk_SMULBB(round_loss, psEncCtrl->LTPredCodGain_Q7), SILK_FIX_CONST(0.1, 9)), 0, 2);
     } else {
         /* Default is minimum scaling */
         psEnc->sCmn.indices.LTP_scaleIndex = 0;
     }
-    psEncCtrl->LTP_scale_Q14 = silk_LTPScales_table_Q14[ psEnc->sCmn.indices.LTP_scaleIndex ];
+    psEncCtrl->LTP_scale_Q14 = silk_LTPScales_table_Q14[psEnc->sCmn.indices.LTP_scaleIndex];
 }

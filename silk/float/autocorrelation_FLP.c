@@ -29,24 +29,22 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "config.h"
 #endif
 
-#include "typedef.h"
 #include "SigProc_FLP.h"
+#include "typedef.h"
 
 /* compute autocorrelation */
-void silk_autocorrelation_FLP(
-    silk_float          *results,           /* O    result (length correlationCount)                            */
-    const silk_float    *inputData,         /* I    input data to correlate                                     */
-    opus_int            inputDataSize,      /* I    length of input                                             */
-    opus_int            correlationCount    /* I    number of correlation taps to compute                       */
-)
-{
+void silk_autocorrelation_FLP(silk_float* results,         /* O    result (length correlationCount)         */
+                              const silk_float* inputData, /* I    input data to correlate */
+                              opus_int inputDataSize,      /* I    length of input      */
+                              opus_int correlationCount    /* I    number of correlation taps to compute    */
+) {
     opus_int i;
 
-    if( correlationCount > inputDataSize ) {
+    if (correlationCount > inputDataSize) {
         correlationCount = inputDataSize;
     }
 
-    for( i = 0; i < correlationCount; i++ ) {
-        results[ i ] =  (silk_float)silk_inner_product_FLP( inputData, inputData + i, inputDataSize - i );
+    for (i = 0; i < correlationCount; i++) {
+        results[i] = (silk_float)silk_inner_product_FLP(inputData, inputData + i, inputDataSize - i);
     }
 }

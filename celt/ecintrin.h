@@ -26,12 +26,13 @@
 */
 
 /*Some common macros for potential platform-specific optimization.*/
-#include "opus_types.h"
-#include <math.h>
 #include <limits.h>
+#include <math.h>
+
 #include "arch.h"
+#include "opus_types.h"
 #if !defined(_ecintrin_H)
-# define _ecintrin_H (1)
+#define _ecintrin_H (1)
 
 /*Some specific platforms may have optimized intrinsic or OPUS_INLINE assembly
    versions of these functions which can substantially improve performance.
@@ -43,39 +44,39 @@
    are just as fast, and do not require any special target architecture.
   Earlier gcc versions (3.x) compiled both code to the same assembly
    instructions, because of the way they represented ((_b)>(_a)) internally.*/
-# define EC_MINI(_a,_b)      ((_a)+(((_b)-(_a))&-((_b)<(_a))))
+#define EC_MINI(_a, _b) ((_a) + (((_b) - (_a)) & -((_b) < (_a))))
 
 /*Count leading zeros.
   This macro should only be used for implementing ec_ilog(), if it is defined.
   All other code should use EC_ILOG() instead.*/
 #if defined(_MSC_VER) && (_MSC_VER >= 1400)
 #if defined(_MSC_VER) && (_MSC_VER >= 1910)
-# include <intrin0.h> /* Improve compiler throughput. */
+#include <intrin0.h> /* Improve compiler throughput. */
 #else
-# include <intrin.h>
+#include <intrin.h>
 #endif
 /*In _DEBUG mode this is not an intrinsic by default.*/
-# pragma intrinsic(_BitScanReverse)
+#pragma intrinsic(_BitScanReverse)
 
-static __inline int ec_bsr(unsigned long _x){
-  unsigned long ret;
-  _BitScanReverse(&ret,_x);
-  return (int)ret;
+static __inline int ec_bsr(unsigned long _x) {
+    unsigned long ret;
+    _BitScanReverse(&ret, _x);
+    return (int)ret;
 }
-# define EC_CLZ0    (1)
-# define EC_CLZ(_x) (-ec_bsr(_x))
+#define EC_CLZ0 (1)
+#define EC_CLZ(_x) (-ec_bsr(_x))
 #elif defined(ENABLE_TI_DSPLIB)
-# include "dsplib.h"
-# define EC_CLZ0    (31)
-# define EC_CLZ(_x) (_lnorm(_x))
-#elif __GNUC_PREREQ(3,4)
-# if INT_MAX>=2147483647
-#  define EC_CLZ0    ((int)sizeof(unsigned)*CHAR_BIT)
-#  define EC_CLZ(_x) (__builtin_clz(_x))
-# elif LONG_MAX>=2147483647L
-#  define EC_CLZ0    ((int)sizeof(unsigned long)*CHAR_BIT)
-#  define EC_CLZ(_x) (__builtin_clzl(_x))
-# endif
+#include "dsplib.h"
+#define EC_CLZ0 (31)
+#define EC_CLZ(_x) (_lnorm(_x))
+#elif __GNUC_PREREQ(3, 4)
+#if INT_MAX >= 2147483647
+#define EC_CLZ0 ((int)sizeof(unsigned) * CHAR_BIT)
+#define EC_CLZ(_x) (__builtin_clz(_x))
+#elif LONG_MAX >= 2147483647L
+#define EC_CLZ0 ((int)sizeof(unsigned long) * CHAR_BIT)
+#define EC_CLZ(_x) (__builtin_clzl(_x))
+#endif
 #endif
 
 #if defined(EC_CLZ)
@@ -83,9 +84,9 @@ static __inline int ec_bsr(unsigned long _x){
    documentation (and that of the BSR instruction that implements it on x86).
   The majority of the time we can never pass it zero.
   When we need to, it can be special cased.*/
-# define EC_ILOG(_x) (EC_CLZ0-EC_CLZ(_x))
+#define EC_ILOG(_x) (EC_CLZ0 - EC_CLZ(_x))
 #else
 int ec_ilog(opus_uint32 _v);
-# define EC_ILOG(_x) (ec_ilog(_x))
+#define EC_ILOG(_x) (ec_ilog(_x))
 #endif
 #endif

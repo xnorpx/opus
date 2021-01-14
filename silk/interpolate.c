@@ -32,20 +32,18 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "main.h"
 
 /* Interpolate two vectors */
-void silk_interpolate(
-    opus_int16                  xi[ MAX_LPC_ORDER ],            /* O    interpolated vector                         */
-    const opus_int16            x0[ MAX_LPC_ORDER ],            /* I    first vector                                */
-    const opus_int16            x1[ MAX_LPC_ORDER ],            /* I    second vector                               */
-    const opus_int              ifact_Q2,                       /* I    interp. factor, weight on 2nd vector        */
-    const opus_int              d                               /* I    number of parameters                        */
-)
-{
+void silk_interpolate(opus_int16 xi[MAX_LPC_ORDER],       /* O    interpolated vector       */
+                      const opus_int16 x0[MAX_LPC_ORDER], /* I    first vector */
+                      const opus_int16 x1[MAX_LPC_ORDER], /* I    second vector */
+                      const opus_int ifact_Q2,            /* I    interp. factor, weight on 2nd vector */
+                      const opus_int d                    /* I    number of parameters                        */
+) {
     opus_int i;
 
-    celt_assert( ifact_Q2 >= 0 );
-    celt_assert( ifact_Q2 <= 4 );
+    celt_assert(ifact_Q2 >= 0);
+    celt_assert(ifact_Q2 <= 4);
 
-    for( i = 0; i < d; i++ ) {
-        xi[ i ] = (opus_int16)silk_ADD_RSHIFT( x0[ i ], silk_SMULBB( x1[ i ] - x0[ i ], ifact_Q2 ), 2 );
+    for (i = 0; i < d; i++) {
+        xi[i] = (opus_int16)silk_ADD_RSHIFT(x0[i], silk_SMULBB(x1[i] - x0[i], ifact_Q2), 2);
     }
 }

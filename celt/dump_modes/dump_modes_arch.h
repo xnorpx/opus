@@ -29,7 +29,7 @@
 #define DUMP_MODE_ARCH_H
 
 void dump_modes_arch_init();
-void dump_mode_arch(CELTMode *mode);
+void dump_mode_arch(CELTMode* mode);
 void dump_modes_arch_finalize();
 
 #if !defined(FIXED_POINT)

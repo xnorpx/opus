@@ -26,43 +26,44 @@ POSSIBILITY OF SUCH DAMAGE.
 ***********************************************************************/
 
 #ifndef SILK_WARPED_AUTOCORRELATION_FIX_ARM_H
-# define SILK_WARPED_AUTOCORRELATION_FIX_ARM_H
+#define SILK_WARPED_AUTOCORRELATION_FIX_ARM_H
 
-# include "celt/arm/armcpu.h"
+#include "celt/arm/armcpu.h"
 
-# if defined(FIXED_POINT)
+#if defined(FIXED_POINT)
 
-#  if defined(OPUS_ARM_MAY_HAVE_NEON_INTR)
-void silk_warped_autocorrelation_FIX_neon(
-          opus_int32                *corr,                                  /* O    Result [order + 1]                                                          */
-          opus_int                  *scale,                                 /* O    Scaling of the correlation vector                                           */
-    const opus_int16                *input,                                 /* I    Input data to correlate                                                     */
-    const opus_int                  warping_Q16,                            /* I    Warping coefficient                                                         */
-    const opus_int                  length,                                 /* I    Length of input                                                             */
-    const opus_int                  order                                   /* I    Correlation order (even)                                                    */
+#if defined(OPUS_ARM_MAY_HAVE_NEON_INTR)
+void silk_warped_autocorrelation_FIX_neon(opus_int32* corr, /* O    Result [order + 1]           */
+                                          opus_int* scale,  /* O    Scaling of the correlation vector            */
+                                          const opus_int16* input,    /* I    Input data to correlate    */
+                                          const opus_int warping_Q16, /* I    Warping coefficient */
+                                          const opus_int length,      /* I    Length of input      */
+                                          const opus_int order        /* I    Correlation order (even)        */
 );
 
-#  if !defined(OPUS_HAVE_RTCD) && defined(OPUS_ARM_PRESUME_NEON)
-#   define OVERRIDE_silk_warped_autocorrelation_FIX (1)
-#   define silk_warped_autocorrelation_FIX(corr, scale, input, warping_Q16, length, order, arch) \
+#if !defined(OPUS_HAVE_RTCD) && defined(OPUS_ARM_PRESUME_NEON)
+#define OVERRIDE_silk_warped_autocorrelation_FIX (1)
+#define silk_warped_autocorrelation_FIX(corr, scale, input, warping_Q16, length, order, arch) \
     ((void)(arch), PRESUME_NEON(silk_warped_autocorrelation_FIX)(corr, scale, input, warping_Q16, length, order))
-#  endif
-#  endif
+#endif
+#endif
 
-#  if !defined(OVERRIDE_silk_warped_autocorrelation_FIX)
+#if !defined(OVERRIDE_silk_warped_autocorrelation_FIX)
 /*Is run-time CPU detection enabled on this platform?*/
-#   if defined(OPUS_HAVE_RTCD) && (defined(OPUS_ARM_MAY_HAVE_NEON_INTR) && !defined(OPUS_ARM_PRESUME_NEON_INTR))
-extern void (*const SILK_WARPED_AUTOCORRELATION_FIX_IMPL[OPUS_ARCHMASK+1])(opus_int32*, opus_int*, const opus_int16*, const opus_int, const opus_int, const opus_int);
-#    define OVERRIDE_silk_warped_autocorrelation_FIX (1)
-#    define silk_warped_autocorrelation_FIX(corr, scale, input, warping_Q16, length, order, arch) \
+#if defined(OPUS_HAVE_RTCD) && (defined(OPUS_ARM_MAY_HAVE_NEON_INTR) && !defined(OPUS_ARM_PRESUME_NEON_INTR))
+extern void (*const SILK_WARPED_AUTOCORRELATION_FIX_IMPL[OPUS_ARCHMASK + 1])(opus_int32*, opus_int*, const opus_int16*,
+                                                                             const opus_int, const opus_int,
+                                                                             const opus_int);
+#define OVERRIDE_silk_warped_autocorrelation_FIX (1)
+#define silk_warped_autocorrelation_FIX(corr, scale, input, warping_Q16, length, order, arch) \
     ((*SILK_WARPED_AUTOCORRELATION_FIX_IMPL[(arch)&OPUS_ARCHMASK])(corr, scale, input, warping_Q16, length, order))
-#   elif defined(OPUS_ARM_PRESUME_NEON_INTR)
-#    define OVERRIDE_silk_warped_autocorrelation_FIX (1)
-#    define silk_warped_autocorrelation_FIX(corr, scale, input, warping_Q16, length, order, arch) \
+#elif defined(OPUS_ARM_PRESUME_NEON_INTR)
+#define OVERRIDE_silk_warped_autocorrelation_FIX (1)
+#define silk_warped_autocorrelation_FIX(corr, scale, input, warping_Q16, length, order, arch) \
     ((void)(arch), silk_warped_autocorrelation_FIX_neon(corr, scale, input, warping_Q16, length, order))
-#   endif
-#  endif
+#endif
+#endif
 
-# endif /* end FIXED_POINT */
+#endif /* end FIXED_POINT */
 
 #endif /* end SILK_WARPED_AUTOCORRELATION_FIX_ARM_H */

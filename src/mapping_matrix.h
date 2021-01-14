@@ -33,15 +33,15 @@
 #ifndef MAPPING_MATRIX_H
 #define MAPPING_MATRIX_H
 
-#include "opus_types.h"
+#include "arch.h"
 #include "opus_projection.h"
+#include "opus_types.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct MappingMatrix
-{
+typedef struct MappingMatrix {
     int rows; /* number of channels outputted from matrix. */
     int cols; /* number of channels inputted to matrix. */
     int gain; /* in dB. S7.8-format. */
@@ -50,63 +50,28 @@ typedef struct MappingMatrix
 
 opus_int32 mapping_matrix_get_size(int rows, int cols);
 
-opus_int16 *mapping_matrix_get_data(const MappingMatrix *matrix);
+opus_int16* mapping_matrix_get_data(const MappingMatrix* matrix);
 
-void mapping_matrix_init(
-    MappingMatrix * const matrix,
-    int rows,
-    int cols,
-    int gain,
-    const opus_int16 *data,
-    opus_int32 data_size
-);
+void mapping_matrix_init(MappingMatrix* const matrix, int rows, int cols, int gain, const opus_int16* data,
+                         opus_int32 data_size);
 
 #ifndef DISABLE_FLOAT_API
-void mapping_matrix_multiply_channel_in_float(
-    const MappingMatrix *matrix,
-    const float *input,
-    int input_rows,
-    opus_val16 *output,
-    int output_row,
-    int output_rows,
-    int frame_size
-);
+void mapping_matrix_multiply_channel_in_float(const MappingMatrix* matrix, const float* input, int input_rows,
+                                              opus_val16* output, int output_row, int output_rows, int frame_size);
 
-void mapping_matrix_multiply_channel_out_float(
-    const MappingMatrix *matrix,
-    const opus_val16 *input,
-    int input_row,
-    int input_rows,
-    float *output,
-    int output_rows,
-    int frame_size
-);
+void mapping_matrix_multiply_channel_out_float(const MappingMatrix* matrix, const opus_val16* input, int input_row,
+                                               int input_rows, float* output, int output_rows, int frame_size);
 #endif /* DISABLE_FLOAT_API */
 
-void mapping_matrix_multiply_channel_in_short(
-    const MappingMatrix *matrix,
-    const opus_int16 *input,
-    int input_rows,
-    opus_val16 *output,
-    int output_row,
-    int output_rows,
-    int frame_size
-);
+void mapping_matrix_multiply_channel_in_short(const MappingMatrix* matrix, const opus_int16* input, int input_rows,
+                                              opus_val16* output, int output_row, int output_rows, int frame_size);
 
-void mapping_matrix_multiply_channel_out_short(
-    const MappingMatrix *matrix,
-    const opus_val16 *input,
-    int input_row,
-    int input_rows,
-    opus_int16 *output,
-    int output_rows,
-    int frame_size
-);
+void mapping_matrix_multiply_channel_out_short(const MappingMatrix* matrix, const opus_val16* input, int input_row,
+                                               int input_rows, opus_int16* output, int output_rows, int frame_size);
 
-/* Pre-computed mixing and demixing matrices for 1st to 3rd-order ambisonics.
- *   foa: first-order ambisonics
- *   soa: second-order ambisonics
- *   toa: third-order ambisonics
+/* Pre-computed mixing and demixing matrices for 1st to 3rd-order
+ * ambisonics. foa: first-order ambisonics soa: second-order ambisonics toa:
+ * third-order ambisonics
  */
 extern const MappingMatrix mapping_matrix_foa_mixing;
 extern const opus_int16 mapping_matrix_foa_mixing_data[36];
