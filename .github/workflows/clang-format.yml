@@ -1,0 +1,15 @@
+name: Opus Build Matrix
+
+on: [push, pull_request]
+
+jobs:
+  ClangFormat:
+    name: Clang format
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: clang-format-10
+        run: |
+          python ./scripts/run-clang-format.py --clang-format-executable clang-format-10 --clang-format-version 10.0.0 -r .
