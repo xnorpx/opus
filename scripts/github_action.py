@@ -54,27 +54,45 @@ class GithubActionsTransformer():
                 })
 
         if 'configure' in config:
-            job['steps'].append(
-                {
-                    'working-directory': '{}'.format(workdir),
-                    'run': '{}'.format(config['configure']),
-                    'name': 'Configure'
-                })
+            for key, val in config['configure'].items():
+                job['steps'].append(
+                    {
+                        'working-directory': '{}'.format(workdir),
+                        'run': '{}'.format(val),
+                        'name': 'Configure' + '-' + key
+                    })
 
-        if 'build' in config:
-            job['steps'].append(
-                {
-                    'working-directory': '{}'.format(workdir),
-                    'run': '{}'.format(config['build']),
-                    'name': 'Build'
-                })
+                if 'build' in config:
+                    job['steps'].append(
+                        {
+                            'working-directory': '{}'.format(workdir),
+                            'run': '{}'.format(config['build']),
+                            'name': 'Build'  + '-' + key
+                        })
 
-        if 'test' in config:
-            job['steps'].append(
-                {
-                    'working-directory': '{}'.format(workdir),
-                    'run': '{}'.format(config['test']),
-                    'name': 'Test'
-                }
-            )
+                if 'test' in config:
+                    job['steps'].append(
+                        {
+                            'working-directory': '{}'.format(workdir),
+                            'run': '{}'.format(config['test']),
+                            'name': 'Test'  + '-' + key
+                        }
+                    )
+        else:
+            if 'build' in config:
+                job['steps'].append(
+                    {
+                        'working-directory': '{}'.format(workdir),
+                        'run': '{}'.format(config['build']),
+                        'name': 'Build'
+                    })
+
+            if 'test' in config:
+                job['steps'].append(
+                    {
+                        'working-directory': '{}'.format(workdir),
+                        'run': '{}'.format(config['test']),
+                        'name': 'Test'
+                    }
+                )
         return job

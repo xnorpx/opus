@@ -4,7 +4,7 @@ class CMakeTransformer():
             'custom-modes': 'OPUS_CUSTOM_MODES',
             'fixed-point': 'OPUS_FIXED_POINT',
             'float-api': 'OPUS_ENABLE_FLOAT_API',
-            'intrinsics': 'OPUS_DISABLE_INTRINSICS'
+            'disable-intrinsics': 'OPUS_DISABLE_INTRINSICS'
         }
         self.test_settings_dict = {
             'assertions': 'OPUS_ASSERTIONS'
@@ -79,21 +79,16 @@ class CMakeTransformer():
         for config in configs:
             if self._supported_build_target(config['platform'], config['arch']):
                 config_dict = {}
-                config_dict['configure'] = self._add_config_step(config)
-                config_dict['build'] = 'cmake --build . --config Release'
                 config_dict['name'] = self._generate_name(config)
                 config_dict['host'] = config['platform']
                 config_dict['workdir'] = 'build'
+
+                config_dict['configure'] = self._add_config_step(config)
+                config_dict['build'] = 'cmake --build . --config Release'
+
                 if self._supported_test_target(config['platform'], config['arch']):
                     config_dict['test'] = 'ctest -C Release'
                 cmake_configs.append(config_dict)
-
-        # let's make sure we generate configs for shared libs as well
-        cmake_configs_shared_lib = cmake_configs.copy()
-        for config in cmake_configs_shared_lib:
-            config['configure'] += ' -DOPUS_BUILD_SHARED_LIBRARY=ON'
-            config['name'] += '-shared'
-        cmake_configs += cmake_configs_shared_lib
 
         return sorted(cmake_configs, key=lambda i: i['name'])
 
@@ -149,4 +144,5 @@ class CMakeTransformer():
         configure += self._platform_build_option(
             config['platform'], config['arch'])
 
-        return configure
+        # for cmake let's build shared library and static library in the same config
+        return {"static": configure, "shared": configure + ' -DOPUS_BUILD_SHARED_LIBRARY=ON'}

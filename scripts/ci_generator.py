@@ -16,7 +16,7 @@ build_settings = [
     'custom-modes',
     'fixed-point',
     'float-api',
-    'intrinsics',
+    'disable-intrinsics',
 ]
 
 # no reason for disable float api if
@@ -28,7 +28,7 @@ build_settings_rules = [
 
 
 def main():
-    parser = argparse.ArgumentParser(description='')
+    parser = argparse.ArgumentParser(description='Generate yaml for ci configs for github')
     parser.add_argument('--github_action_config_path', default=os.path.abspath(os.path.join(os.path.dirname(
         __file__), '..', '.github', 'workflows')), type=str, help='github action config path (default: %(default)s)')
     parser.add_argument('--log-level', dest='log_level', default='info', help='logging level',
