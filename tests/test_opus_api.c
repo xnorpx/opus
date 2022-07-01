@@ -717,7 +717,14 @@ opus_int32 test_parse(void)
    fprintf(stdout,"  ---------------------------------------------------\n");
    memset(packet,0,sizeof(char)*1276);
    packet[0]=63<<2;
+#if !defined(OPUS_BUILD) && (OPUS_GNUC_PREREQ(4, 6) || (defined(__clang_major__) && __clang_major__ >= 3))
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnonnull"
+#endif
    if(opus_packet_parse(packet,1,&toc,frames,0,&payload_offset)!=OPUS_BAD_ARG)test_failed();
+#if !defined(OPUS_BUILD) && (OPUS_GNUC_PREREQ(4, 6) || (defined(__clang_major__) && __clang_major__ >= 3))
+#pragma GCC diagnostic pop
+#endif
    cfgs_total=cfgs=1;
    /*code 0*/
    for(i=0;i<64;i++)
