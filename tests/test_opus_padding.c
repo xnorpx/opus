@@ -78,14 +78,13 @@ int test_overflow(void)
 int main(void)
 {
   const char *oversion;
-  int tests = 0;;
 
   iseed = 0;
   oversion = opus_get_version_string();
   if (!oversion) test_failed();
   fprintf(stderr, "Testing %s padding.\n", oversion);
 
-  tests += test_overflow();
+  test_overflow();
 
   fprintf(stderr, "All padding tests passed.\n");
 
