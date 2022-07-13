@@ -227,6 +227,30 @@ if(OPUS_CPU_X86 OR OPUS_CPU_X64)
                          "OPUS_X86_MAY_HAVE_AVX; NOT OPUS_DISABLE_INTRINSICS"
                          OFF)
   add_feature_info(OPUS_X86_PRESUME_AVX OPUS_X86_PRESUME_AVX ${OPUS_X86_PRESUME_AVX_HELP_STR})
+elseif(OPUS_CPU_ARM)
+  set(OPUS_ARM_MAY_HAVE_NEON_HELP_STR "does runtime check for NEON support.")
+  cmake_dependent_option(OPUS_ARM_MAY_HAVE_NEON
+                          ${OPUS_X86_MAY_HAVE_AVX_HELP_STR}
+                          ON
+                          "NEON_SUPPORTED; NOT OPUS_DISABLE_INTRINSICS"
+                          OFF)
+  add_feature_info(OPUS_ARM_MAY_HAVE_NEON OPUS_ARM_MAY_HAVE_NEON ${OPUS_ARM_MAY_HAVE_NEON_HELP_STR})
+
+  set(OPUS_ARM_PRESUME_NEON_HELP_STR "assume target CPU has NEON support (override runtime check).")
+  if (OPUS_CPU_ARM_V8 || APPLE)
+    cmake_dependent_option(OPUS_ARM_PRESUME_NEON
+                            ${OPUS_ARM_PRESUME_NEON_HELP_STR}
+                            ON
+                            "OPUS_ARM_MAY_HAVE_NEON; NOT OPUS_DISABLE_INTRINSICS"
+                            OFF)
+  elseif()
+    cmake_dependent_option(OPUS_ARM_PRESUME_NEON
+                          ${OPUS_ARM_PRESUME_NEON_HELP_STR}
+                          OFF
+                          "OPUS_ARM_MAY_HAVE_NEON; NOT OPUS_DISABLE_INTRINSICS"
+                          OFF)
+  endif()
+  add_feature_info(OPUS_ARM_PRESUME_NEON OPUS_ARM_PRESUME_NEON ${OPUS_ARM_PRESUME_NEON_HELP_STR})
 endif()
 
 feature_summary(WHAT ALL)

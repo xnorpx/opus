@@ -38,12 +38,18 @@ function(get_library_version OPUS_LIBRARY_VERSION OPUS_LIBRARY_VERSION_MAJOR)
     OPUS_LIBRARY_VERSION
     "${OPUS_LIBRARY_VERSION_MAJOR}.${OPUS_LIBRARY_VERSION_MINOR}.${OPUS_LIBRARY_VERSION_PATCH}"
     PARENT_SCOPE)
-  set(OPUS_LIBRARY_VERSION_MAJOR ${OPUS_LIBRARY_VERSION_MAJOR} PARENT_SCOPE)
+  set(OPUS_LIBRARY_VERSION_MAJOR ${OPUS_LIBRARY_VERSION_MAJOR} CACHE INTERNAL "")
 endfunction()
 
 function(check_flag NAME FLAG)
   include(CheckCCompilerFlag)
-  check_c_compiler_flag(${FLAG} ${NAME}_SUPPORTED)
+  check_c_compiler_flag(${FLAG} ${NAME}_SUPPORTED_LOCAL)
+  if(${NAME}_SUPPORTED_LOCAL)
+    set(${NAME}_SUPPORTED 1 CACHE INTERNAL "")
+  else()
+    set(${NAME}_SUPPORTED 0 CACHE INTERNAL "")
+  endif()
+
 endfunction()
 
 include(CheckIncludeFile)
@@ -52,7 +58,15 @@ include(CheckIncludeFile)
 # system is guaranteed to have SSE support then OPUS_PRESUME_SSE can be used to
 # skip SSE runtime check
 function(opus_detect_sse COMPILER_SUPPORT_SIMD)
-  message(STATUS "Check SIMD support by compiler")
+  message(STATUS "Performing Test SIMD")
+
+  set(SSE1_SUPPORTED 0 CACHE INTERNAL "")
+  set(SSE2_SUPPORTED 0 CACHE INTERNAL "")
+  set(SSE4_1_SUPPORTED 0 CACHE INTERNAL "")
+  set(AVX_SUPPORTED 0 CACHE INTERNAL "")
+  set(COMPILER_SUPPORT_SIMD 0 CACHE INTERNAL "")
+
+  message(STATUS "Performing Test SSE1")
   check_include_file(xmmintrin.h HAVE_XMMINTRIN_H) # SSE1
   if(HAVE_XMMINTRIN_H)
     if(MSVC)
@@ -60,57 +74,60 @@ function(opus_detect_sse COMPILER_SUPPORT_SIMD)
       if(CMAKE_SIZEOF_VOID_P EQUAL 4)
         check_flag(SSE1 /arch:SSE)
       else()
-        set(SSE1_SUPPORTED
-            1
-            PARENT_SCOPE)
+        set(SSE1_SUPPORTED 1 CACHE INTERNAL "")
       endif()
     else()
       check_flag(SSE1 -msse)
     endif()
-  else()
-    set(SSE1_SUPPORTED
-        0
-        PARENT_SCOPE)
   endif()
 
+  if(SSE1_SUPPORTED)
+    message(STATUS "Performing Test SSE1 -- success")
+  else()
+    message(STATUS "Performing Test SSE1 -- failed")
+  endif()
+
+  message(STATUS "Performing Test SSE2")
   check_include_file(emmintrin.h HAVE_EMMINTRIN_H) # SSE2
   if(HAVE_EMMINTRIN_H)
     if(MSVC)
       if(CMAKE_SIZEOF_VOID_P EQUAL 4)
         check_flag(SSE2 /arch:SSE2)
       else()
-        set(SSE2_SUPPORTED
-            1
-            PARENT_SCOPE)
+        set(SSE2_SUPPORTED 1 CACHE INTERNAL "")
       endif()
     else()
       check_flag(SSE2 -msse2)
     endif()
-  else()
-    set(SSE2_SUPPORTED
-        0
-        PARENT_SCOPE)
   endif()
 
+  if(SSE2_SUPPORTED)
+    message(STATUS "Performing Test SSE2 -- success")
+  else()
+    message(STATUS "Performing Test SSE2 -- failed")
+  endif()
+
+  message(STATUS "Performing Test SSE4.1")
   check_include_file(smmintrin.h HAVE_SMMINTRIN_H) # SSE4.1
   if(HAVE_SMMINTRIN_H)
     if(MSVC)
       if(CMAKE_SIZEOF_VOID_P EQUAL 4)
         check_flag(SSE4_1 /arch:SSE2) # SSE2 and above
       else()
-        set(SSE4_1_SUPPORTED
-            1
-            PARENT_SCOPE)
+        set(SSE4_1_SUPPORTED 1 CACHE INTERNAL "")
       endif()
     else()
       check_flag(SSE4_1 -msse4.1)
     endif()
+  endif()
+  
+  if(SSE4_1_SUPPORTED)
+    message(STATUS "Performing Test SSE4.1 -- success")
   else()
-    set(SSE4_1_SUPPORTED
-        0
-        PARENT_SCOPE)
+    message(STATUS "Performing Test SSE4.1 -- failed")
   endif()
 
+  message(STATUS "Performing Test AVX")
   check_include_file(immintrin.h HAVE_IMMINTRIN_H) # AVX
   if(HAVE_IMMINTRIN_H)
     if(MSVC)
@@ -118,27 +135,28 @@ function(opus_detect_sse COMPILER_SUPPORT_SIMD)
     else()
       check_flag(AVX -mavx)
     endif()
+  endif()
+
+  if(AVX_SUPPORTED)
+    message(STATUS "Performing Test AVX -- success")
   else()
-    set(AVX_SUPPORTED
-        0
-        PARENT_SCOPE)
+    message(STATUS "Performing Test AVX -- failed")
   endif()
 
   if(SSE1_SUPPORTED OR SSE2_SUPPORTED OR SSE4_1_SUPPORTED OR AVX_SUPPORTED)
-    set(COMPILER_SUPPORT_SIMD 1 PARENT_SCOPE)
+    set(COMPILER_SUPPORT_SIMD 1 CACHE INTERNAL "")
+    message(STATUS "Performing Test SIMD -- success")
   else()
-    message(STATUS "No SIMD support in compiler")
+    message(STATUS "Performing Test SIMD -- failed")
   endif()
 endfunction()
 
 function(opus_detect_neon COMPILER_SUPPORT_NEON)
   message(STATUS "Performing Test NEON")
-  set(COMPILER_SUPPORT_NEON 0 PARENT_SCOPE)
-  if(CMAKE_SYSTEM_PROCESSOR MATCHES "(arm|aarch64)")
-    check_include_file(arm_neon.h HAVE_ARM_NEON_H)
-    if(HAVE_ARM_NEON_H)
-      set(COMPILER_SUPPORT_NEON 1 PARENT_SCOPE)
-    endif()
+  set(COMPILER_SUPPORT_NEON 0 CACHE INTERNAL "")
+  check_include_file(arm_neon.h HAVE_ARM_NEON_H)
+  if(HAVE_ARM_NEON_H)
+    set(COMPILER_SUPPORT_NEON 1 CACHE INTERNAL "")
   endif()
   if(COMPILER_SUPPORT_NEON)
     message(STATUS "Performing Test NEON -- success")
@@ -149,41 +167,35 @@ endfunction()
 
 function(opus_supports_cpu_detection RUNTIME_CPU_CAPABILITY_DETECTION)
   message(STATUS "Performing Test RTCD")
-  set(RUNTIME_CPU_CAPABILITY_DETECTION 0 PARENT_SCOPE)
+  set(RUNTIME_CPU_CAPABILITY_DETECTION 0 CACHE INTERNAL "")
   if(OPUS_CPU_X86 OR OPUS_CPU_X64)
     if(MSVC)
       check_include_file(intrin.h HAVE_INTRIN_H)
       if(HAVE_INTRIN_H)
         # if intrin.h is available we assume __cpuid is there
-        set(RUNTIME_CPU_CAPABILITY_DETECTION 1 PARENT_SCOPE)
+        set(RUNTIME_CPU_CAPABILITY_DETECTION 1 CACHE INTERNAL "")
       endif()
     else()
       include(CFeatureCheck)
       c_feature_check(CPU_INFO_BY_ASM)
-      set(CPU_INFO_BY_ASM_SUPPORTED ${CPU_INFO_BY_ASM_SUPPORTED} PARENT_SCOPE)
       check_include_file(cpuid.h HAVE_CPUID_H)
       if(HAVE_CPUID_H)
         c_feature_check(CPU_INFO_BY_C)
-        set(CPU_INFO_BY_C_SUPPORTED ${CPU_INFO_BY_C_SUPPORTED} PARENT_SCOPE)
       endif()
       if(CPU_INFO_BY_ASM_SUPPORTED OR CPU_INFO_BY_C_SUPPORTED)
-        set(RUNTIME_CPU_CAPABILITY_DETECTION 1 PARENT_SCOPE)
+        set(RUNTIME_CPU_CAPABILITY_DETECTION 1 CACHE INTERNAL "")
       endif()
     endif()
   elseif(OPUS_CPU_ARM)
-    # ARM cpu detection is implemented for Windows and anything
-    # using a Linux kernel (such as Android).
-    if (CMAKE_SYSTEM_NAME MATCHES "(Windows|Linux|Android)")
-      set(RUNTIME_CPU_CAPABILITY_DETECTION 1 PARENT_SCOPE)
-    endif ()
-  else()
-    set(RUNTIME_CPU_CAPABILITY_DETECTION 0 PARENT_SCOPE)
+    set(RUNTIME_CPU_CAPABILITY_DETECTION 1 CACHE INTERNAL "")
   endif()
+
   if(RUNTIME_CPU_CAPABILITY_DETECTION)
     message(STATUS "Performing Test RTCD -- success")
   else()
     message(STATUS "Performing Test RTCD -- failed")
   endif()
+
 endfunction()
 
 function(add_sources_group target group)
