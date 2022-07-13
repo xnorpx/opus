@@ -4,6 +4,15 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(OpusPackageVersion)
 get_package_version(PACKAGE_VERSION PROJECT_VERSION)
 
+# Hidden mode for test scripts during development
+option(OPUS_CMAKE_TEST ${OPUS_CMAKE_TEST} OFF)
+if(OPUS_CMAKE_TEST)
+message(STATUS "Run Opus Cmake test")
+project(OpusCmakeTest LANGUAGES C VERSION ${PROJECT_VERSION})
+include(CMakeTest)
+return()
+endif()
+
 project(Opus LANGUAGES C VERSION ${PROJECT_VERSION})
 
 include(OpusFunctions)

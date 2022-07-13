@@ -4,7 +4,13 @@ endif()
 set(__opus_functions INCLUDED)
 
 function(get_library_version OPUS_LIBRARY_VERSION OPUS_LIBRARY_VERSION_MAJOR)
-  file(STRINGS configure.ac opus_lt_current_string
+  get_library_version_from_file(configure.ac OPUS_LIBRARY_VERSION OPUS_LIBRARY_VERSION_MAJOR)
+  set(OPUS_LIBRARY_VERSION_MAJOR ${OPUS_LIBRARY_VERSION_MAJOR} PARENT_SCOPE)
+  set(OPUS_LIBRARY_VERSION ${OPUS_LIBRARY_VERSION} PARENT_SCOPE)
+endfunction()
+
+function(get_library_version_from_file FILE_NAME OPUS_LIBRARY_VERSION OPUS_LIBRARY_VERSION_MAJOR)
+  file(STRINGS ${FILE_NAME} opus_lt_current_string
        LIMIT_COUNT 1
        REGEX "OPUS_LT_CURRENT=")
   string(REGEX MATCH
@@ -13,7 +19,7 @@ function(get_library_version OPUS_LIBRARY_VERSION OPUS_LIBRARY_VERSION_MAJOR)
                ${opus_lt_current_string})
   set(OPUS_LT_CURRENT ${CMAKE_MATCH_1})
 
-  file(STRINGS configure.ac opus_lt_revision_string
+  file(STRINGS ${FILE_NAME} opus_lt_revision_string
        LIMIT_COUNT 1
        REGEX "OPUS_LT_REVISION=")
   string(REGEX MATCH
@@ -22,7 +28,7 @@ function(get_library_version OPUS_LIBRARY_VERSION OPUS_LIBRARY_VERSION_MAJOR)
                ${opus_lt_revision_string})
   set(OPUS_LT_REVISION ${CMAKE_MATCH_1})
 
-  file(STRINGS configure.ac opus_lt_age_string
+  file(STRINGS ${FILE_NAME} opus_lt_age_string
        LIMIT_COUNT 1
        REGEX "OPUS_LT_AGE=")
   string(REGEX MATCH
