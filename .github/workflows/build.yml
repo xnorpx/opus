@@ -10,11 +10,18 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Install CMake 3.22 on Linux
+        if: matrix.config.os == 'ubuntu-latest'
+        run: |
+          curl -sL https://github.com/Kitware/CMake/releases/download/v3.22.5/cmake-3.22.5-linux-x86_64.sh -o cmakeinstall.sh
+          chmod +x cmakeinstall.sh
+          sudo ./cmakeinstall.sh --prefix=/usr/local --exclude-subdir
+          rm cmakeinstall.sh
       - name: Create Build Dir
         run: mkdir build
       - name: Configure submodule build
         working-directory: ./build
-        run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DBUILD_TESTING=ON
+        run: cmake .. -DOPUS_CMAKE_TEST=ON
 
   # CMake:
   #   name: CMake as submodule
