@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+        # with:
+        #   fetch-depth: 0
       - name: Install CMake 3.22 on Linux
         if: matrix.config.os == 'ubuntu-latest'
         run: |
