@@ -3,84 +3,84 @@ name: Opus Build Matrix
 on: [push, pull_request]
 
 jobs:
-  # CMake:
-  #   name: CMake as submodule
-  #   runs-on: ubuntu-latest
+  CMake:
+    name: CMake as submodule
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Autogen
+        run: ./autogen.sh
+      - name: Configure
+        run: ./configure
+      - name: DistCheck
+        run: make distcheck -j 2
+      - name: Clean out gitrepo
+        run: find . ! -name 'opus*.tar.gz' -type f -exec rm -f {} +
+      - name: Create submodule dir
+        run: mkdir opus_submodule
+      - name: Untar dist
+        run: for F in opus*.tar.gz; do tar -xf "$F" -C ./opus_submodule --strip-components=1; done
+      - name: Create new CMakeLists.txt for submodule
+        run: printf '%s\n' 'cmake_minimum_required(VERSION 3.1)' 'project(OpusSubModule LANGUAGES C)' 'add_subdirectory(opus_submodule)' > CMakeLists.txt
+      - name: Create Build Dir
+        run: mkdir build
+      - name: Configure submodule build
+        working-directory: ./build
+        run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DBUILD_TESTING=ON
+      - name: Build
+        working-directory: ./build
+        run: make -j 2 -s
+      - name: Test
+        working-directory: ./build
+        run: ctest -j 2
+
+  # CMakeTestWindows:
+  #   name: Test CMake Scripts
+  #   runs-on: windows-latest,
   #   steps:
   #     - uses: actions/checkout@v2
   #       with:
   #         fetch-depth: 0
-  #     - name: Autogen
-  #       run: ./autogen.sh
-  #     - name: Configure
-  #       run: ./configure
-  #     - name: DistCheck
-  #       run: make distcheck -j 2
-  #     - name: Clean out gitrepo
-  #       run: find . ! -name 'opus*.tar.gz' -type f -exec rm -f {} +
-  #     - name: Create submodule dir
-  #       run: mkdir opus_submodule
-  #     - name: Untar dist
-  #       run: for F in opus*.tar.gz; do tar -xf "$F" -C ./opus_submodule --strip-components=1; done
-  #     - name: Create new CMakeLists.txt for submodule
-  #       run: printf '%s\n' 'cmake_minimum_required(VERSION 3.1)' 'project(OpusSubModule LANGUAGES C)' 'add_subdirectory(opus_submodule)' > CMakeLists.txt
   #     - name: Create Build Dir
   #       run: mkdir build
   #     - name: Configure submodule build
   #       working-directory: ./build
-  #       run: cmake .. -DOPUS_BUILD_PROGRAMS=ON -DBUILD_TESTING=ON
-  #     - name: Build
+  #       run: cmake .. -DOPUS_CMAKE_TEST=ON
+
+  # CMakeTestUbuntu:
+  #   name: Test CMake Scripts
+  #   runs-on: ubuntu-latest,
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - name: Install CMake 3.22 on Linux
+  #       if: matrix.config.os == 'ubuntu-latest'
+  #       run: |
+  #         curl -sL https://github.com/Kitware/CMake/releases/download/v3.22.5/cmake-3.22.5-linux-x86_64.sh -o cmakeinstall.sh
+  #         chmod +x cmakeinstall.sh
+  #         sudo ./cmakeinstall.sh --prefix=/usr/local --exclude-subdir
+  #         rm cmakeinstall.sh
+  #     - name: Create Build Dir
+  #       run: mkdir build
+  #     - name: Configure submodule build
   #       working-directory: ./build
-  #       run: make -j 2 -s
-  #     - name: Test
+  #       run: cmake .. -DOPUS_CMAKE_TEST=ON
+
+  # CMakeTestMac:
+  #   name: Test CMake Scripts
+  #   runs-on: macos-latest,
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - name: Create Build Dir
+  #       run: mkdir build
+  #     - name: Configure submodule build
   #       working-directory: ./build
-  #       run: ctest -j 2
-
-  CMakeTestWindows:
-    name: Test CMake Scripts
-    runs-on: windows-latest,
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Create Build Dir
-        run: mkdir build
-      - name: Configure submodule build
-        working-directory: ./build
-        run: cmake .. -DOPUS_CMAKE_TEST=ON
-
-  CMakeTestUbuntu:
-    name: Test CMake Scripts
-    runs-on: ubuntu-latest,
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Install CMake 3.22 on Linux
-        if: matrix.config.os == 'ubuntu-latest'
-        run: |
-          curl -sL https://github.com/Kitware/CMake/releases/download/v3.22.5/cmake-3.22.5-linux-x86_64.sh -o cmakeinstall.sh
-          chmod +x cmakeinstall.sh
-          sudo ./cmakeinstall.sh --prefix=/usr/local --exclude-subdir
-          rm cmakeinstall.sh
-      - name: Create Build Dir
-        run: mkdir build
-      - name: Configure submodule build
-        working-directory: ./build
-        run: cmake .. -DOPUS_CMAKE_TEST=ON
-
-  CMakeTestMac:
-    name: Test CMake Scripts
-    runs-on: macos-latest,
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Create Build Dir
-        run: mkdir build
-      - name: Configure submodule build
-        working-directory: ./build
-        run: cmake .. -DOPUS_CMAKE_TEST=ON
+  #       run: cmake .. -DOPUS_CMAKE_TEST=ON
 
   # CheckTrailingWhiteSpaces:
   #   name: Check trailing white spaces
