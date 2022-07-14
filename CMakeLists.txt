@@ -9,7 +9,7 @@ option(OPUS_CMAKE_TEST ${OPUS_CMAKE_TEST} OFF)
 if(OPUS_CMAKE_TEST)
 message(STATUS "Run Opus Cmake test")
 project(OpusCmakeTest LANGUAGES C VERSION ${PROJECT_VERSION})
-include(CMakeTest)
+include(CmakeTest)
 return()
 endif()
 
