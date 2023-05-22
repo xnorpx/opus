@@ -1,4 +1,5 @@
-/* Copyright (c) 2017 Jean-Marc Valin */
+/* Copyright (c) 2022 Amazon
+   Written by Jan Buethe */
 /*
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
@@ -14,8 +15,8 @@
    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
    ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
    EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
    PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
@@ -24,37 +25,18 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef _MLP_H_
-#define _MLP_H_
+#include "opus.h"
+#include "dred_config.h"
+#include "dred_rdovae.h"
+#include "entcode.h"
 
-#include "opus_types.h"
+struct OpusDRED {
+    float        fec_features[2*DRED_NUM_REDUNDANCY_FRAMES*DRED_NUM_FEATURES];
+    float        state[DRED_STATE_DIM];
+    float        latents[(DRED_NUM_REDUNDANCY_FRAMES/2)*DRED_LATENT_DIM];
+    int          nb_latents;
+    int          process_stage;
+};
 
-#define WEIGHTS_SCALE (1.f/128)
 
-#define MAX_NEURONS 32
-
-typedef struct {
-  const opus_int8 *bias;
-  const opus_int8 *input_weights;
-  int nb_inputs;
-  int nb_neurons;
-  int sigmoid;
-} AnalysisDenseLayer;
-
-typedef struct {
-  const opus_int8 *bias;
-  const opus_int8 *input_weights;
-  const opus_int8 *recurrent_weights;
-  int nb_inputs;
-  int nb_neurons;
-} AnalysisGRULayer;
-
-extern const AnalysisDenseLayer layer0;
-extern const AnalysisGRULayer layer1;
-extern const AnalysisDenseLayer layer2;
-
-void analysis_compute_dense(const AnalysisDenseLayer *layer, float *output, const float *input);
-
-void analysis_compute_gru(const AnalysisGRULayer *gru, float *state, const float *input);
-
-#endif /* _MLP_H_ */
+int dred_ec_decode(OpusDRED *dec, const opus_uint8 *bytes, int num_bytes, int min_feature_frames);

@@ -34,6 +34,16 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "entenc.h"
 #include "entdec.h"
 
+#ifdef NEURAL_PLC
+#include "lpcnet.h"
+#include "lpcnet/src/lpcnet_private.h"
+#endif
+
+#ifdef ENABLE_NEURAL_FEC
+#include "dred_encoder.h"
+#include "dred_decoder.h"
+#endif
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -225,6 +235,9 @@ typedef struct {
     opus_int                     LBRR_GainIncreases;                /* Gains increment for coding LBRR frames                           */
     SideInfoIndices              indices_LBRR[ MAX_FRAMES_PER_PACKET ];
     opus_int8                    pulses_LBRR[ MAX_FRAMES_PER_PACKET ][ MAX_FRAME_LENGTH ];
+#ifdef ENABLE_NEURAL_FEC
+    DREDEnc                      dred_encoder;
+#endif
 } silk_encoder_state;
 
 
@@ -243,6 +256,11 @@ typedef struct {
     opus_int                    fs_kHz;
     opus_int                    nb_subfr;
     opus_int                    subfr_length;
+#ifdef NEURAL_PLC
+    /* FIXME: We should include the state struct directly to preserve the state shadow copy property. */
+    LPCNetPLCState              lpcnet;
+    int                         pre_filled;
+#endif
 } silk_PLC_struct;
 
 /* Struct for CNG */

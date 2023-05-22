@@ -1,4 +1,5 @@
-/* Copyright (c) 2017 Jean-Marc Valin */
+/* Copyright (c) 2022 Amazon
+   Written by Jan Buethe */
 /*
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
@@ -14,8 +15,8 @@
    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
    ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
    EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
    PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
@@ -24,37 +25,23 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef _MLP_H_
-#define _MLP_H_
+#ifndef DRED_CONFIG_H
+#define DRED_CONFIG_H
 
-#include "opus_types.h"
+#define DRED_VERSION 0
+#define DRED_MIN_BYTES 16
 
-#define WEIGHTS_SCALE (1.f/128)
+/* these are inpart duplicates to the values defined in dred_rdovae_constants.h */
+#define DRED_NUM_FEATURES 20
+#define DRED_LATENT_DIM 80
+#define DRED_STATE_DIM 24
+#define DRED_MAX_FRAMES 100
+#define DRED_SILK_ENCODER_DELAY 79
+#define DRED_FRAME_SIZE 160
+#define DRED_DFRAME_SIZE (2 * (DRED_FRAME_SIZE))
+#define DRED_MAX_DATA_SIZE 1000
+#define DRED_ENC_Q0 9
+#define DRED_ENC_Q1 15
+#define DRED_NUM_REDUNDANCY_FRAMES 50
 
-#define MAX_NEURONS 32
-
-typedef struct {
-  const opus_int8 *bias;
-  const opus_int8 *input_weights;
-  int nb_inputs;
-  int nb_neurons;
-  int sigmoid;
-} AnalysisDenseLayer;
-
-typedef struct {
-  const opus_int8 *bias;
-  const opus_int8 *input_weights;
-  const opus_int8 *recurrent_weights;
-  int nb_inputs;
-  int nb_neurons;
-} AnalysisGRULayer;
-
-extern const AnalysisDenseLayer layer0;
-extern const AnalysisGRULayer layer1;
-extern const AnalysisDenseLayer layer2;
-
-void analysis_compute_dense(const AnalysisDenseLayer *layer, float *output, const float *input);
-
-void analysis_compute_gru(const AnalysisGRULayer *gru, float *state, const float *input);
-
-#endif /* _MLP_H_ */
+#endif

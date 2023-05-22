@@ -1,4 +1,5 @@
-/* Copyright (c) 2017 Jean-Marc Valin */
+/* Copyright (c) 2022 Amazon
+   Written by Jan Buethe */
 /*
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
@@ -14,8 +15,8 @@
    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
    ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
    EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
    PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
@@ -24,37 +25,33 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef _MLP_H_
-#define _MLP_H_
+#ifndef DRED_ENCODER_H
+#define DRED_ENCODER_H
 
-#include "opus_types.h"
+#include "lpcnet.h"
+#include "dred_config.h"
+#include "dred_rdovae.h"
+#include "entcode.h"
+#include "lpcnet/src/lpcnet_private.h"
+#include "lpcnet/src/dred_rdovae_enc.h"
 
-#define WEIGHTS_SCALE (1.f/128)
-
-#define MAX_NEURONS 32
-
-typedef struct {
-  const opus_int8 *bias;
-  const opus_int8 *input_weights;
-  int nb_inputs;
-  int nb_neurons;
-  int sigmoid;
-} AnalysisDenseLayer;
 
 typedef struct {
-  const opus_int8 *bias;
-  const opus_int8 *input_weights;
-  const opus_int8 *recurrent_weights;
-  int nb_inputs;
-  int nb_neurons;
-} AnalysisGRULayer;
+    opus_int16 input_buffer[DRED_DFRAME_SIZE + DRED_SILK_ENCODER_DELAY];
+    float latents_buffer[DRED_MAX_FRAMES * DRED_LATENT_DIM];
+    int latents_buffer_fill;
+    float state_buffer[24];
+    LPCNetEncState lpcnet_enc_state;
+    RDOVAEEnc rdovae_enc;
+} DREDEnc;
 
-extern const AnalysisDenseLayer layer0;
-extern const AnalysisGRULayer layer1;
-extern const AnalysisDenseLayer layer2;
 
-void analysis_compute_dense(const AnalysisDenseLayer *layer, float *output, const float *input);
+void init_dred_encoder(DREDEnc* enc);
 
-void analysis_compute_gru(const AnalysisGRULayer *gru, float *state, const float *input);
+void dred_deinit_encoder(DREDEnc *enc);
 
-#endif /* _MLP_H_ */
+void dred_process_silk_frame(DREDEnc *enc, const opus_int16 *silk_frame);
+
+int dred_encode_silk_frame(DREDEnc *enc, unsigned char *buf, int max_chunks, int max_bytes);
+
+#endif

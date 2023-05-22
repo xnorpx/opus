@@ -116,6 +116,9 @@ struct OpusEncoder {
     int          nb_no_activity_ms_Q1;
     opus_val32   peak_signal_energy;
 #endif
+#ifdef ENABLE_NEURAL_FEC
+    int          dred_duration;
+#endif
     int          nonfinal_frame; /* current frame is not the final in a packet */
     opus_uint32  rangeFinal;
 };
@@ -224,6 +227,7 @@ int opus_encoder_init(OpusEncoder* st, opus_int32 Fs, int channels, int applicat
     st->silk_mode.packetLossPercentage      = 0;
     st->silk_mode.complexity                = 9;
     st->silk_mode.useInBandFEC              = 0;
+    st->silk_mode.useDRED                   = 0;
     st->silk_mode.useDTX                    = 0;
     st->silk_mode.useCBR                    = 0;
     st->silk_mode.reducedDependency         = 0;
@@ -1003,7 +1007,8 @@ static opus_int32 encode_multiframe_packet(OpusEncoder *st,
       }
    }
 
-   ret = opus_repacketizer_out_range_impl(rp, 0, nb_frames, data, repacketize_len, 0, !st->use_vbr);
+   /* FIXME: Handle extensions here. */
+   ret = opus_repacketizer_out_range_impl(rp, 0, nb_frames, data, repacketize_len, 0, !st->use_vbr, NULL, 0);
 
    if (ret<0)
    {
@@ -1879,6 +1884,13 @@ opus_int32 opus_encode_native(OpusEncoder *st, const opus_val16 *pcm, int frame_
            celt_to_silk = 0;
            st->silk_bw_switch = 1;
         }
+    } else {
+#ifdef ENABLE_NEURAL_FEC
+        /* If we're not in SILK mode, delete all the processed DRED.
+           TODO: Remove this if/when DRED gets encoded for CELT. */
+        DREDEnc *dred = &((silk_encoder*)silk_enc)->state_Fxx[0].sCmn.dred_encoder;
+        dred->latents_buffer_fill = 0;
+#endif
     }
 
     /* CELT processing */
@@ -2178,6 +2190,42 @@ opus_int32 opus_encode_native(OpusEncoder *st, const opus_val16 *pcm, int frame_
     }
     /* Count ToC and redundancy */
     ret += 1+redundancy_bytes;
+#ifdef ENABLE_NEURAL_FEC
+    if (st->dred_duration > 0) {
+       opus_extension_data extension;
+       unsigned char buf[DRED_MAX_DATA_SIZE];
+       int dred_chunks;
+       int dred_bytes_left;
+       DREDEnc *dred = &((silk_encoder*)silk_enc)->state_Fxx[0].sCmn.dred_encoder;
+       dred_chunks = IMIN(st->dred_duration/4, DRED_NUM_REDUNDANCY_FRAMES/2);
+       dred_bytes_left = IMIN(DRED_MAX_DATA_SIZE, max_data_bytes-ret-2);
+       /* Check whether we actually have something to encode. */
+       if (dred_chunks >= 1 && dred_bytes_left >= DRED_MIN_BYTES+2) {
+           int dred_bytes;
+           /* Add temporary extension type and version.
+              These bytes will be removed once extension is finalized. */
+           buf[0] = 'D';
+           buf[1] = DRED_VERSION;
+           dred_bytes = dred_encode_silk_frame(dred, buf+2, dred_chunks, dred_bytes_left-2);
+           dred_bytes += 2;
+           celt_assert(dred_bytes <= dred_bytes_left);
+           extension.id = 127;
+           extension.frame = 0;
+           extension.data = buf;
+           extension.len = dred_bytes;
+           ret = opus_packet_pad_impl(data, ret, max_data_bytes, !st->use_vbr, &extension, 1);
+       } else if (!st->use_vbr) {
+           ret = opus_packet_pad(data, ret, max_data_bytes);
+           if (ret == OPUS_OK)
+              ret = max_data_bytes;
+       }
+       if (ret < 0)
+       {
+          RESTORE_STACK;
+          return OPUS_INTERNAL_ERROR;
+       }
+    } else
+#endif
     if (!st->use_vbr)
     {
        if (opus_packet_pad(data, ret, max_data_bytes) != OPUS_OK)
@@ -2677,6 +2725,29 @@ int opus_encoder_ctl(OpusEncoder *st, int request, ...)
             celt_encoder_ctl(celt_enc, OPUS_GET_PHASE_INVERSION_DISABLED(value));
         }
         break;
+#ifdef ENABLE_NEURAL_FEC
+        case OPUS_SET_DRED_DURATION_REQUEST:
+        {
+            opus_int32 value = va_arg(ap, opus_int32);
+            if(value<0 || value>DRED_MAX_FRAMES)
+            {
+               goto bad_arg;
+            }
+            st->dred_duration = value;
+            st->silk_mode.useDRED = !!value;
+        }
+        break;
+        case OPUS_GET_DRED_DURATION_REQUEST:
+        {
+            opus_int32 *value = va_arg(ap, opus_int32*);
+            if (!value)
+            {
+               goto bad_arg;
+            }
+            *value = st->dred_duration;
+        }
+        break;
+#endif
         case OPUS_RESET_STATE:
         {
            void *silk_enc;

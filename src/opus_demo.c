@@ -62,7 +62,9 @@ void print_usage( char* argv[] )
     fprintf(stderr, "-inbandfec           : enable SILK inband FEC\n" );
     fprintf(stderr, "-forcemono           : force mono encoding, even for stereo input\n" );
     fprintf(stderr, "-dtx                 : enable SILK DTX\n" );
-    fprintf(stderr, "-loss <perc>         : simulate packet loss, in percent (0-100); default: 0\n" );
+    fprintf(stderr, "-loss <perc>         : optimize for loss percentage and simulate packet loss, in percent (0-100); default: 0\n" );
+    fprintf(stderr, "-lossfile <file>     : simulate packet loss, reading loss from file\n" );
+    fprintf(stderr, "-dred <frames>       : add Deep REDundancy (in units of 10-ms frames)\n" );
 }
 
 static void int_to_char(opus_uint32 i, unsigned char ch[4])
@@ -215,11 +217,13 @@ int main(int argc, char *argv[])
     FILE *fout=NULL;
     OpusEncoder *enc=NULL;
     OpusDecoder *dec=NULL;
+    OpusDRED *dred=NULL;
+    OpusDREDDecoder *dred_dec=NULL;
     int args;
-    int len[2];
+    int len;
     int frame_size, channels;
     opus_int32 bitrate_bps=0;
-    unsigned char *data[2] = {NULL, NULL};
+    unsigned char *data = NULL;
     unsigned char *fbytes=NULL;
     opus_int32 sampling_rate;
     int use_vbr;
@@ -243,8 +247,7 @@ int main(int argc, char *argv[])
     int bandwidth=OPUS_AUTO;
     const char *bandwidth_string;
     int lost = 0, lost_prev = 1;
-    int toggle = 0;
-    opus_uint32 enc_final_range[2];
+    opus_uint32 enc_final_range;
     opus_uint32 dec_final_range;
     int encode_only=0, decode_only=0;
     int max_frame_size = 48000*2;
@@ -264,6 +267,9 @@ int main(int argc, char *argv[])
     int variable_duration=OPUS_FRAMESIZE_ARG;
     int delayed_decision=0;
     int ret = EXIT_FAILURE;
+    int lost_count=0;
+    FILE *packet_loss_file=NULL;
+    int dred_duration=0;
 
     if (argc < 5 )
     {
@@ -422,6 +428,16 @@ int main(int argc, char *argv[])
         } else if( strcmp( argv[ args ], "-loss" ) == 0 ) {
             packet_loss_perc = atoi( argv[ args + 1 ] );
             args += 2;
+        } else if( strcmp( argv[ args ], "-lossfile" ) == 0 ) {
+            packet_loss_file = fopen( argv[ args + 1 ], "r" );
+            if (packet_loss_file == NULL) {
+                fprintf(stderr, "failed to open loss file %s\n", argv[ args + 1 ] );
+                exit(1);
+            }
+            args += 2;
+        } else if( strcmp( argv[ args ], "-dred" ) == 0 ) {
+            dred_duration = atoi( argv[ args + 1 ] );
+            args += 2;
         } else if( strcmp( argv[ args ], "-sweep" ) == 0 ) {
             check_encoder_option(decode_only, "-sweep");
             sweep_bps = atoi( argv[ args + 1 ] );
@@ -537,6 +553,10 @@ int main(int argc, char *argv[])
        opus_encoder_ctl(enc, OPUS_GET_LOOKAHEAD(&skip));
        opus_encoder_ctl(enc, OPUS_SET_LSB_DEPTH(16));
        opus_encoder_ctl(enc, OPUS_SET_EXPERT_FRAME_DURATION(variable_duration));
+       if (dred_duration > 0)
+       {
+          opus_encoder_ctl(enc, OPUS_SET_DRED_DURATION(dred_duration));
+       }
     }
     if (!encode_only)
     {
@@ -587,10 +607,7 @@ int main(int argc, char *argv[])
     out = (short*)malloc(max_frame_size*channels*sizeof(short));
     /* We need to allocate for 16-bit PCM data, but we store it as unsigned char. */
     fbytes = (unsigned char*)malloc(max_frame_size*channels*sizeof(short));
-    data[0] = (unsigned char*)calloc(max_payload_bytes,sizeof(unsigned char));
-    if ( use_inbandfec ) {
-        data[1] = (unsigned char*)calloc(max_payload_bytes,sizeof(unsigned char));
-    }
+    data = (unsigned char*)calloc(max_payload_bytes,sizeof(unsigned char));
     if(delayed_decision)
     {
        if (frame_size==sampling_rate/400)
@@ -614,6 +631,8 @@ int main(int argc, char *argv[])
        opus_encoder_ctl(enc, OPUS_SET_EXPERT_FRAME_DURATION(variable_duration));
        frame_size = 2*48000;
     }
+    dred_dec = opus_dred_decoder_create(&err);
+    dred = opus_dred_create(&err);
     while (!stop)
     {
         if (delayed_celt)
@@ -652,22 +671,22 @@ int main(int argc, char *argv[])
             num_read = fread(ch, 1, 4, fin);
             if (num_read!=4)
                 break;
-            len[toggle] = char_to_int(ch);
-            if (len[toggle]>max_payload_bytes || len[toggle]<0)
+            len = char_to_int(ch);
+            if (len>max_payload_bytes || len<0)
             {
-                fprintf(stderr, "Invalid payload length: %d\n",len[toggle]);
+                fprintf(stderr, "Invalid payload length: %d\n",len);
                 break;
             }
             num_read = fread(ch, 1, 4, fin);
             if (num_read!=4)
                 break;
-            enc_final_range[toggle] = char_to_int(ch);
-            num_read = fread(data[toggle], 1, len[toggle], fin);
-            if (num_read!=(size_t)len[toggle])
+            enc_final_range = char_to_int(ch);
+            num_read = fread(data, 1, len, fin);
+            if (num_read!=(size_t)len)
             {
                 fprintf(stderr, "Ran out of input, "
                                 "expecting %d bytes got %d\n",
-                                len[toggle],(int)num_read);
+                                len,(int)num_read);
                 break;
             }
         } else {
@@ -696,8 +715,13 @@ int main(int argc, char *argv[])
                 if (encode_only || decode_only)
                    stop = 1;
             }
-            len[toggle] = opus_encode(enc, in, frame_size, data[toggle], max_payload_bytes);
-            nb_encoded = opus_packet_get_samples_per_frame(data[toggle], sampling_rate)*opus_packet_get_nb_frames(data[toggle], len[toggle]);
+            len = opus_encode(enc, in, frame_size, data, max_payload_bytes);
+            if (len < 0)
+            {
+                fprintf (stderr, "opus_encode() returned %d\n", len);
+                goto failure;
+            }
+            nb_encoded = opus_packet_get_samples_per_frame(data, sampling_rate)*opus_packet_get_nb_frames(data, len);
             remaining = frame_size-nb_encoded;
             for(i=0;i<remaining*channels;i++)
                in[i] = in[nb_encoded*channels+i];
@@ -716,12 +740,7 @@ int main(int argc, char *argv[])
                   bitrate_bps = 1000;
                opus_encoder_ctl(enc, OPUS_SET_BITRATE(bitrate_bps));
             }
-            opus_encoder_ctl(enc, OPUS_GET_FINAL_RANGE(&enc_final_range[toggle]));
-            if (len[toggle] < 0)
-            {
-                fprintf (stderr, "opus_encode() returned %d\n", len[toggle]);
-                goto failure;
-            }
+            opus_encoder_ctl(enc, OPUS_GET_FINAL_RANGE(&enc_final_range));
             curr_mode_count += frame_size;
             if (curr_mode_count > mode_switch_time && curr_mode < nb_modes_in_list-1)
             {
@@ -731,56 +750,75 @@ int main(int argc, char *argv[])
         }
 
 #if 0 /* This is for testing the padding code, do not enable by default */
-        if (len[toggle]<1275)
+        if (len<1275)
         {
-           int new_len = len[toggle]+rand()%(max_payload_bytes-len[toggle]);
-           if ((err = opus_packet_pad(data[toggle], len[toggle], new_len)) != OPUS_OK)
+           int new_len = len+rand()%(max_payload_bytes-len);
+           if ((err = opus_packet_pad(data, len, new_len)) != OPUS_OK)
            {
               fprintf(stderr, "padding failed: %s\n", opus_strerror(err));
               goto failure;
            }
-           len[toggle] = new_len;
+           len = new_len;
         }
 #endif
         if (encode_only)
         {
             unsigned char int_field[4];
-            int_to_char(len[toggle], int_field);
+            int_to_char(len, int_field);
             if (fwrite(int_field, 1, 4, fout) != 4) {
                fprintf(stderr, "Error writing.\n");
                goto failure;
             }
-            int_to_char(enc_final_range[toggle], int_field);
+            int_to_char(enc_final_range, int_field);
             if (fwrite(int_field, 1, 4, fout) != 4) {
                fprintf(stderr, "Error writing.\n");
                goto failure;
             }
-            if (fwrite(data[toggle], 1, len[toggle], fout) != (unsigned)len[toggle]) {
+            if (fwrite(data, 1, len, fout) != (unsigned)len) {
                fprintf(stderr, "Error writing.\n");
                goto failure;
             }
             tot_samples += nb_encoded;
         } else {
-            opus_int32 output_samples;
-            lost = len[toggle]==0 || (packet_loss_perc>0 && rand()%100 < packet_loss_perc);
+            int fr;
+            int run_decoder;
+            if (packet_loss_file != NULL) {
+                if ( fscanf(packet_loss_file, "%d", &lost) != 1) {
+                    lost = 0;
+                }
+            } else {
+              lost = (packet_loss_perc>0) && (rand()%100 < packet_loss_perc);
+            }
+            if (len == 0) lost = 1;
             if (lost)
-               opus_decoder_ctl(dec, OPUS_GET_LAST_PACKET_DURATION(&output_samples));
-            else
-               output_samples = max_frame_size;
-            if( count >= use_inbandfec ) {
-                /* delay by one packet when using in-band FEC */
-                if( use_inbandfec  ) {
-                    if( lost_prev ) {
-                        /* attempt to decode with in-band FEC from next packet */
-                        opus_decoder_ctl(dec, OPUS_GET_LAST_PACKET_DURATION(&output_samples));
-                        output_samples = opus_decode(dec, lost ? NULL : data[toggle], len[toggle], out, output_samples, 1);
-                    } else {
-                        /* regular decode */
-                        output_samples = max_frame_size;
-                        output_samples = opus_decode(dec, data[1-toggle], len[1-toggle], out, output_samples, 0);
-                    }
+            {
+               lost_count++;
+               run_decoder = 0;
+            } else {
+               run_decoder= 1;
+            }
+            if (run_decoder)
+                run_decoder += lost_count;
+            if (!lost && lost_count > 0) {
+                opus_int32 output_samples=0;
+                int dred_input;
+                opus_decoder_ctl(dec, OPUS_GET_LAST_PACKET_DURATION(&output_samples));
+                dred_input = lost_count*output_samples*100/sampling_rate;
+                /* Only decode the amount we need to fill in the gap. */
+                opus_dred_parse(dred_dec, dred, data, len, IMIN(100, IMAX(0, dred_input))*480, 48000, 0);
+            }
+            /* FIXME: Figure out how to trigger the decoder when the last packet of the file is lost. */
+            for (fr=0;fr<run_decoder;fr++) {
+                opus_int32 output_samples=0;
+                if (fr == lost_count-1 && opus_packet_has_lbrr(data, len)) {
+                   opus_decoder_ctl(dec, OPUS_GET_LAST_PACKET_DURATION(&output_samples));
+                   output_samples = opus_decode(dec, data, len, out, output_samples, 1);
+                } else if (fr < lost_count) {
+                   opus_decoder_ctl(dec, OPUS_GET_LAST_PACKET_DURATION(&output_samples));
+                   output_samples = opus_decoder_dred_output(dec, dred, (lost_count-fr)*sampling_rate/100, out, output_samples);
                 } else {
-                    output_samples = opus_decode(dec, lost ? NULL : data[toggle], len[toggle], out, output_samples, 0);
+                   output_samples = max_frame_size;
+                   output_samples = opus_decode(dec, data, len, out, output_samples, 0);
                 }
                 if (output_samples>0)
                 {
@@ -817,24 +855,26 @@ int main(int argc, char *argv[])
         if (!encode_only)
            opus_decoder_ctl(dec, OPUS_GET_FINAL_RANGE(&dec_final_range));
         /* compare final range encoder rng values of encoder and decoder */
-        if( enc_final_range[toggle^use_inbandfec]!=0  && !encode_only
+        if( enc_final_range!=0  && !encode_only
          && !lost && !lost_prev
-         && dec_final_range != enc_final_range[toggle^use_inbandfec] ) {
+         && dec_final_range != enc_final_range ) {
             fprintf (stderr, "Error: Range coder state mismatch "
                              "between encoder and decoder "
                              "in frame %ld: 0x%8lx vs 0x%8lx\n",
                          (long)count,
-                         (unsigned long)enc_final_range[toggle^use_inbandfec],
+                         (unsigned long)enc_final_range,
                          (unsigned long)dec_final_range);
             goto failure;
         }
 
         lost_prev = lost;
+        if (!lost)
+           lost_count = 0;
         if( count >= use_inbandfec ) {
             /* count bits */
-            bits += len[toggle]*8;
-            bits_max = ( len[toggle]*8 > bits_max ) ? len[toggle]*8 : bits_max;
-            bits2 += len[toggle]*len[toggle]*64;
+            bits += len*8;
+            bits_max = ( len*8 > bits_max ) ? len*8 : bits_max;
+            bits2 += len*len*64;
             if (!decode_only)
             {
                 nrg = 0.0;
@@ -843,13 +883,12 @@ int main(int argc, char *argv[])
                 }
                 nrg /= frame_size * channels;
                 if( nrg > 1e5 ) {
-                    bits_act += len[toggle]*8;
+                    bits_act += len*8;
                     count_act++;
                 }
             }
         }
         count++;
-        toggle = (toggle + use_inbandfec) & 1;
     }
 
     if(decode_only && count > 0)
@@ -879,8 +918,9 @@ int main(int argc, char *argv[])
 failure:
     opus_encoder_destroy(enc);
     opus_decoder_destroy(dec);
-    free(data[0]);
-    free(data[1]);
+    opus_dred_destroy(dred);
+    opus_dred_decoder_destroy(dred_dec);
+    free(data);
     if (fin)
         fclose(fin);
     if (fout)
