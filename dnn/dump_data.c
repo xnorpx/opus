@@ -98,7 +98,7 @@ void write_audio(LPCNetEncState *st, const short *pcm, const int *noise, FILE *f
     /* Simulate error on excitation. */
     e += noise[k*FRAME_SIZE+i];
     e = IMIN(255, IMAX(0, e));
-    
+
     RNN_MOVE(&st->sig_mem[1], &st->sig_mem[0], LPC_ORDER-1);
     st->sig_mem[0] = p + ulaw2lin(e);
     st->exc_mem = e;
@@ -278,7 +278,7 @@ int main(int argc, char **argv) {
     if (fpcm) {
         compute_noise(&noisebuf[st->pcount*FRAME_SIZE], noise_std);
     }
-    
+
     if (!quantize) {
       process_single_frame(st, ffeat);
       if (fpcm) write_audio(st, pcm, &noisebuf[st->pcount*FRAME_SIZE], fpcm, 1);
@@ -304,4 +304,3 @@ int main(int argc, char **argv) {
   lpcnet_encoder_destroy(st);
   return 0;
 }
-

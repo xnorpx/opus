@@ -1,14 +1,14 @@
 # Makefile for LPCNet
 
 CC=gcc
-CFLAGS+=-Wall -W -Wextra -Wno-unused-function -O3 -g -Iinclude 
+CFLAGS+=-Wall -W -Wextra -Wno-unused-function -O3 -g -Iinclude
 
 AVX2:=$(shell cat /proc/cpuinfo | grep -c avx2)
 AVX:=$(shell cat /proc/cpuinfo | grep -c avx)
 NEON:=$(shell cat /proc/cpuinfo | grep -c neon)
 
 ifneq ($(AVX2),0)
-CFLAGS+=-mavx2 -mfma 
+CFLAGS+=-mavx2 -mfma
 else
 # AVX2 machines will also match on AVX
 ifneq ($(AVX),0)
@@ -63,6 +63,6 @@ test: test_vec
 
 clean:
 	rm -f dump_data test_lpcnet test_vec
-	rm -f $(dump_data_objs) $(dump_data_deps) 
-	rm -f $(test_lpcnet_objs) $(test_lpcnet_deps) 
-	rm -f $(test_vec_objs) $(test_vec_deps) 
+	rm -f $(dump_data_objs) $(dump_data_deps)
+	rm -f $(test_lpcnet_objs) $(test_lpcnet_deps)
+	rm -f $(test_vec_objs) $(test_vec_deps)

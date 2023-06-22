@@ -409,7 +409,7 @@ static int lpcnet_plc_update_non_causal(LPCNetPLCState *st, short *pcm) {
         w = .5 - .5*cos(M_PI*i/(TRAINING_OFFSET));
         st->pcm[FRAME_SIZE-1-i] = (int)floor(.5 + w*st->pcm[FRAME_SIZE-1-i] + (1-w)*(rev[i]+delta));
       }
-      
+
     }
     st->lpcnet = copy;
 #if 1
@@ -424,7 +424,7 @@ static int lpcnet_plc_update_non_causal(LPCNetPLCState *st, short *pcm) {
     preemphasis(x, &st->enc.mem_preemph, x, PREEMPHASIS, FRAME_SIZE);
     compute_frame_features(&st->enc, x);
     process_single_frame(&st->enc, NULL);
-    
+
   }
   for (i=0;i<FRAME_SIZE;i++) x[i] = pcm[i];
   preemphasis(x, &st->enc.mem_preemph, x, PREEMPHASIS, FRAME_SIZE);

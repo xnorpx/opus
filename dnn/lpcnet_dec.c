@@ -87,14 +87,14 @@ void decode_packet(float features[4][NB_TOTAL_FEATURES], float *vq_mem, const un
   int vq_end[3];
   int vq_mid;
   int interp_id;
-  
+
   int i;
   int sub;
   int voiced = 1;
   float frame_corr;
   float sign;
   unpacker bits;
-  
+
   bits_unpacker_init(&bits, buf, 8);
   c0_id = bits_unpack(&bits, 7);
   main_pitch = bits_unpack(&bits, 6);
@@ -107,7 +107,7 @@ void decode_packet(float features[4][NB_TOTAL_FEATURES], float *vq_mem, const un
   interp_id = bits_unpack(&bits, 3);
   /*fprintf(stdout, "%d %d %d %d %d %d %d %d %d\n", c0_id, main_pitch, modulation, corr_id, vq_end[0], vq_end[1], vq_end[2], vq_mid, interp_id);*/
 
-  
+
   for (i=0;i<4;i++) RNN_CLEAR(&features[i][0], NB_TOTAL_FEATURES);
 
   modulation -= 4;
@@ -127,7 +127,7 @@ void decode_packet(float features[4][NB_TOTAL_FEATURES], float *vq_mem, const un
     features[sub][NB_BANDS] = .02f*(p-100.f);
     features[sub][NB_BANDS + 1] = frame_corr-.5f;
   }
-  
+
   features[3][0] = (c0_id-64)/4.f;
   for (i=0;i<NB_BANDS_1;i++) {
     features[3][i+1] = ceps_codebook1[vq_end[0]*NB_BANDS_1 + i] + ceps_codebook2[vq_end[1]*NB_BANDS_1 + i] + ceps_codebook3[vq_end[2]*NB_BANDS_1 + i];
@@ -148,7 +148,7 @@ void decode_packet(float features[4][NB_TOTAL_FEATURES], float *vq_mem, const un
   } else {
     for (i=0;i<NB_BANDS;i++) features[1][i] += features[3][i];
   }
-  
+
   perform_double_interp(features, vq_mem, interp_id);
 
   RNN_COPY(vq_mem, &features[3][0], NB_BANDS);

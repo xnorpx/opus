@@ -54,7 +54,7 @@ void vq_quantize_mbest(const float *codebook, int nb_entries, const float *x, in
 {
   int i, j;
   for (i=0;i<mbest;i++) dist[i] = 1e15f;
-  
+
   for (i=0;i<nb_entries;i++)
   {
     float d=0;
@@ -83,7 +83,7 @@ int vq_quantize(const float *codebook, int nb_entries, const float *x, int ndim,
   int i, j;
   float min_dist = 1e15f;
   int nearest = 0;
-  
+
   for (i=0;i<nb_entries;i++)
   {
     float dist=0;
@@ -125,7 +125,7 @@ int quantize_2stage(float *x)
         }
         printf("%f\n", sqrt(err/NB_BANDS));
     }
-    
+
     return id;
 }
 
@@ -236,7 +236,7 @@ int quantize_3stage_mbest(float *x, int entry[3])
         }
         printf("%f\n", sqrt(err/NB_BANDS));
     }
-    
+
     return id;
 }
 
@@ -313,7 +313,7 @@ int quantize_diff(float *x, float *left, float *right, float *codebook, int bits
         }
         printf("%f\n", sqrt(err/NB_BANDS));
     }
-    
+
     return id;
 }
 
